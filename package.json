@@ -1,0 +1,100 @@
+{
+  "name": "cputy",
+  "version": "1.0.0",
+  "description": "macOS System Cleaner, Duplicate Hunter & Performance Suite",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev:renderer": "vite",
+    "dev:electron": "tsc -p tsconfig.electron.json -w",
+    "dev": "concurrently -k -n \"VITE,ELECTRON\" -c \"cyan,magenta\" \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build:renderer": "vite build",
+    "build": "npm run build:renderer && npm run build:electron",
+    "start": "NODE_ENV=production electron dist-electron/main.js",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:arm64": "npm run build && electron-builder --mac --arm64",
+    "dist:x64": "npm run build && electron-builder --mac --x64",
+    "dist:universal": "npm run build && electron-builder --mac --universal",
+    "dist:dir": "npm run build && electron-builder --mac --dir"
+  },
+  "build": {
+    "appId": "com.cputy.app",
+    "productName": "CPUTY",
+    "copyright": "Copyright © 2026 CPUTY",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "build/trayTemplate*.png",
+      "package.json"
+    ],
+    "mac": {
+      "icon": "build/icon.icns",
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "identity": null
+    },
+    "dmg": {
+      "title": "${productName} ${version} (${arch})",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    }
+  },
+  "keywords": [
+    "macos",
+    "cleaner",
+    "disk-space",
+    "optimizer",
+    "electron"
+  ],
+  "author": "CPUTY",
+  "license": "MIT",
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.38.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.4.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.1",
+    "autoprefixer": "^10.5.4",
+    "concurrently": "^9.2.4",
+    "electron": "^41.7.1",
+    "electron-builder": "^26.15.3",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2",
+    "wait-on": "^9.1.0"
+  }
+}

@@ -1,0 +1,146 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
+
+/**
+ * Calculates the size of a file or directory recursively
+ */
+export async function getPathSize(targetPath: string): Promise<number> {
+  try {
+    const stats = await fs.promises.lstat(targetPath);
+    if (stats.isFile()) {
+      return stats.size;
+    }
+    if (stats.isDirectory()) {
+      let totalSize = 0;
+      const entries = await fs.promises.readdir(targetPath, { withFileTypes: true });
+      for (const entry of entries) {
+        // Skip symlinks or restricted sockets
+        if (entry.isSymbolicLink()) continue;
+        const fullPath = path.join(targetPath, entry.name);
+        try {
+          if (entry.isDirectory()) {
+            totalSize += await getPathSize(fullPath);
+          } else if (entry.isFile()) {
+            const fileStat = await fs.promises.stat(fullPath);
+            totalSize += fileStat.size;
+          }
+        } catch {
+          // ignore permission denied on individual sub-files
+        }
+      }
+      return totalSize;
+    }
+    return 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Checks if a path exists
+ */
+export async function pathExists(p: string): Promise<boolean> {
+  try {
+    await fs.promises.access(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Expands tilde ~ to user home directory
+ */
+export function expandHome(filePath: string): string {
+  if (filePath.startsWith('~')) {
+    return path.join(os.homedir(), filePath.slice(1));
+  }
+  return filePath;
+}
+
+/**
+ * Human-readable size formatting (e.g. 2.4 GB)
+ */
+export function formatBytes(bytes: number, decimals = 2): string {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+/**
+ * Safety check: Ensures paths are safe to touch and not critical macOS system root paths
+ */
+export function isPathSafe(targetPath: string): boolean {
+  const normalized = path.resolve(targetPath);
+  const home = os.homedir();
+  const dangerousRoots = [
+    '/',
+    '/System',
+    '/System/Library',
+    '/usr',
+    '/usr/bin',
+    '/usr/sbin',
+    '/bin',
+    '/sbin',
+    '/private',
+    '/private/etc',
+    '/etc',
+    '/var',
+    '/dev',
+    '/Library',
+    '/Applications',
+    home,
+    path.join(home, 'Desktop'),
+    path.join(home, 'Documents'),
+    path.join(home, 'Library'),
+    path.join(home, 'Pictures'),
+    path.join(home, 'Movies'),
+    path.join(home, 'Music'),
+  ];
+
+  if (dangerousRoots.includes(normalized)) {
+    return false;
+  }
+
+  // Must be within user directory or specific allowed /Library caches/logs
+  const allowedRoots = [
+    path.join(home, 'Library/Caches'),
+    path.join(home, 'Library/Logs'),
+    path.join(home, 'Library/Application Support'),
+    path.join(home, 'Library/Saved Application State'),
+    path.join(home, 'Library/Containers'),
+    path.join(home, 'Downloads'),
+    path.join(home, '.Trash'),
+    path.join(home, '.npm'),
+    path.join(home, '.yarn'),
+    path.join(home, '.pnpm-store'),
+    path.join(home, '.cache'),
+    path.join(home, '.gradle/caches'),
+    path.join(home, '.cocoapods'),
+    '/Library/Caches',
+    '/Library/Logs',
+    '/private/var/log',
+    '/tmp',
+    '/var/tmp',
+  ];
+
+  // If it's a subpath in allowed roots, it is definitely safe
+  const isInsideAllowed = allowedRoots.some(allowed => normalized.startsWith(allowed) && normalized.length > allowed.length);
+  if (isInsideAllowed) return true;
+
+  // If it's an app bundle inside /Applications or ~/Applications (for uninstaller), it is safe
+  if (normalized.startsWith('/Applications/') || normalized.startsWith(path.join(home, 'Applications/'))) {
+    return true;
+  }
+
+  // If it's inside user's home (excluding protected root folders), it can be cleaned if explicitly selected
+  if (normalized.startsWith(home)) {
+    return true;
+  }
+
+  return false;
+}
