@@ -5,18 +5,16 @@ import {
   ExternalLink, 
   CheckSquare, 
   Square, 
-  MinusSquare,
+  MinusSquare, 
   Sparkles, 
   ChevronDown, 
   ChevronRight, 
   Search, 
-  AlertTriangle, 
-  Folder, 
-  CheckCircle2, 
-  XCircle 
+  Folder,
+  RotateCw
 } from 'lucide-react';
 import { InstalledApp } from '../types';
-import { formatBytes, formatTimeAgo } from '../utils/formatters';
+import { formatBytes } from '../utils/formatters';
 import { useLanguage } from '../context/LanguageContext';
 
 interface UninstallerViewProps {
@@ -115,42 +113,55 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
       {/* Header Banner */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Package className="w-6 h-6 text-rose-500 dark:text-rose-400" />
-            {t('uninstallerHeaderTitle')}
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2.5">
+            <div className="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 shadow-xs">
+              <Package className="w-5 h-5" />
+            </div>
+            <span>{t('uninstallerHeaderTitle')}</span>
           </h1>
           <p className="text-xs text-mac-subtext mt-1">
             {t('uninstallerHeaderDesc')}
           </p>
         </div>
 
-        <button
-          onClick={handleConfirmUninstall}
-          disabled={selectedAppsList.length === 0 || isScanning}
-          className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-glow-rose transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 btn-solid cursor-pointer shrink-0"
-        >
-          <Trash2 className="w-4 h-4" />
-          <span>
-            {t('uninstallSelectedBtn')} {selectedAppsList.length > 0 ? `(${selectedAppsList.length} • ${formatBytes(selectedTotalSize)})` : ''}
-          </span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onRescan}
+            disabled={isScanning}
+            className="px-3.5 py-2.5 rounded-2xl cputy-btn-secondary text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+          >
+            <RotateCw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-emerald-400' : ''}`} />
+            <span>{t('rescan')}</span>
+          </button>
+
+          <button
+            onClick={handleConfirmUninstall}
+            disabled={selectedAppsList.length === 0 || isScanning}
+            className="px-5 py-2.5 rounded-2xl cputy-btn-primary text-xs font-bold shadow-glow-emerald transition-all disabled:opacity-40 flex items-center gap-2 btn-solid cursor-pointer shrink-0"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>
+              {t('uninstallSelectedBtn')} {selectedAppsList.length > 0 ? `(${selectedAppsList.length} • ${formatBytes(selectedTotalSize)})` : ''}
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Filter & Selection Control Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-2xl mac-card border border-mac-border">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-3 rounded-2xl cputy-glass border border-mac-border">
         <div className="flex items-center gap-3">
           {/* Master Select/Unselect All Checkbox */}
           <button
             onClick={toggleSelectAll}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors group cursor-pointer"
+            className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors group cursor-pointer"
             title={isAllFilteredSelected ? t('unselectAll') : t('selectAll')}
           >
             {isAllFilteredSelected ? (
-              <CheckSquare className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+              <CheckSquare className="w-4.5 h-4.5 text-emerald-500" />
             ) : isSomeFilteredSelected ? (
-              <MinusSquare className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+              <MinusSquare className="w-4.5 h-4.5 text-emerald-500" />
             ) : (
-              <Square className="w-4 h-4 text-slate-500 group-hover:text-slate-400" />
+              <Square className="w-4.5 h-4.5 text-slate-400 group-hover:text-slate-500" />
             )}
             <span>
               {isAllFilteredSelected ? t('unselectAll') : t('selectAll')}
@@ -163,24 +174,24 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
           <div className="flex items-center gap-2 text-xs">
             <button
               onClick={selectAll}
-              className="px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors text-[11px] font-medium cursor-pointer"
+              className="px-3 py-1 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors text-[11px] font-semibold cursor-pointer border border-black/5 dark:border-white/5"
             >
               {t('selectAll')} ({filteredApps.length})
             </button>
             <button
               onClick={unselectAll}
               disabled={selectedAppIds.size === 0}
-              className="px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-40 disabled:hover:bg-black/5 dark:disabled:hover:bg-white/5 transition-colors text-[11px] font-medium cursor-pointer"
+              className="px-3 py-1 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-40 transition-colors text-[11px] font-semibold cursor-pointer border border-black/5 dark:border-white/5"
             >
               {t('unselectAll')}
             </button>
           </div>
 
-          <span className="text-[11px] text-slate-500 dark:text-slate-400">
+          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
             {isRTL ? (
-              <>• تم تحديد <strong className="text-rose-600 dark:text-rose-400">{selectedAppIds.size}</strong> من {filteredApps.length}</>
+              <>• تم تحديد <strong className="text-emerald-600 dark:text-emerald-400">{selectedAppIds.size}</strong> من {filteredApps.length}</>
             ) : (
-              <>• <strong className="text-rose-600 dark:text-rose-400">{selectedAppIds.size}</strong> of {filteredApps.length} {t('selectedCountText')}</>
+              <>• <strong className="text-emerald-600 dark:text-emerald-400">{selectedAppIds.size}</strong> of {filteredApps.length} {t('selectedCountText')}</>
             )}
           </span>
         </div>
@@ -193,7 +204,7 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
             placeholder={t('searchAppsPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`py-1.5 rounded-xl bg-black/5 dark:bg-black/40 border border-black/10 dark:border-white/10 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-rose-500/50 w-60 ${
+            className={`py-1.5 rounded-xl bg-black/5 dark:bg-black/20 border border-mac-border text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 w-60 font-medium ${
               isRTL ? 'pr-8 pl-3 text-right' : 'pl-8 pr-3 text-left'
             }`}
           />
@@ -202,9 +213,9 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
 
       {/* App List */}
       {filteredApps.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl mac-glass border border-mac-border space-y-3">
-          <Package className="w-12 h-12 text-rose-500 dark:text-rose-400 mx-auto opacity-70" />
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+        <div className="p-12 text-center rounded-3xl cputy-glass border border-mac-border space-y-3">
+          <Package className="w-12 h-12 text-emerald-500 dark:text-emerald-400 mx-auto opacity-80" />
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
             {isRTL ? 'لم يتم العثور على تطبيقات' : 'No Applications Found'}
           </h3>
           <p className="text-xs text-mac-subtext">
@@ -221,27 +232,27 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
             return (
               <div 
                 key={app.id} 
-                className={`rounded-2xl mac-card border transition-all duration-200 overflow-hidden ${
-                  isSelected ? 'border-rose-500/40 bg-rose-950/10' : 'border-mac-border hover:border-black/15 dark:hover:border-white/10'
+                className={`rounded-3xl cputy-card border transition-all duration-200 overflow-hidden ${
+                  isSelected ? 'border-emerald-500/40 bg-emerald-500/[0.04]' : 'border-mac-border hover:border-black/15 dark:hover:border-white/15'
                 }`}
               >
                 <div className="p-4 flex items-center justify-between hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3.5 min-w-0">
                     <button
                       onClick={() => toggleSelect(app.id)}
-                      className="text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 focus:outline-none cursor-pointer"
+                      className="text-emerald-500 hover:text-emerald-400 focus:outline-none cursor-pointer"
                     >
                       {isSelected ? (
-                        <CheckSquare className="w-4 h-4" />
+                        <CheckSquare className="w-4.5 h-4.5" />
                       ) : (
-                        <Square className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+                        <Square className="w-4.5 h-4.5 text-slate-400" />
                       )}
                     </button>
 
                     {hasLeftovers && (
                       <button
                         onClick={() => toggleExpand(app.id)}
-                        className="text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+                        className="p-1 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
                         title={isExpanded ? (isRTL ? 'طي المتبقيات' : 'Collapse leftovers') : (isRTL ? 'عرض المتبقيات' : 'Expand leftovers')}
                       >
                         {isExpanded ? (
@@ -254,26 +265,26 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">{app.name}</h4>
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{app.name}</h4>
                         {app.version && (
-                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 font-mono">
+                          <span className="text-[10px] px-2 py-0.2 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 font-mono font-bold">
                             v{app.version}
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-mac-subtext truncate max-w-md">
+                      <p className="text-[11px] text-mac-subtext truncate max-w-md font-mono mt-0.5">
                         {app.bundleId || app.appPath}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 shrink-0">
+                  <div className="flex items-center gap-3.5 shrink-0">
                     <div className="text-end">
-                      <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400 block">
+                      <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 block">
                         {formatBytes(app.totalSize)}
                       </span>
                       {hasLeftovers && (
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                        <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
                           +{formatBytes(app.totalSize - app.appSize)} {t('leftoversText')}
                         </span>
                       )}
@@ -282,7 +293,7 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
                     <button
                       onClick={(e) => handleSingleAppUninstall(app, e)}
                       title={`${t('uninstallSingleApp')}: ${app.name}`}
-                      className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 transition-colors cursor-pointer"
+                      className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 hover:text-emerald-600 transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -290,7 +301,7 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
                     <button
                       onClick={() => handleReveal(app.appPath)}
                       title={t('revealInFinder')}
-                      className="p-1.5 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                      className="p-2 rounded-xl bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                     </button>
@@ -299,20 +310,20 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
 
                 {/* Leftovers Accordion */}
                 {hasLeftovers && isExpanded && (
-                  <div className="bg-black/30 border-t border-white/5 p-4 space-y-2">
-                    <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
-                      <Folder className="w-3.5 h-3.5 text-rose-400" />
-                      Associated Application Data & Leftovers:
+                  <div className="bg-black/5 dark:bg-black/30 border-t border-mac-border/60 p-4 space-y-2">
+                    <div className="text-[11px] font-bold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+                      <Folder className="w-3.5 h-3.5 text-emerald-500" />
+                      Associated Application Data & Residual Leftovers:
                     </div>
                     <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs text-slate-300 pl-4">
-                        <span className="truncate max-w-md">📦 Application Binary ({app.appPath})</span>
-                        <span className="font-mono text-[11px] text-slate-400">{formatBytes(app.appSize)}</span>
+                      <div className="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300 pl-4 font-mono">
+                        <span className="truncate max-w-md">📦 Application Bundle ({app.appPath})</span>
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400">{formatBytes(app.appSize)}</span>
                       </div>
                       {app.associatedFiles.map((file) => (
-                        <div key={file.path} className="flex items-center justify-between text-xs text-slate-300 pl-4">
+                        <div key={file.path} className="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300 pl-4 font-mono">
                           <span className="truncate max-w-md">📁 [{file.type.toUpperCase()}] {file.path}</span>
-                          <span className="font-mono text-[11px] text-slate-400">{formatBytes(file.size)}</span>
+                          <span className="text-[11px] text-slate-500 dark:text-slate-400">{formatBytes(file.size)}</span>
                         </div>
                       ))}
                     </div>

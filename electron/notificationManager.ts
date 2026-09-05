@@ -1,7 +1,137 @@
-import { app, Notification } from 'electron';
+import { app, Notification, nativeImage, NativeImage } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { exec } from 'child_process';
 import { purgeRAM } from './scanners/systemMonitor';
+
+export function getAppIconPath(): string {
+  const possiblePaths: string[] = [
+    path.join(__dirname, '../build/icon.png'),
+    path.join(__dirname, '../../build/icon.png'),
+  ];
+
+  if (process.resourcesPath) {
+    possiblePaths.push(
+      path.join(process.resourcesPath, 'build/icon.png'),
+      path.join(process.resourcesPath, 'icon.png'),
+      path.join(process.resourcesPath, 'app.asar.unpacked/build/icon.png'),
+      path.join(process.resourcesPath, 'icon.icns')
+    );
+  }
+
+  try {
+    if (app && typeof app.getAppPath === 'function') {
+      const appPath = app.getAppPath();
+      if (appPath) {
+        possiblePaths.push(
+          path.join(appPath, 'build/icon.png'),
+          path.join(appPath, 'public/app-icon.png')
+        );
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  possiblePaths.push(
+    path.join(__dirname, '../public/app-icon.png'),
+    path.join(process.cwd(), 'build/icon.png')
+  );
+
+  for (const p of possiblePaths) {
+    try {
+      if (p && fs.existsSync(p)) return p;
+    } catch {
+      // ignore
+    }
+  }
+  return path.join(__dirname, '../build/icon.png');
+}
+
+export function getAppIcon(): NativeImage | undefined {
+  const iconPath = getAppIconPath();
+  try {
+    if (fs.existsSync(iconPath)) {
+      const img = nativeImage.createFromPath(iconPath);
+      if (!img.isEmpty()) return img;
+    }
+  } catch {
+    // ignore
+  }
+
+  // Check for icns on macOS if resourcesPath exists
+  if (process.resourcesPath) {
+    const icnsPath = path.join(process.resourcesPath, 'icon.icns');
+    try {
+      if (fs.existsSync(icnsPath)) {
+        const img = nativeImage.createFromPath(icnsPath);
+        if (!img.isEmpty()) return img;
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return undefined;
+}
+
+function getNotifierAppPath(): string | null {
+  const possiblePaths: string[] = [
+    path.join(__dirname, '../build/CPUTYNotifier.app'),
+    path.join(__dirname, '../../build/CPUTYNotifier.app'),
+    path.join(process.cwd(), 'build/CPUTYNotifier.app'),
+  ];
+
+  if (process.resourcesPath) {
+    possiblePaths.push(
+      path.join(process.resourcesPath, 'build/CPUTYNotifier.app'),
+      path.join(process.resourcesPath, 'CPUTYNotifier.app'),
+      path.join(process.resourcesPath, 'app.asar.unpacked/build/CPUTYNotifier.app')
+    );
+  }
+
+  try {
+    if (app && typeof app.getAppPath === 'function') {
+      const appPath = app.getAppPath();
+      if (appPath) {
+        possiblePaths.push(
+          path.join(appPath, 'build/CPUTYNotifier.app'),
+          path.join(appPath, '../build/CPUTYNotifier.app')
+        );
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  for (const p of possiblePaths) {
+    try {
+      if (p && fs.existsSync(p)) return p;
+    } catch {
+      // ignore
+    }
+  }
+  return null;
+}
+
+function dispatchMacNotificationWithAppIcon(title: string, body: string, playSound = true) {
+  try {
+    const notifierApp = getNotifierAppPath();
+    const cleanTitle = (title || 'CPUTY').replace(/["\\]/g, ' ');
+    const cleanBody = (body || '').replace(/["\\]/g, ' ');
+
+    if (notifierApp) {
+      const execPath = path.join(notifierApp, 'Contents/MacOS/applet');
+      const { execFile } = require('child_process');
+      if (fs.existsSync(execPath)) {
+        execFile(execPath, [cleanBody, cleanTitle]);
+      } else {
+        execFile('open', ['-a', notifierApp, '--args', cleanBody, cleanTitle]);
+      }
+    }
+  } catch (err) {
+    console.error('[CPUTY Notifications] dispatchMacNotificationWithAppIcon error:', err);
+  }
+}
 
 export interface NotificationSettings {
   enabled: boolean;
@@ -32,7 +162,14 @@ let lastRamAlertTime = 0;
 const ALERT_THROTTLE_MS = 3 * 60 * 1000; // 3 minutes
 
 function getSettingsFilePath(): string {
-  return path.join(app.getPath('userData'), 'notification-settings.json');
+  try {
+    if (app && typeof app.getPath === 'function') {
+      return path.join(app.getPath('userData'), 'notification-settings.json');
+    }
+  } catch {
+    // ignore
+  }
+  return path.join(process.cwd(), 'notification-settings.json');
 }
 
 export function loadNotificationSettings(): NotificationSettings {
@@ -87,31 +224,42 @@ export function sendDesktopNotification(options: SendNotificationOptions): boole
     if (options.category === 'ram' && !settings.notifyOnHighRam) return false;
   }
 
-  if (!Notification.isSupported()) return false;
+  const appIcon = getAppIcon();
+  const iconPath = getAppIconPath();
 
-  try {
-    const notification = new Notification({
-      title: options.title,
-      body: options.body,
-      silent: !settings.sound,
-    });
+  let nativeNotificationShown = false;
 
-    if (options.onClick) {
-      notification.on('click', () => {
-        try {
-          options.onClick?.();
-        } catch {
-          // ignore
-        }
+  // Dispatch via Electron native Notification.
+  // In dev mode, patch-electron-icon.js (predev script) has already replaced Electron.app's icon
+  // with the CPUTY icon and set CFBundleIdentifier to com.cputy.app, so macOS will correctly
+  // attribute the notification to CPUTY with the proper icon in both dev and production.
+  if (Notification && typeof Notification.isSupported === 'function' && Notification.isSupported()) {
+    try {
+      const notification = new Notification({
+        title: options.title,
+        body: options.body,
+        icon: appIcon || iconPath,
+        silent: !settings.sound,
       });
-    }
 
-    notification.show();
-    return true;
-  } catch (err) {
-    console.error('Failed to dispatch desktop notification:', err);
-    return false;
+      if (options.onClick) {
+        notification.on('click', () => {
+          try {
+            options.onClick?.();
+          } catch {
+            // ignore
+          }
+        });
+      }
+
+      notification.show();
+      nativeNotificationShown = true;
+    } catch (err) {
+      console.error('[CPUTY Notifications] Native Notification error:', err);
+    }
   }
+
+  return nativeNotificationShown;
 }
 
 export function checkSystemThresholdAlerts(cpuPercent: number, ramPercent: number) {

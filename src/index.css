@@ -3,56 +3,125 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-mac-bg: var(--mac-bg);
-  --color-mac-sidebar: var(--mac-sidebar);
-  --color-mac-card: var(--mac-card);
-  --color-mac-cardHover: var(--mac-card-hover);
-  --color-mac-border: var(--mac-border);
-  --color-mac-subtext: var(--mac-subtext);
-  --color-mac-accent: #3B82F6;
-  --color-mac-accentHover: #2563EB;
-  --color-mac-cyan: #06B6D4;
-  --color-mac-emerald: #10B981;
-  --color-mac-rose: #F43F5E;
-  --color-mac-amber: #F59E0B;
-  --color-mac-purple: #8B5CF6;
+  --color-mac-bg: var(--cputy-bg);
+  --color-mac-sidebar: var(--cputy-sidebar);
+  --color-mac-card: var(--cputy-card);
+  --color-mac-cardHover: var(--cputy-card-hover);
+  --color-mac-border: var(--cputy-border);
+  --color-mac-subtext: var(--cputy-subtext);
+  --color-mac-accent: #92E6E0;
+  --color-mac-accentHover: #5F9C9F;
+  --color-mac-cyan: #92E6E0;
+  --color-mac-emerald: #92E6E0;
+  --color-mac-rose: #5F9C9F;
+  --color-mac-amber: #92E6E0;
+  --color-mac-purple: #5F9C9F;
+
+  /* Direct User Swatch Utilities */
+  --color-cputy-midnight: #14252E;
+  --color-cputy-black: #000000;
+  --color-cputy-spruce: #19353C;
+  --color-cputy-seafoam: #5F9C9F;
+  --color-cputy-aqua: #92E6E0;
+
+  /* Remap emerald & green to the exact user palette */
+  --color-emerald-300: #B2F4EF;
+  --color-emerald-400: #92E6E0;
+  --color-emerald-500: #5F9C9F;
+  --color-emerald-600: #487E81;
+  --color-emerald-700: #19353C;
+  --color-emerald-800: #14252E;
+  --color-emerald-900: #0D1920;
 }
 
 :root {
-  --mac-bg: #0F1117;
-  --mac-sidebar: #161922;
-  --mac-card: #1C202E;
-  --mac-card-hover: #24293B;
-  --mac-border: rgba(255, 255, 255, 0.08);
-  --mac-subtext: #8E95A5;
-  --mac-text-main: #FFFFFF;
-  --mac-text-secondary: #CBD5E1;
-  --mac-text-muted: #94A3B8;
-  --mac-glass-bg: rgba(22, 25, 34, 0.75);
-  --mac-card-bg: rgba(28, 32, 46, 0.65);
-  --mac-card-hover-bg: rgba(36, 41, 59, 0.85);
-  --mac-card-border: rgba(255, 255, 255, 0.07);
-  --mac-card-hover-border: rgba(255, 255, 255, 0.14);
-  --mac-traffic-red: #FF5F56;
-  --mac-traffic-yellow: #FFBD2E;
-  --mac-traffic-green: #27C93F;
+  /* Dark Mode: Swatch 1 (#14252E), Swatch 2 (#000000), Swatch 3 (#19353C), Swatch 4 (#5F9C9F), Swatch 5 (#92E6E0) */
+  --cputy-bg: #000000;
+  --cputy-sidebar: #14252E;
+  --cputy-card: #19353C;
+  --cputy-card-hover: #1F424B;
+  --cputy-border: rgba(95, 156, 159, 0.22);
+  --cputy-border-hover: rgba(146, 230, 224, 0.5);
+  --cputy-subtext: #8EACB0;
+  --cputy-text-main: #FFFFFF;
+  --cputy-text-secondary: #E3F2F1;
+  --cputy-text-muted: #8EACB0;
+  --cputy-glass-bg: rgba(20, 37, 46, 0.88);
+  --cputy-card-bg: rgba(25, 53, 60, 0.72);
+  --cputy-card-hover-bg: rgba(31, 66, 75, 0.88);
+  --cputy-card-border: rgba(95, 156, 159, 0.22);
+  --cputy-card-hover-border: rgba(146, 230, 224, 0.5);
+  
+  /* User Palette Tokens */
+  --cputy-midnight: #14252E;
+  --cputy-black: #000000;
+  --cputy-spruce: #19353C;
+  --cputy-seafoam: #5F9C9F;
+  --cputy-aqua: #92E6E0;
+  --cputy-white: #FFFFFF;
+
+  --cputy-green: #92E6E0;
+  --cputy-green-hover: #5F9C9F;
+  --cputy-green-light: #92E6E0;
+  --cputy-green-mint: #B2F4EF;
+  --cputy-green-glow: rgba(146, 230, 224, 0.35);
+
+  --cputy-blue: #92E6E0;
+  --cputy-blue-glow: rgba(146, 230, 224, 0.35);
+  --cputy-cyan: #92E6E0;
+  --cputy-cyan-glow: rgba(146, 230, 224, 0.35);
+  --cputy-violet: #5F9C9F;
+  --cputy-violet-glow: rgba(95, 156, 159, 0.35);
+  --cputy-emerald: #92E6E0;
+  --cputy-emerald-glow: rgba(146, 230, 224, 0.35);
+  --cputy-rose: #5F9C9F;
+  --cputy-rose-glow: rgba(95, 156, 159, 0.35);
+  --cputy-amber: #92E6E0;
+  --cputy-amber-glow: rgba(146, 230, 224, 0.35);
+
+  /* Legacy mappings */
+  --mac-bg: var(--cputy-bg);
+  --mac-sidebar: var(--cputy-sidebar);
+  --mac-card: var(--cputy-card);
+  --mac-card-hover: var(--cputy-card-hover);
+  --mac-border: var(--cputy-border);
+  --mac-subtext: var(--cputy-subtext);
+  --mac-glass-bg: var(--cputy-glass-bg);
+  --mac-card-bg: var(--cputy-card-bg);
+  --mac-card-hover-bg: var(--cputy-card-hover-bg);
+  --mac-card-border: var(--cputy-card-border);
+  --mac-card-hover-border: var(--cputy-card-hover-border);
 }
 
 .light, [data-theme="light"] {
-  --mac-bg: #F1F4F9;
-  --mac-sidebar: #E5E9F0;
-  --mac-card: #FFFFFF;
-  --mac-card-hover: #F8FAFC;
-  --mac-border: rgba(0, 0, 0, 0.08);
-  --mac-subtext: #475569;
-  --mac-text-main: #0F172A;
-  --mac-text-secondary: #334155;
-  --mac-text-muted: #64748B;
-  --mac-glass-bg: rgba(255, 255, 255, 0.88);
-  --mac-card-bg: rgba(255, 255, 255, 0.95);
-  --mac-card-hover-bg: #FFFFFF;
-  --mac-card-border: rgba(0, 0, 0, 0.08);
-  --mac-card-hover-border: rgba(0, 0, 0, 0.14);
+  /* Light Mode: Crisp White, Slate-Spruce (#14252E), Seafoam (#5F9C9F) & Aqua (#92E6E0) */
+  --cputy-bg: #FFFFFF;
+  --cputy-sidebar: #F2F7F7;
+  --cputy-card: #FFFFFF;
+  --cputy-card-hover: #EBF4F4;
+  --cputy-border: rgba(25, 53, 60, 0.12);
+  --cputy-border-hover: rgba(95, 156, 159, 0.5);
+  --cputy-subtext: #416B70;
+  --cputy-text-main: #000000;
+  --cputy-text-secondary: #14252E;
+  --cputy-text-muted: #5F9C9F;
+  --cputy-glass-bg: rgba(255, 255, 255, 0.94);
+  --cputy-card-bg: #FFFFFF;
+  --cputy-card-hover-bg: #F4F9F9;
+  --cputy-card-border: rgba(25, 53, 60, 0.1);
+  --cputy-card-hover-border: rgba(95, 156, 159, 0.5);
+
+  --mac-bg: var(--cputy-bg);
+  --mac-sidebar: var(--cputy-sidebar);
+  --mac-card: var(--cputy-card);
+  --mac-card-hover: var(--cputy-card-hover);
+  --mac-border: var(--cputy-border);
+  --mac-subtext: var(--cputy-subtext);
+  --mac-glass-bg: var(--cputy-glass-bg);
+  --mac-card-bg: var(--cputy-card-bg);
+  --mac-card-hover-bg: var(--cputy-card-hover-bg);
+  --mac-card-border: var(--cputy-card-border);
+  --mac-card-hover-border: var(--cputy-card-hover-border);
 }
 
 body {
@@ -60,43 +129,68 @@ body {
   -webkit-user-select: none;
   -webkit-app-region: no-drag;
   overflow: hidden;
-  background-color: var(--mac-bg);
-  color: var(--mac-text-secondary);
+  background-color: var(--cputy-bg);
+  color: var(--cputy-text-secondary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", sans-serif;
-  font-weight: 500;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-[dir="rtl"], .rtl-layout {
-  font-family: 'Cairo', 'Tajawal', -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Geeza Pro", sans-serif;
+/* Cairo font integration for Arabic & RTL */
+[dir="rtl"],
+[dir="rtl"] *,
+.rtl-layout,
+.rtl-layout * {
+  font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Geeza Pro", sans-serif !important;
   letter-spacing: normal;
-  font-weight: 600;
+}
+
+[dir="rtl"] .font-mono {
+  font-family: 'SF Mono', ui-monospace, 'Menlo', 'Cairo', monospace !important;
+}
+
+[dir="rtl"], .rtl-layout {
+  font-weight: 700 !important;
+}
+
+[dir="rtl"] .font-normal,
+.rtl-layout .font-normal {
+  font-weight: 600 !important;
 }
 
 [dir="rtl"] .font-medium,
 .rtl-layout .font-medium {
-  font-weight: 700;
+  font-weight: 700 !important;
 }
 
 [dir="rtl"] .font-semibold,
 .rtl-layout .font-semibold {
-  font-weight: 800;
+  font-weight: 800 !important;
 }
 
 [dir="rtl"] .font-bold,
 .rtl-layout .font-bold {
-  font-weight: 900;
+  font-weight: 850 !important;
 }
 
-[dir="rtl"] .nav-label,
-.rtl-layout .nav-label {
+[dir="rtl"] .font-extrabold,
+[dir="rtl"] .font-black,
+.rtl-layout .font-extrabold,
+.rtl-layout .font-black {
+  font-weight: 900 !important;
+}
+
+/* Bold navigation labels */
+.nav-label {
   font-weight: 700;
-  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
 }
 
-[dir="rtl"] .sidebar-nav-item.active .nav-label,
-.rtl-layout .sidebar-nav-item.active .nav-label {
+[dir="rtl"] .nav-label {
+  font-family: 'Cairo', sans-serif !important;
   font-weight: 800 !important;
+  font-size: 13px !important;
 }
 
 /* Draggable titlebar area */
@@ -110,8 +204,8 @@ body {
 
 /* Sleek custom scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -119,213 +213,343 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .light ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.16);
+  background: rgba(0, 0, 0, 0.14);
 }
 
 .light ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.28);
 }
 
-/* Glassmorphism surfaces */
-.mac-glass {
-  background: var(--mac-glass-bg);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--mac-border);
-  transition: background 0.25s ease, border-color 0.25s ease;
+/* Glassmorphism & Surface Utilities */
+.cputy-glass, .mac-glass {
+  background: var(--cputy-glass-bg);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--cputy-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.mac-card {
-  background: var(--mac-card-bg);
+.light .cputy-glass, .light .mac-glass {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+}
+
+.cputy-card, .mac-card {
+  background: var(--cputy-card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--mac-card-border);
+  border: 1px solid var(--cputy-card-border);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mac-card:hover {
-  background: var(--mac-card-hover-bg);
-  border-color: var(--mac-card-hover-border);
+.cputy-card:hover, .mac-card:hover {
+  background: var(--cputy-card-hover-bg);
+  border-color: var(--cputy-card-hover-border);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.35), 0 0 15px -3px rgba(59, 130, 246, 0.15);
 }
 
-.light .mac-glass {
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.04);
+.light .cputy-card, .light .mac-card {
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03), inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
 }
 
-.light .mac-card {
-  box-shadow: 0 4px 14px -3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+.light .cputy-card:hover, .light .mac-card:hover {
+  box-shadow: 0 8px 22px -4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-color: rgba(37, 99, 235, 0.28);
 }
 
-.light .mac-card:hover {
-  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.09), 0 2px 4px rgba(0, 0, 0, 0.04);
-}
-
-/* Dedicated Sidebar Navigation Item Styles */
+/* Sidebar Navigation Items */
 .sidebar-nav-item {
-  color: #475569;
+  color: #8EACB0;
   background-color: transparent;
   border: 1px solid transparent;
-  transition: all 0.15s ease;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
 .sidebar-nav-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #0F172A;
+  background-color: rgba(95, 156, 159, 0.12);
+  color: #FFFFFF;
 }
 
 .sidebar-nav-item.active {
-  background-color: rgba(59, 130, 246, 0.12);
-  color: #1D4ED8 !important;
-  border: 1px solid rgba(59, 130, 246, 0.28);
-  font-weight: 600;
+  background-color: rgba(146, 230, 224, 0.14);
+  color: #92E6E0 !important;
+  border: 1px solid rgba(146, 230, 224, 0.38);
+  box-shadow: 0 0 20px -3px rgba(146, 230, 224, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  font-weight: 700;
 }
 
 .sidebar-nav-item.active .nav-label {
-  color: #1D4ED8 !important;
+  color: #92E6E0 !important;
 }
 
 .sidebar-nav-item.active .nav-icon {
-  color: #2563EB !important;
+  color: #92E6E0 !important;
 }
 
 .sidebar-nav-badge {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #475569;
+  background-color: rgba(25, 53, 60, 0.6);
+  color: #8EACB0;
+  border: 1px solid rgba(95, 156, 159, 0.2);
 }
 
 .sidebar-nav-item.active .sidebar-nav-badge {
-  background-color: rgba(59, 130, 246, 0.18);
-  color: #1E40AF !important;
-  font-weight: 600;
+  background-color: rgba(146, 230, 224, 0.22);
+  color: #B2F4EF !important;
+  border-color: rgba(146, 230, 224, 0.4);
 }
 
-/* Dark Mode Sidebar */
-.dark .sidebar-nav-item {
-  color: #94A3B8;
-  background-color: transparent;
-  border: 1px solid transparent;
+.light .sidebar-nav-item {
+  color: #416B70;
 }
 
-.dark .sidebar-nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.06);
+.light .sidebar-nav-item:hover {
+  background-color: rgba(95, 156, 159, 0.08);
+  color: #14252E;
+}
+
+.light .sidebar-nav-item.active {
+  background-color: rgba(95, 156, 159, 0.16);
+  color: #19353C !important;
+  border: 1px solid rgba(95, 156, 159, 0.4);
+  box-shadow: 0 2px 8px -1px rgba(95, 156, 159, 0.18);
+}
+
+.light .sidebar-nav-item.active .nav-label {
+  color: #19353C !important;
+}
+
+.light .sidebar-nav-item.active .nav-icon {
+  color: #19353C !important;
+}
+
+.light .sidebar-nav-badge {
+  background-color: rgba(95, 156, 159, 0.1);
+  color: #416B70;
+  border: 1px solid rgba(95, 156, 159, 0.15);
+}
+
+.light .sidebar-nav-item.active .sidebar-nav-badge {
+  background-color: rgba(95, 156, 159, 0.25);
+  color: #14252E !important;
+  border-color: rgba(95, 156, 159, 0.35);
+}
+
+/* Holographic Radar Scanner Engine */
+.cputy-radar-container {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cputy-radar-ring-outer {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1.5px dashed rgba(146, 230, 224, 0.4);
+  animation: cputy-spin-slow 24s linear infinite;
+}
+
+.cputy-radar-ring-mid {
+  position: absolute;
+  inset: 16px;
+  border-radius: 9999px;
+  border: 1px solid rgba(95, 156, 159, 0.35);
+  box-shadow: 0 0 25px -4px rgba(95, 156, 159, 0.25);
+}
+
+.cputy-radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, rgba(146, 230, 224, 0.45) 0deg, rgba(95, 156, 159, 0.08) 60deg, transparent 120deg);
+  animation: cputy-spin 3.2s linear infinite;
+  pointer-events: none;
+}
+
+.cputy-radar-core {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 9999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #19353C 0%, #000000 100%);
+  border: 1.5px solid rgba(146, 230, 224, 0.4);
+  box-shadow: 0 0 35px -5px rgba(146, 230, 224, 0.3), inset 0 0 25px rgba(95, 156, 159, 0.25);
+  transition: all 0.3s ease;
+}
+
+.light .cputy-radar-core {
+  background: radial-gradient(circle at center, #FFFFFF 0%, #EBF5F5 80%, #D4EFEF 100%);
+  border: 1.5px solid rgba(95, 156, 159, 0.4);
+  box-shadow: 0 10px 30px -5px rgba(95, 156, 159, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.light .cputy-radar-ring-outer {
+  border-color: rgba(95, 156, 159, 0.35);
+}
+
+.light .cputy-radar-ring-mid {
+  border-color: rgba(146, 230, 224, 0.35);
+  box-shadow: 0 0 20px -4px rgba(95, 156, 159, 0.15);
+}
+
+.cputy-radar-total {
+  background: linear-gradient(135deg, #B2F4EF 0%, #92E6E0 50%, #5F9C9F 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.light .cputy-radar-total {
+  background: linear-gradient(135deg, #19353C 0%, #5F9C9F 50%, #14252E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animations */
+@keyframes cputy-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cputy-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-energy {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 25px -4px rgba(146, 230, 224, 0.35);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 40px 4px rgba(146, 230, 224, 0.55);
+  }
+}
+
+.animate-pulse-energy {
+  animation: pulse-energy 2.5s ease-in-out infinite;
+}
+
+/* Action Buttons */
+.cputy-btn-primary {
+  background: linear-gradient(135deg, #92E6E0 0%, #5F9C9F 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 14px -1px rgba(95, 156, 159, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  color: #14252E !important;
+  font-weight: 800;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cputy-btn-primary:hover {
+  background: linear-gradient(135deg, #B2F4EF 0%, #6EB3B6 100%);
+  box-shadow: 0 6px 20px 0 rgba(146, 230, 224, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+  transform: translateY(-0.5px);
+}
+
+.cputy-btn-primary:active {
+  transform: translateY(0.5px) scale(0.98);
+}
+
+.cputy-btn-emerald {
+  background: linear-gradient(135deg, #92E6E0 0%, #5F9C9F 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 14px -1px rgba(95, 156, 159, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  color: #14252E !important;
+  font-weight: 800;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cputy-btn-emerald:hover {
+  background: linear-gradient(135deg, #B2F4EF 0%, #6EB3B6 100%);
+  box-shadow: 0 6px 20px 0 rgba(146, 230, 224, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+  transform: translateY(-0.5px);
+}
+
+.cputy-btn-rose {
+  background: linear-gradient(135deg, #92E6E0 0%, #5F9C9F 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 14px -1px rgba(95, 156, 159, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  color: #14252E !important;
+  font-weight: 800;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cputy-btn-rose:hover {
+  background: linear-gradient(135deg, #B2F4EF 0%, #6EB3B6 100%);
+  box-shadow: 0 6px 20px 0 rgba(146, 230, 224, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+  transform: translateY(-0.5px);
+}
+
+.cputy-btn-secondary {
+  background-color: rgba(95, 156, 159, 0.12);
+  border: 1px solid rgba(95, 156, 159, 0.2);
+  color: #E3F2F1;
+  font-weight: 700;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cputy-btn-secondary:hover {
+  background-color: rgba(95, 156, 159, 0.22);
   color: #FFFFFF;
+  border-color: rgba(146, 230, 224, 0.35);
+  transform: translateY(-0.5px);
 }
 
-.dark .sidebar-nav-item.active {
-  background-color: rgba(59, 130, 246, 0.22);
-  color: #93C5FD !important;
-  border: 1px solid rgba(59, 130, 246, 0.35);
-  box-shadow: 0 0 15px -3px rgba(59, 130, 246, 0.25);
-  font-weight: 600;
+.light .cputy-btn-secondary {
+  background-color: rgba(95, 156, 159, 0.1);
+  border-color: rgba(95, 156, 159, 0.2);
+  color: #14252E;
 }
 
-.dark .sidebar-nav-item.active .nav-label {
-  color: #93C5FD !important;
-}
-
-.dark .sidebar-nav-item.active .nav-icon {
-  color: #60A5FA !important;
-}
-
-.dark .sidebar-nav-badge {
-  background-color: rgba(255, 255, 255, 0.1);
+.cputy-btn-secondary {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #CBD5E1;
+  font-weight: 600;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dark .sidebar-nav-item.active .sidebar-nav-badge {
-  background-color: rgba(59, 130, 246, 0.35);
-  color: #BFDBFE !important;
+.cputy-btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-0.5px);
 }
 
-/* Dedicated Smart Scan Orb Styles */
-.smart-scan-orb {
-  background: linear-gradient(180deg, #EEF2FF 0%, #FFFFFF 50%, #F8FAFC 100%);
-  border: 1.5px solid rgba(199, 210, 254, 0.9);
-  box-shadow: 0 12px 28px -6px rgba(59, 130, 246, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
-}
-
-.dark .smart-scan-orb {
-  background: linear-gradient(180deg, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.6) 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.15) inset;
-}
-
-.smart-scan-badge {
-  background-color: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  color: #2563EB;
-}
-
-.dark .smart-scan-badge {
-  background-color: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  color: #60A5FA;
-}
-
-.smart-scan-total-number {
-  background: linear-gradient(135deg, #1D4ED8 0%, #4338CA 50%, #0891B2 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #1D4ED8;
-}
-
-.dark .smart-scan-total-number {
-  background: linear-gradient(135deg, #60A5FA 0%, #818CF8 50%, #22D3EE 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #60A5FA;
-}
-
-.smart-scan-status-text {
-  color: #475569;
-}
-
-.dark .smart-scan-status-text {
-  color: #94A3B8;
-}
-
-.metric-card-size {
-  color: #0F172A;
-}
-
-.dark .metric-card-size {
-  color: #E2E8F0;
-}
-
-.rescan-btn {
-  background-color: #F1F5F9;
-  border: 1px solid #E2E8F0;
+.light .cputy-btn-secondary {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
   color: #334155;
 }
 
-.rescan-btn:hover {
-  background-color: #E2E8F0;
+.light .cputy-btn-secondary:hover {
+  background-color: rgba(0, 0, 0, 0.09);
   color: #0F172A;
+  border-color: rgba(0, 0, 0, 0.16);
 }
 
-.dark .rescan-btn {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #CBD5E1;
-}
-
-.dark .rescan-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #FFFFFF;
-}
-
-/* Light mode typography & high contrast rules */
+/* High Contrast Light Mode Overrides */
 .light {
   color-scheme: light;
   color: #334155;
@@ -389,7 +613,7 @@ body {
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Solid action buttons keep white text in both themes */
+/* Solid action buttons keep crisp white text in both themes */
 .btn-solid,
 .btn-solid * {
   color: #FFFFFF !important;
@@ -403,23 +627,297 @@ body {
   color: #94A3B8 !important;
 }
 
-.shadow-glow-blue {
-  box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.3);
+/* Global Controls Accent Color matching user palette (#92E6E0 in dark, #487E81 in light) */
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+  accent-color: #92E6E0 !important;
+  cursor: pointer;
 }
 
-.shadow-glow-emerald {
-  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.3);
+.light input[type="checkbox"],
+.light input[type="radio"],
+.light input[type="range"] {
+  accent-color: #487E81 !important;
 }
 
-.shadow-glow-rose {
-  box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.3);
+.shadow-glow-blue,
+.shadow-glow-emerald,
+.shadow-glow-rose,
+.shadow-glow-cyan,
+.shadow-glow-violet,
+.shadow-glow-amber {
+  box-shadow: 0 0 25px -4px rgba(146, 230, 224, 0.4);
 }
 
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.02); }
+/* ========================================================
+   CPUTY Signature 3D Glass Orb & Orbital System (User Palette)
+   Swatch 1: #14252E | Swatch 2: #000000 | Swatch 3: #19353C 
+   Swatch 4: #5F9C9F | Swatch 5: #92E6E0
+   ======================================================== */
+
+.cleanmymac-orb-stage {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 900px;
 }
 
-.animate-pulse-subtle {
-  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+/* Ambient Volumetric Diffuse Aura */
+.cleanmymac-orb-aura {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(146, 230, 224, 0.45) 0%, rgba(95, 156, 159, 0.22) 45%, transparent 70%);
+  filter: blur(35px);
+  pointer-events: none;
+  transition: all 0.8s ease-out;
+  animation: orb-aura-breathe 5s ease-in-out infinite alternate;
 }
+
+.light .cleanmymac-orb-aura {
+  background: radial-gradient(circle, rgba(146, 230, 224, 0.35) 0%, rgba(95, 156, 159, 0.15) 50%, transparent 70%);
+}
+
+@keyframes orb-aura-breathe {
+  0% { transform: scale(0.92); opacity: 0.65; }
+  100% { transform: scale(1.1); opacity: 0.95; }
+}
+
+/* 3D Glass Sphere Body */
+.cleanmymac-orb-sphere {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, 
+    #B2F4EF 0%, 
+    #92E6E0 26%, 
+    #5F9C9F 52%, 
+    #19353C 74%, 
+    #14252E 88%,
+    #000000 100%
+  );
+  box-shadow: 
+    0 20px 50px -10px rgba(25, 53, 60, 0.85),
+    0 0 30px rgba(146, 230, 224, 0.45),
+    inset -8px -8px 24px rgba(0, 0, 0, 0.95),
+    inset 0 0 20px rgba(178, 244, 239, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.cleanmymac-orb-sphere:hover {
+  transform: scale(1.04);
+  box-shadow: 
+    0 25px 60px -8px rgba(146, 230, 224, 0.65),
+    0 0 45px rgba(95, 156, 159, 0.6),
+    inset -6px -6px 20px rgba(0, 0, 0, 0.85),
+    inset 0 0 30px rgba(178, 244, 239, 0.6);
+}
+
+.light .cleanmymac-orb-sphere {
+  background: radial-gradient(circle at 35% 22%, 
+    #B2F4EF 0%, 
+    #92E6E0 30%, 
+    #5F9C9F 60%, 
+    #19353C 85%, 
+    #14252E 100%
+  );
+  box-shadow: 
+    0 20px 45px -8px rgba(95, 156, 159, 0.45),
+    0 4px 20px rgba(146, 230, 224, 0.35),
+    inset -6px -6px 20px rgba(20, 37, 46, 0.7),
+    inset 2px 2px 14px rgba(255, 255, 255, 0.5);
+}
+
+/* Glass Specular Crescent & Reflection Highlights */
+.cleanmymac-orb-highlight {
+  position: absolute;
+  top: 12px;
+  left: 28px;
+  width: 95px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 72%);
+  transform: rotate(-32deg);
+  pointer-events: none;
+}
+
+/* Inner Holographic Grid / Core */
+.cleanmymac-orb-core {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #FFFFFF !important;
+}
+
+.cleanmymac-orb-core * {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+.cleanmymac-orb-badge {
+  background: rgba(20, 37, 46, 0.75) !important;
+  border: 1px solid rgba(146, 230, 224, 0.4) !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.light .cleanmymac-orb-badge {
+  background: rgba(20, 37, 46, 0.85) !important;
+  border: 1px solid rgba(146, 230, 224, 0.5) !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* 3D Rotating Orbital Rings */
+.cleanmymac-orbital-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.cleanmymac-orbital-ring-1 {
+  width: 250px;
+  height: 250px;
+  border-top-color: rgba(146, 230, 224, 0.9);
+  border-right-color: rgba(95, 156, 159, 0.45);
+  box-shadow: 0 0 15px rgba(146, 230, 224, 0.35);
+  transform: rotateX(68deg) rotateY(-18deg) rotateZ(0deg);
+  animation: cleanmymac-spin-orbit1 9s linear infinite;
+}
+
+.cleanmymac-orbital-ring-2 {
+  width: 235px;
+  height: 235px;
+  border-bottom-color: rgba(95, 156, 159, 0.9);
+  border-left-color: rgba(146, 230, 224, 0.45);
+  box-shadow: 0 0 15px rgba(95, 156, 159, 0.35);
+  transform: rotateX(72deg) rotateY(24deg) rotateZ(0deg);
+  animation: cleanmymac-spin-orbit2 12s linear infinite reverse;
+}
+
+@keyframes cleanmymac-spin-orbit1 {
+  from { transform: rotateX(68deg) rotateY(-18deg) rotateZ(0deg); }
+  to { transform: rotateX(68deg) rotateY(-18deg) rotateZ(360deg); }
+}
+
+@keyframes cleanmymac-spin-orbit2 {
+  from { transform: rotateX(72deg) rotateY(24deg) rotateZ(0deg); }
+  to { transform: rotateX(72deg) rotateY(24deg) rotateZ(360deg); }
+}
+
+/* Sonar Scan Radar Waves */
+.cleanmymac-radar-wave {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 2px solid rgba(146, 230, 224, 0.7);
+  animation: cleanmymac-radar-expand 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes cleanmymac-radar-expand {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+
+/* Signature Rounded Pill Button */
+.cleanmymac-pill-btn {
+  border-radius: 9999px;
+  padding: 13px 44px;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 10px 25px -4px rgba(146, 230, 224, 0.45),
+    0 0 15px rgba(95, 156, 159, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  background: linear-gradient(135deg, #92E6E0 0%, #5F9C9F 100%);
+  color: #14252E !important;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.cleanmymac-pill-btn:hover {
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 
+    0 14px 30px -4px rgba(146, 230, 224, 0.65),
+    0 0 25px rgba(146, 230, 224, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: linear-gradient(135deg, #B2F4EF 0%, #92E6E0 100%);
+}
+
+.cleanmymac-pill-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Clean Button Pill */
+.cleanmymac-pill-btn-clean {
+  background: linear-gradient(135deg, #92E6E0 0%, #5F9C9F 100%);
+  color: #14252E !important;
+  font-weight: 800;
+  box-shadow: 
+    0 10px 25px -4px rgba(146, 230, 224, 0.45),
+    0 0 15px rgba(95, 156, 159, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.cleanmymac-pill-btn-clean:hover {
+  background: linear-gradient(135deg, #B2F4EF 0%, #92E6E0 100%);
+  box-shadow: 
+    0 14px 30px -4px rgba(146, 230, 224, 0.65),
+    0 0 25px rgba(146, 230, 224, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Dynamic Ambient Category Light Aura in Workspace */
+.category-ambient-glow {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(90px);
+  opacity: 0.2;
+  background: #5F9C9F;
+  transition: all 0.8s ease;
+  z-index: 0;
+}
+
+.light .category-ambient-glow {
+  opacity: 0.15;
+  background: #92E6E0;
+}
+
+[data-active-category] .category-ambient-glow {
+  background: #5F9C9F;
+}
+

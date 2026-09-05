@@ -78,14 +78,23 @@ function calculateCpuDelta(): number {
 
 async function updateDiskStats() {
   try {
-    const { stdout } = await execAsync('df -k /');
+    let stdout = '';
+    try {
+      const res = await execAsync('df -k /System/Volumes/Data');
+      stdout = res.stdout;
+    } catch {
+      const res = await execAsync('df -k /');
+      stdout = res.stdout;
+    }
+
     const lines = stdout.trim().split('\n');
     if (lines.length >= 2) {
       const parts = lines[1].split(/\s+/);
       if (parts.length >= 6) {
         const diskTotal = parseInt(parts[1], 10) * 1024;
-        const diskUsed = parseInt(parts[2], 10) * 1024;
         const diskFree = parseInt(parts[3], 10) * 1024;
+        // In macOS APFS containers, diskUsed is total minus available free space
+        const diskUsed = diskTotal > diskFree ? diskTotal - diskFree : parseInt(parts[2], 10) * 1024;
         const mountPoint = parts[8] || '/';
         const storageUsagePercent = diskTotal > 0 ? parseFloat(((diskUsed / diskTotal) * 100).toFixed(1)) : 0;
 

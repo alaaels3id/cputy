@@ -18,6 +18,13 @@ export interface Translations {
   systemHealth: string;
   preferencesLogs: string;
   
+  // Section Headers (CleanMyMac X Grouping)
+  sectionCleanup: string;
+  sectionProtection: string;
+  sectionSpeed: string;
+  sectionFiles: string;
+  sectionApplications: string;
+  
   // Header
   protectedTag: string;
   cleanSelected: string;
@@ -39,6 +46,7 @@ export interface Translations {
   macintoshHD: string;
   storageFree: string;
   storageTotal: string;
+  storageUsed: string;
 
   // System Health View
   healthTitle: string;
@@ -97,6 +105,10 @@ export interface Translations {
   cleanAllNow: string;
   noJunkFound: string;
   systemCleanBadge: string;
+  summaryCleanup: string;
+  summaryProtection: string;
+  summarySpeed: string;
+  reviewDetails: string;
 
   // Uninstaller View
   uninstallerHeaderTitle: string;
@@ -171,6 +183,12 @@ const translations: Record<Language, Translations> = {
     systemHealth: 'System Health',
     preferencesLogs: 'Preferences & Logs',
 
+    sectionCleanup: 'CLEANUP',
+    sectionProtection: 'PROTECTION',
+    sectionSpeed: 'SPEED',
+    sectionFiles: 'FILES',
+    sectionApplications: 'APPLICATIONS',
+
     protectedTag: 'macOS Protected',
     cleanSelected: 'Clean Selected',
     rescan: 'Rescan',
@@ -189,6 +207,7 @@ const translations: Record<Language, Translations> = {
     macintoshHD: 'Macintosh HD',
     storageFree: 'free',
     storageTotal: 'total',
+    storageUsed: 'used',
 
     healthTitle: 'macOS Hardware & Performance Monitor',
     healthDesc: 'Real-time diagnostics for Apple Silicon / Intel CPUs, unified memory pressure, and internal NVMe storage.',
@@ -243,7 +262,11 @@ const translations: Record<Language, Translations> = {
     itemsFoundText: 'items safe to clean',
     cleanAllNow: 'Clean Smart Scan Items',
     noJunkFound: 'Your Mac is clean and running at peak performance.',
-    systemCleanBadge: 'Optimized',
+    systemCleanBadge: 'System Optimal',
+    summaryCleanup: 'Cleanup',
+    summaryProtection: 'Protection',
+    summarySpeed: 'Speed & Files',
+    reviewDetails: 'View Details',
 
     uninstallerHeaderTitle: 'Complete App Uninstaller & Leftover Hunter',
     uninstallerHeaderDesc: 'Completely remove applications along with hidden ~/Library preferences, caches, and leftover application data.',
@@ -308,6 +331,12 @@ const translations: Record<Language, Translations> = {
     systemHealth: 'صحة وأداء النظام',
     preferencesLogs: 'التفضيلات والسجلات',
 
+    sectionCleanup: 'التنظيف',
+    sectionProtection: 'الحماية والخصوصية',
+    sectionSpeed: 'السرعة والأداء',
+    sectionFiles: 'الملفات والمساحة',
+    sectionApplications: 'التطبيقات',
+
     protectedTag: 'نظام macOS محمي',
     cleanSelected: 'تنظيف المحدد',
     rescan: 'إعادة الفحص',
@@ -326,6 +355,7 @@ const translations: Record<Language, Translations> = {
     macintoshHD: 'قرص Macintosh HD',
     storageFree: 'متاح',
     storageTotal: 'الإجمالي',
+    storageUsed: 'مستخدم',
 
     healthTitle: 'مراقب عتاد وأداء نظام macOS',
     healthDesc: 'تشخيص مباشر لمعالجات Apple Silicon / Intel وضغط الذاكرة الموحدة وسعة تخزين NVMe الداخلية.',
@@ -381,6 +411,10 @@ const translations: Record<Language, Translations> = {
     cleanAllNow: 'تنظيف جميع عناصر الفحص الذكي',
     noJunkFound: 'نظام ماك نظيف ويعمل بأقصى كفاءة.',
     systemCleanBadge: 'نظام مثالي',
+    summaryCleanup: 'التنظيف',
+    summaryProtection: 'الحماية',
+    summarySpeed: 'السرعة والملفات',
+    reviewDetails: 'عرض التفاصيل',
 
     uninstallerHeaderTitle: 'إلغاء تثبيت التطبيقات وصياد المتبقيات',
     uninstallerHeaderDesc: 'حذف التطبيقات بالكامل مع ملفات التفضيلات المخفية في مكتبة النظام والكاش وبقايا الملفات.',

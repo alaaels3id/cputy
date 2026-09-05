@@ -309,7 +309,7 @@ export const App: React.FC = () => {
   const { dir } = useLanguage();
 
   return (
-    <div className="flex flex-row h-screen w-screen bg-mac-bg text-slate-100 dark:text-slate-100 light:text-slate-800 font-sans overflow-hidden transition-colors duration-200" dir="ltr">
+    <div className="flex flex-row h-screen w-screen bg-mac-bg text-slate-900 dark:text-slate-100 font-sans overflow-hidden transition-colors duration-250 select-none" dir="ltr">
       {/* Sidebar - Anchored on the left under macOS traffic lights */}
       <Sidebar
         currentCategory={currentCategory}
@@ -319,7 +319,14 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Area - Fully localized with RTL in Arabic */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative" dir={dir}>
+      <div 
+        className="flex-1 flex flex-col min-w-0 overflow-hidden relative" 
+        dir={dir}
+        data-active-category={currentCategory}
+      >
+        {/* Dynamic Category Ambient Mood Flare */}
+        <div className="category-ambient-glow" />
+
         <Header
           currentCategory={currentCategory}
           isScanning={isScanning}

@@ -1,5 +1,6 @@
-import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, dialog, nativeImage } from 'electron';
 import * as path from 'path';
+import * as fs from 'fs';
 import { getSystemStats, purgeRAM } from './scanners/systemMonitor';
 import { scanSystemJunk } from './scanners/systemJunkScanner';
 import { scanDevJunk } from './scanners/devJunkScanner';
@@ -10,22 +11,36 @@ import { scanDuplicates } from './scanners/duplicateScanner';
 import { scanInstalledApps } from './scanners/uninstallerScanner';
 import { cleanPaths } from './scanners/cleanerEngine';
 import { setupTray, destroyTray } from './trayManager';
-import { getNotificationSettings, saveNotificationSettings, sendTestDesktopNotification, sendDesktopNotification } from './notificationManager';
+import { getNotificationSettings, saveNotificationSettings, sendTestDesktopNotification, sendDesktopNotification, getAppIconPath } from './notificationManager';
 
+app.setName('CPUTY');
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.cputy.app');
+}
 
 let mainWindow: BrowserWindow | null = null;
 let isQuitting = false;
 
 function createWindow() {
+  const iconPath = getAppIconPath();
+  if (process.platform === 'darwin' && app.dock && iconPath && fs.existsSync(iconPath)) {
+    try {
+      app.dock.setIcon(iconPath);
+    } catch {
+      // ignore
+    }
+  }
+
   mainWindow = new BrowserWindow({
     width: 1180,
     height: 780,
     minWidth: 1000,
     minHeight: 650,
     title: 'CPUTY',
+    icon: iconPath,
     titleBarStyle: 'hiddenInset',
     trafficLightPosition: { x: 18, y: 18 },
-    backgroundColor: '#0F1117',
+    backgroundColor: '#090C15',
     show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

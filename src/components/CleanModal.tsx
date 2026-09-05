@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trash2, AlertTriangle, ShieldCheck, X, Sparkles, Package } from 'lucide-react';
+import { X, Sparkles, Package, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { formatBytes } from '../utils/formatters';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -37,57 +37,57 @@ export const CleanModal: React.FC<CleanModalProps> = ({
   const modalConfirmText = confirmText || t('cleanNowBtn');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-md rounded-3xl mac-glass border border-white/10 p-6 space-y-6 shadow-2xl animate-scale-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+      <div className="w-full max-w-md rounded-3xl cputy-glass border border-mac-border p-6 space-y-6 shadow-2xl animate-scale-up">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-2xl ${isRose ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}`}>
-              {isRose ? <Package className="w-5 h-5" /> : <Sparkles className="w-5 h-5" />}
+            <div className="p-3 rounded-2xl bg-emerald-500/15 text-emerald-500 dark:text-emerald-400 border border-emerald-500/25">
+              <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-slate-900 dark:text-white">{modalTitle}</h3>
-              <p className="text-xs text-mac-subtext">{modalSubtitle}</p>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">{modalTitle}</h3>
+              <p className="text-xs text-mac-subtext mt-0.5">{modalSubtitle}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Space Stats */}
-        <div className="p-4 rounded-2xl bg-black/5 dark:bg-black/30 border border-black/5 dark:border-white/5 space-y-2 text-center">
-          <span className="text-[11px] text-mac-subtext uppercase tracking-wider font-semibold">{t('totalSizeToFree')}</span>
-          <div className={`text-3xl font-extrabold text-transparent bg-clip-text ${isRose ? 'bg-gradient-to-r from-rose-500 to-pink-400 dark:from-rose-400 dark:to-pink-300' : 'bg-gradient-to-r from-blue-600 to-emerald-500 dark:from-blue-400 dark:to-emerald-300'}`}>
+        <div className="p-5 rounded-2xl bg-black/5 dark:bg-black/30 border border-black/5 dark:border-white/5 space-y-2 text-center">
+          <span className="text-[10.5px] text-mac-subtext uppercase tracking-widest font-mono font-bold">{t('totalSizeToFree')}</span>
+          <div className="text-4xl font-black font-mono tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#19353C] via-[#5F9C9F] to-[#92E6E0] dark:from-[#5F9C9F] dark:via-[#92E6E0] dark:to-[#FFFFFF]">
             {formatBytes(totalSize)}
           </div>
-          <span className="text-xs text-slate-500 dark:text-slate-400 block">
+          <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">
             {isRTL ? (
-              <>عبر <strong>{itemCount}</strong> {isRose ? 'تطبيق ومتبقيات محددة' : 'عنصر محدد'}</>
+              <>عبر <strong className="text-slate-900 dark:text-white font-mono">{itemCount}</strong> {isRose ? 'تطبيق ومتبقيات محددة' : 'عنصر محدد'}</>
             ) : (
-              <>Across <strong>{itemCount}</strong> selected {isRose ? 'application(s) and leftovers' : 'items'}</>
+              <>Across <strong className="text-slate-900 dark:text-white font-mono">{itemCount}</strong> selected {isRose ? 'application(s) and leftovers' : 'items'}</>
             )}
           </span>
         </div>
 
         {/* Safety Option */}
-        <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/5 space-y-2">
+        <div className="p-4 rounded-2xl bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/5 space-y-2">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={permanently}
               onChange={(e) => setPermanently(e.target.checked)}
-              className={`mt-0.5 rounded border-slate-400 dark:border-slate-700 ${isRose ? 'text-rose-600' : 'text-blue-600'} focus:ring-0`}
+              className="mt-0.5 rounded border-slate-400 dark:border-slate-600 accent-[#92E6E0] focus:ring-0 cursor-pointer"
             />
             <div className="text-xs">
-              <span className="font-semibold text-slate-800 dark:text-slate-200 block">{t('deletePermanently')}</span>
-              <span className="text-[11px] text-mac-subtext">
+              <span className="font-bold text-slate-900 dark:text-slate-200 block">{t('deletePermanently')}</span>
+              <span className="text-[11px] text-mac-subtext leading-relaxed">
                 {permanently 
                   ? (isRTL ? 'سيتم حذف الملفات والتطبيقات نهائياً ولن يمكن استعادتها من سلة المهملات.' : 'Files and application binaries will be permanently deleted and cannot be restored from macOS Trash.')
-                  : (isRTL ? 'سيتم نقل الملفات إلى سلة مهملات ماك حتى تتمكن من استعادتها بسهولة إذا أردت.' : 'Files will be moved to macOS Trash bin so you can easily restore them if needed.')}
+                  : (isRTL ? 'سيتم نقل الملفات إلى سلة مهملات ماك حتى تتمكن من استعادتها بسهولة إذا أردت.' : 'Files will be safely moved to macOS Trash bin so you can easily restore them if needed.')}
               </span>
             </div>
           </label>
@@ -97,17 +97,13 @@ export const CleanModal: React.FC<CleanModalProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-black/5 dark:border-white/5 transition-all cursor-pointer"
+            className="flex-1 py-2.5 rounded-2xl cputy-btn-secondary text-xs font-semibold transition-all cursor-pointer"
           >
             {t('cancelBtn')}
           </button>
           <button
             onClick={() => onConfirm(permanently)}
-            className={`flex-1 py-2.5 rounded-xl text-white text-xs font-semibold transition-all cursor-pointer btn-solid ${
-              isRose 
-                ? 'bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 shadow-glow-rose' 
-                : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-glow-blue'
-            }`}
+            className="flex-1 py-2.5 rounded-2xl text-white text-xs font-bold transition-all cursor-pointer btn-solid cputy-btn-primary shadow-glow-emerald"
           >
             {modalConfirmText}
           </button>
