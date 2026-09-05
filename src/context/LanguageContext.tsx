@@ -71,6 +71,22 @@ export interface Translations {
   englishSub: string;
   arabicSub: string;
 
+  // Desktop Notifications
+  notificationsTitle: string;
+  notificationsDesc: string;
+  enableNotifications: string;
+  enableSound: string;
+  notifyPurgeLabel: string;
+  notifyCleanLabel: string;
+  notifyCpuLabel: string;
+  notifyRamLabel: string;
+  cpuThresholdLabel: string;
+  ramThresholdLabel: string;
+  testNotificationBtn: string;
+  testNotificationSent: string;
+  elevatedPurgeBtn: string;
+
+
   // Smart Scan View
   smartScanTitle: string;
   smartScanDesc: string;
@@ -204,6 +220,21 @@ const translations: Record<Language, Translations> = {
     englishSub: 'English (United States)',
     arabicSub: 'العربية (Arabic - RTL)',
 
+    notificationsTitle: 'Desktop Notifications Configuration',
+    notificationsDesc: 'Customize alerts, RAM purge responses, sound settings, and system load thresholds.',
+    enableNotifications: 'Enable Desktop Notifications',
+    enableSound: 'Play Alert Sounds',
+    notifyPurgeLabel: 'RAM Purge Status Alerts',
+    notifyCleanLabel: 'File Cleanup Completion Alerts',
+    notifyCpuLabel: 'High CPU Usage Alert',
+    notifyRamLabel: 'High RAM Usage Alert',
+    cpuThresholdLabel: 'CPU Load Threshold',
+    ramThresholdLabel: 'RAM Usage Threshold',
+    testNotificationBtn: 'Send Test Notification',
+    testNotificationSent: 'Test notification delivered to Notification Center!',
+    elevatedPurgeBtn: 'Elevated Purge (Admin Sudo)',
+
+
     smartScanTitle: 'One-Click Smart macOS Cleaner',
     smartScanDesc: 'Instantly inspect and reclaim gigabytes across system caches, developer build artifacts, browser data, and duplicate files.',
     startSmartScan: 'Run Smart Scan',
@@ -325,6 +356,21 @@ const translations: Record<Language, Translations> = {
     arabicLang: 'العربية',
     englishSub: 'English (United States)',
     arabicSub: 'العربية (Arabic - RTL)',
+
+    notificationsTitle: 'إعدادات إشعارات سطح المكتب',
+    notificationsDesc: 'تخصيص التنبيهات، استجابة تفريغ الذاكرة، الأصوات، وحدود تنبيه ضغط المعالج والذاكرة.',
+    enableNotifications: 'تفعيل إشعارات سطح المكتب',
+    enableSound: 'تشغيل أصوات التنبيهات',
+    notifyPurgeLabel: 'تنبيهات حالة تفريغ الذاكرة (RAM)',
+    notifyCleanLabel: 'تنبيهات اكتمال تنظيف الملفات',
+    notifyCpuLabel: 'تنبيه الاستهلاك العالي للمعالج (CPU)',
+    notifyRamLabel: 'تنبيه الضغط العالي للذاكرة (RAM)',
+    cpuThresholdLabel: 'حد تنبيه حمل المعالج',
+    ramThresholdLabel: 'حد تنبيه استهلاك الذاكرة',
+    testNotificationBtn: 'إرسال إشعار تجريبي',
+    testNotificationSent: 'تم إرسال الإشعار التجريبي لمركز إشعارات ماك بنجاح!',
+    elevatedPurgeBtn: 'تفريغ مع صلاحيات مسؤول (Sudo)',
+
 
     smartScanTitle: 'التنظيف الذكي لنظام ماك بنقرة واحدة',
     smartScanDesc: 'افحص واستعد غيغابايت من المساحة الضائعة عبر كاش النظام، ملفات بناء المطورين، بيانات المتصفحات، والملفات المكررة.',

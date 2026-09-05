@@ -10,6 +10,8 @@ import { scanDuplicates } from './scanners/duplicateScanner';
 import { scanInstalledApps } from './scanners/uninstallerScanner';
 import { cleanPaths } from './scanners/cleanerEngine';
 import { setupTray, destroyTray } from './trayManager';
+import { getNotificationSettings, saveNotificationSettings, sendTestDesktopNotification, sendDesktopNotification } from './notificationManager';
+
 
 let mainWindow: BrowserWindow | null = null;
 let isQuitting = false;
@@ -93,15 +95,36 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle('clean-items', async (_event, paths: string[], permanently?: boolean) => {
-    return await cleanPaths(paths, permanently);
+    const res = await cleanPaths(paths, permanently);
+    if (res.success) {
+      sendDesktopNotification({
+        title: '🧹 CPUTY Storage Cleaner',
+        body: `Successfully cleaned ${paths.length} items from your Mac.`,
+        category: 'clean',
+      });
+    }
+    return res;
   });
 
-  ipcMain.handle('purge-ram', async () => {
-    return await purgeRAM();
+
+  ipcMain.handle('purge-ram', async (_event, elevated?: boolean) => {
+    return await purgeRAM(elevated);
   });
 
   ipcMain.handle('reveal-in-finder', async (_event, filePath: string) => {
     shell.showItemInFolder(filePath);
+  });
+
+  ipcMain.handle('get-notification-settings', async () => {
+    return getNotificationSettings();
+  });
+
+  ipcMain.handle('update-notification-settings', async (_event, settings) => {
+    return saveNotificationSettings(settings);
+  });
+
+  ipcMain.handle('test-notification', async () => {
+    return sendTestDesktopNotification();
   });
 
   ipcMain.handle('select-folder-dialog', async () => {
@@ -114,6 +137,7 @@ app.whenReady().then(() => {
     }
     return result.filePaths[0];
   });
+
 
   createWindow();
   setupTray(() => mainWindow);

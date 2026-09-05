@@ -94,6 +94,17 @@ export interface SystemStats {
   hostname: string;
 }
 
+export interface NotificationSettings {
+  enabled: boolean;
+  sound: boolean;
+  notifyOnPurge: boolean;
+  notifyOnHighCpu: boolean;
+  cpuThreshold: number;
+  notifyOnHighRam: boolean;
+  ramThreshold: number;
+  notifyOnCleanComplete: boolean;
+}
+
 export interface CleanProgress {
   currentFile: string;
   cleanedBytes: number;
@@ -113,9 +124,12 @@ export interface CPUTYAPI {
   scanDuplicates: (targetDir?: string) => Promise<DuplicateGroup[]>;
   scanInstalledApps: () => Promise<InstalledApp[]>;
   cleanItems: (paths: string[], permanently?: boolean) => Promise<{ success: boolean; freedBytes: number; errors: string[] }>;
-  purgeRAM: () => Promise<{ success: boolean; message: string }>;
+  purgeRAM: (elevated?: boolean) => Promise<{ success: boolean; message: string }>;
   revealInFinder: (filePath: string) => Promise<void>;
   selectFolderDialog: () => Promise<string | null>;
+  getNotificationSettings: () => Promise<NotificationSettings>;
+  updateNotificationSettings: (settings: Partial<NotificationSettings>) => Promise<NotificationSettings>;
+  testNotification: () => Promise<boolean>;
   onScanProgress: (callback: (data: { category: string; progress: number; currentItem?: string }) => void) => () => void;
 }
 
@@ -124,3 +138,4 @@ declare global {
     cputyAPI: CPUTYAPI;
   }
 }
+

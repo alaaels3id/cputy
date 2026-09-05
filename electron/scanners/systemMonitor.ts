@@ -195,13 +195,25 @@ export async function getSystemStats(): Promise<SystemStats> {
   return { ...currentStats };
 }
 
-export async function purgeRAM(): Promise<{ success: boolean; message: string }> {
+export async function purgeRAM(elevated = false): Promise<{ success: boolean; message: string }> {
   try {
-    await execAsync('purge');
+    if (elevated) {
+      await execAsync(`osascript -e 'do shell script "purge" with administrator privileges'`);
+    } else {
+      await execAsync('purge');
+    }
     await updateMemoryStats();
-    return { success: true, message: 'RAM disk and inactive memory purge completed.' };
+    return { success: true, message: 'Inactive memory buffers successfully purged.' };
   } catch (err: any) {
-    return { success: false, message: `Could not purge RAM: ${err?.message || 'Permission required'}` };
+    const errMsg = err?.message || '';
+    if (errMsg.includes('Operation not permitted') || errMsg.includes('Permission denied') || errMsg.includes('sudo')) {
+      return { 
+        success: false, 
+        message: 'macOS requires administrator permissions to purge kernel RAM disk buffers. Try elevated purge or run "sudo purge" in Terminal.' 
+      };
+    }
+    return { success: false, message: `RAM Purge status: ${errMsg || 'Unable to purge inactive memory'}` };
   }
 }
+
 

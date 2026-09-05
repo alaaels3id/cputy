@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { getSystemStats, purgeRAM, startSystemMonitor, stopSystemMonitor } from './scanners/systemMonitor';
 
+import { sendDesktopNotification, checkSystemThresholdAlerts } from './notificationManager';
+
 let tray: Tray | null = null;
 let updateInterval: NodeJS.Timeout | null = null;
 let lastCpuUsage = 0;
@@ -71,6 +73,9 @@ export function setupTray(getMainWindow: () => BrowserWindow | null): Tray {
       lastMemTotalStr = formatBytes(stats.memory.totalBytes);
       lastStorageFreeStr = formatBytes(stats.storage.freeBytes);
 
+      // Check CPU & RAM threshold alerts
+      checkSystemThresholdAlerts(lastCpuUsage, lastMemUsage);
+
       // Display live real-time CPU % directly on the macOS menu bar
       if (tray) {
         tray.setTitle(` ${lastCpuUsage}%`, { fontType: 'monospacedDigit' });
@@ -109,13 +114,11 @@ export function setupTray(getMainWindow: () => BrowserWindow | null): Tray {
         label: '🧹 Clean Inactive RAM',
         click: async () => {
           const res = await purgeRAM();
-          if (Notification.isSupported()) {
-            new Notification({
-              title: 'CPUTY RAM Optimizer',
-              body: res.success ? 'Inactive RAM successfully purged!' : res.message,
-              silent: false,
-            }).show();
-          }
+          sendDesktopNotification({
+            title: 'CPUTY RAM Optimizer',
+            body: res.success ? 'Inactive RAM successfully purged!' : res.message,
+            category: 'purge',
+          });
           await updateMenu();
         },
       },

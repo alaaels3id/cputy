@@ -11,9 +11,12 @@ const api: CPUTYAPI = {
   scanDuplicates: (targetDir?: string) => ipcRenderer.invoke('scan-duplicates', targetDir),
   scanInstalledApps: () => ipcRenderer.invoke('scan-installed-apps'),
   cleanItems: (paths: string[], permanently?: boolean) => ipcRenderer.invoke('clean-items', paths, permanently),
-  purgeRAM: () => ipcRenderer.invoke('purge-ram'),
+  purgeRAM: (elevated?: boolean) => ipcRenderer.invoke('purge-ram', elevated),
   revealInFinder: (filePath: string) => ipcRenderer.invoke('reveal-in-finder', filePath),
   selectFolderDialog: () => ipcRenderer.invoke('select-folder-dialog'),
+  getNotificationSettings: () => ipcRenderer.invoke('get-notification-settings'),
+  updateNotificationSettings: (settings) => ipcRenderer.invoke('update-notification-settings', settings),
+  testNotification: () => ipcRenderer.invoke('test-notification'),
   onScanProgress: (callback) => {
     const subscription = (_event: any, data: any) => callback(data);
     ipcRenderer.on('scan-progress', subscription);
@@ -24,3 +27,4 @@ const api: CPUTYAPI = {
 };
 
 contextBridge.exposeInMainWorld('cputyAPI', api);
+
