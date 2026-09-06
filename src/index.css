@@ -101,10 +101,10 @@
   --cputy-card-hover: #EBF4F4;
   --cputy-border: rgba(25, 53, 60, 0.12);
   --cputy-border-hover: rgba(95, 156, 159, 0.5);
-  --cputy-subtext: #416B70;
-  --cputy-text-main: #000000;
+  --cputy-subtext: #334155;
+  --cputy-text-main: #0F172A;
   --cputy-text-secondary: #14252E;
-  --cputy-text-muted: #5F9C9F;
+  --cputy-text-muted: #475569;
   --cputy-glass-bg: rgba(255, 255, 255, 0.94);
   --cputy-card-bg: #FFFFFF;
   --cputy-card-hover-bg: #F4F9F9;
@@ -311,39 +311,43 @@ body {
 }
 
 .light .sidebar-nav-item {
-  color: #416B70;
+  color: #1E293B;
+}
+
+.light .sidebar-nav-item .nav-label {
+  color: #1E293B;
 }
 
 .light .sidebar-nav-item:hover {
-  background-color: rgba(95, 156, 159, 0.08);
-  color: #14252E;
+  background-color: rgba(25, 53, 60, 0.08);
+  color: #0F172A;
 }
 
 .light .sidebar-nav-item.active {
-  background-color: rgba(95, 156, 159, 0.16);
-  color: #19353C !important;
-  border: 1px solid rgba(95, 156, 159, 0.4);
+  background-color: rgba(95, 156, 159, 0.2);
+  color: #0F172A !important;
+  border: 1px solid rgba(95, 156, 159, 0.45);
   box-shadow: 0 2px 8px -1px rgba(95, 156, 159, 0.18);
 }
 
 .light .sidebar-nav-item.active .nav-label {
-  color: #19353C !important;
+  color: #0F172A !important;
 }
 
 .light .sidebar-nav-item.active .nav-icon {
-  color: #19353C !important;
+  color: #0F172A !important;
 }
 
 .light .sidebar-nav-badge {
-  background-color: rgba(95, 156, 159, 0.1);
-  color: #416B70;
-  border: 1px solid rgba(95, 156, 159, 0.15);
+  background-color: rgba(25, 53, 60, 0.08);
+  color: #1E293B;
+  border: 1px solid rgba(25, 53, 60, 0.14);
 }
 
 .light .sidebar-nav-item.active .sidebar-nav-badge {
-  background-color: rgba(95, 156, 159, 0.25);
-  color: #14252E !important;
-  border-color: rgba(95, 156, 159, 0.35);
+  background-color: rgba(95, 156, 159, 0.32);
+  color: #0F172A !important;
+  border-color: rgba(95, 156, 159, 0.45);
 }
 
 /* Holographic Radar Scanner Engine */
@@ -538,21 +542,26 @@ body {
 }
 
 .light .cputy-btn-secondary {
-  background-color: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: #334155;
+  background-color: rgba(25, 53, 60, 0.06);
+  border-color: rgba(25, 53, 60, 0.14);
+  color: #1E293B !important;
+  font-weight: 700;
+}
+
+.light .cputy-btn-secondary * {
+  color: #1E293B !important;
 }
 
 .light .cputy-btn-secondary:hover {
-  background-color: rgba(0, 0, 0, 0.09);
-  color: #0F172A;
-  border-color: rgba(0, 0, 0, 0.16);
+  background-color: rgba(25, 53, 60, 0.12);
+  color: #0F172A !important;
+  border-color: rgba(25, 53, 60, 0.24);
 }
 
 /* High Contrast Light Mode Overrides */
 .light {
   color-scheme: light;
-  color: #334155;
+  color: #1E293B;
 }
 
 .light h1, 
@@ -570,19 +579,24 @@ body {
 }
 
 .light .text-slate-300 {
-  color: #334155 !important;
+  color: #1E293B !important;
 }
 
 .light .text-slate-400 {
-  color: #475569 !important;
+  color: #334155 !important;
 }
 
 .light .text-slate-500 {
-  color: #64748B !important;
+  color: #475569 !important;
 }
 
 .light .text-mac-subtext {
-  color: #475569 !important;
+  color: #334155 !important;
+}
+
+.light .text-emerald-400,
+.light .text-emerald-300 {
+  color: #0F766E !important;
 }
 
 .light .bg-white\/5,
@@ -613,10 +627,33 @@ body {
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Solid action buttons keep crisp white text in both themes */
+/* Solid action buttons: Dark midnight/spruce text for maximum contrast on bright aqua gradients */
 .btn-solid,
-.btn-solid * {
-  color: #FFFFFF !important;
+.btn-solid *,
+.cputy-btn-primary,
+.cputy-btn-primary *,
+.cputy-btn-emerald,
+.cputy-btn-emerald *,
+.cputy-btn-rose,
+.cputy-btn-rose *,
+.cleanmymac-pill-btn,
+.cleanmymac-pill-btn * {
+  color: #0F2027 !important;
+  font-weight: 800;
+}
+
+.light .btn-solid,
+.light .btn-solid *,
+.light .cputy-btn-primary,
+.light .cputy-btn-primary *,
+.light .cputy-btn-emerald,
+.light .cputy-btn-emerald *,
+.light .cputy-btn-rose,
+.light .cputy-btn-rose *,
+.light .cleanmymac-pill-btn,
+.light .cleanmymac-pill-btn * {
+  color: #0F172A !important;
+  font-weight: 800;
 }
 
 .light input {

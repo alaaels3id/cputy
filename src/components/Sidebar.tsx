@@ -170,14 +170,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <div className="min-w-0">
             <h1 className="font-bold text-sm tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-              <span className="font-mono tracking-wider font-extrabold bg-gradient-to-r from-[#5F9C9F] via-[#92E6E0] to-white bg-clip-text text-transparent">
+              <span className="font-mono tracking-wider font-extrabold bg-gradient-to-r from-[#19353C] via-[#2F676B] to-[#14252E] dark:from-[#5F9C9F] dark:via-[#92E6E0] dark:to-white bg-clip-text text-transparent">
                 {t('appName')}
               </span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#92E6E0]/15 text-[#5F9C9F] dark:text-[#92E6E0] font-mono font-bold uppercase tracking-wider border border-[#92E6E0]/25">
+              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#19353C]/10 text-[#19353C] dark:bg-[#92E6E0]/15 dark:text-[#92E6E0] font-mono font-bold uppercase tracking-wider border border-[#19353C]/20 dark:border-[#92E6E0]/25">
                 {t('proBadge')}
               </span>
             </h1>
-            <p className="text-[10.5px] text-mac-subtext font-medium truncate">{t('suiteSubtitle')}</p>
+            <p className="text-[11px] text-slate-600 dark:text-mac-subtext font-semibold truncate">{t('suiteSubtitle')}</p>
           </div>
         </div>
       </div>
@@ -231,11 +231,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Storage Quick Gauge */}
         <div className="p-2.5 rounded-2xl bg-mac-card/80 border border-mac-border space-y-2 shadow-xs">
           <div className="flex items-center justify-between text-[11px]">
-            <span className="text-mac-subtext flex items-center gap-1.5 font-semibold">
-              <HardDrive className="w-3.5 h-3.5 text-[#92E6E0] shrink-0" />
+            <span className="text-slate-700 dark:text-mac-subtext flex items-center gap-1.5 font-bold">
+              <HardDrive className="w-3.5 h-3.5 text-emerald-600 dark:text-[#92E6E0] shrink-0" />
               {systemStats?.storage?.diskName || t('macintoshHD')}
             </span>
-            <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
+            <span className="font-mono font-bold text-slate-900 dark:text-slate-200">
               {storagePercent}% {t('storageUsed')}
             </span>
           </div>
@@ -248,7 +248,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             />
           </div>
 
-          <div className="flex justify-between text-[9.5px] text-slate-500 dark:text-mac-subtext font-mono font-medium">
+          <div className="flex justify-between text-[10px] text-slate-600 dark:text-mac-subtext font-mono font-semibold">
             <span>{formatBytes(storageUsed)} {t('storageUsed')}</span>
             <span>{formatBytes(storageFree)} {t('storageFree')}</span>
           </div>
@@ -262,8 +262,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           }`}
         >
           <div className="flex items-center gap-2">
-            <Settings className="w-3.5 h-3.5 nav-icon shrink-0 text-slate-400 group-hover:text-slate-200" />
-            <span className="truncate nav-label text-[11.5px]">{t('preferencesLogs')}</span>
+            <Settings className="w-3.5 h-3.5 nav-icon shrink-0 text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200" />
+            <span className="truncate nav-label text-[11.5px] font-bold">{t('preferencesLogs')}</span>
           </div>
         </button>
       </div>

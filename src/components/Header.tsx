@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
         <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-2">
           {getCategoryTitle(currentCategory)}
         </h2>
-        <span className="flex items-center gap-1.5 text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium">
+        <span className="flex items-center gap-1.5 text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-600/30 font-semibold">
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onQuickClean}
             disabled={isScanning}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl cputy-btn-primary text-xs font-semibold shadow-glow-emerald transition-all disabled:opacity-50 btn-solid cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl cputy-btn-primary text-xs font-bold shadow-glow-emerald transition-all disabled:opacity-50 btn-solid cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5 animate-pulse-subtle" />
             <span>{t('cleanSelected')} ({formatBytes(totalCleanableSize)})</span>

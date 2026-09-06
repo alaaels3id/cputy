@@ -218,7 +218,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
             disabled={isPurging}
             className="px-4 py-2.5 rounded-2xl cputy-btn-emerald text-xs font-bold shadow-glow-emerald transition-all disabled:opacity-40 flex items-center gap-2 btn-solid cursor-pointer shrink-0"
           >
-            <Zap className={`w-4 h-4 ${isPurging ? 'animate-spin' : 'text-emerald-200'}`} />
+            <Zap className={`w-4 h-4 ${isPurging ? 'animate-spin' : 'text-[#0F172A]'}`} />
             <span>{isPurging ? t('purgingRam') : t('freeInactiveRam')}</span>
           </button>
           <button
@@ -275,14 +275,14 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
             />
           </div>
 
-          <div className="text-[11px] text-mac-subtext space-y-1.5 pt-1 border-t border-mac-border/50">
+          <div className="text-[11px] text-slate-600 dark:text-mac-subtext space-y-1.5 pt-1 border-t border-mac-border/50">
             <div className="flex justify-between items-center">
-              <span>Model:</span>
-              <span className="text-slate-800 dark:text-slate-200 truncate max-w-[130px] font-semibold">{stats?.cpu?.model || 'Apple Silicon'}</span>
+              <span className="font-semibold text-slate-600 dark:text-slate-400">Model:</span>
+              <span className="text-slate-900 dark:text-slate-200 truncate max-w-[130px] font-bold">{stats?.cpu?.model || 'Apple Silicon'}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span>Load Average:</span>
-              <span className="text-slate-800 dark:text-slate-200 font-mono font-bold">
+              <span className="font-semibold text-slate-600 dark:text-slate-400">Load Average:</span>
+              <span className="text-slate-900 dark:text-slate-200 font-mono font-bold">
                 {stats?.cpu?.loadAverage ? stats.cpu.loadAverage.map(n => n.toFixed(1)).join(' ') : '1.4 1.8 1.6'}
               </span>
             </div>
@@ -293,12 +293,12 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
         <div className="p-6 rounded-3xl cputy-card border border-mac-border flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
+              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 <Zap className="w-4 h-4" />
               </div>
               <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('memoryUnified')}</span>
             </div>
-            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
               {formatBytes(totalRam, 0)}
             </span>
           </div>
@@ -322,13 +322,13 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
               <div style={{ width: `${compressedPct}%` }} className="bg-emerald-400 h-full" title={`Compressed: ${compressedPct}%`} />
               <div style={{ width: `${freePct}%` }} className="bg-slate-300 dark:bg-slate-700 h-full" title={`Free: ${freePct}%`} />
             </div>
-            <div className="flex justify-between text-[10px] text-mac-subtext font-mono font-medium">
+            <div className="flex justify-between text-[11px] text-slate-700 dark:text-mac-subtext font-mono font-bold">
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-500 inline-block"></span>
                 {t('usedLabel')} {formatBytes(usedRam)}
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-500 dark:bg-slate-400 inline-block"></span>
                 {t('freeCacheLabel')} {formatBytes(freeRam)}
               </span>
             </div>
@@ -339,12 +339,12 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
         <div className="p-6 rounded-3xl cputy-card border border-mac-border flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
+              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 <HardDrive className="w-4 h-4" />
               </div>
               <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('storageNvme')}</span>
             </div>
-            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
               {storage?.diskName || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'Local Disk (C:)' : 'Macintosh HD')}
             </span>
           </div>
@@ -360,14 +360,14 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
             />
           </div>
 
-          <div className="text-[11px] text-mac-subtext space-y-1.5 pt-1 border-t border-mac-border/50">
+          <div className="text-[11px] text-slate-600 dark:text-mac-subtext space-y-1.5 pt-1 border-t border-mac-border/50">
             <div className="flex justify-between items-center">
-              <span>{t('usedLabel')}</span>
-              <span className="text-slate-800 dark:text-slate-200 font-mono font-bold">{formatBytes(storage?.usedBytes || 0)}</span>
+              <span className="font-semibold text-slate-600 dark:text-slate-400">{t('usedLabel')}</span>
+              <span className="text-slate-900 dark:text-slate-200 font-mono font-bold">{formatBytes(storage?.usedBytes || 0)}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span>{t('availableLabel')}</span>
-              <span className="text-slate-800 dark:text-slate-200 font-mono font-bold">{formatBytes(storage?.freeBytes || 0)}</span>
+              <span className="font-semibold text-slate-600 dark:text-slate-400">{t('availableLabel')}</span>
+              <span className="text-slate-900 dark:text-slate-200 font-mono font-bold">{formatBytes(storage?.freeBytes || 0)}</span>
             </div>
           </div>
         </div>
@@ -417,7 +417,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
                 onChange={(e) => handleUpdateNotifSetting('enabled', e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-10 h-5.5 bg-slate-300 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-[#92E6E0] shadow-inner"></div>
+              <div className="w-10 h-5.5 bg-slate-300 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 dark:after:border-slate-600 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all after:shadow-sm peer-checked:bg-[#2A666A] dark:peer-checked:bg-[#92E6E0] shadow-inner"></div>
             </label>
           </div>
 
@@ -425,11 +425,11 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
           <div className="flex items-center justify-between p-4 rounded-2xl bg-black/5 dark:bg-black/20 border border-mac-border/50">
             <div className="flex items-center gap-2.5">
               {notifSettings.sound ? (
-                <Volume2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                <Volume2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               ) : (
                 <VolumeX className="w-4 h-4 text-slate-400" />
               )}
-              <span className="font-bold text-slate-800 dark:text-slate-200">{t('enableSound')}</span>
+              <span className="font-bold text-slate-900 dark:text-slate-200">{t('enableSound')}</span>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -439,54 +439,54 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
                 onChange={(e) => handleUpdateNotifSetting('sound', e.target.checked)}
                 className="sr-only peer disabled:opacity-50"
               />
-              <div className="w-10 h-5.5 bg-slate-300 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-[#92E6E0] shadow-inner"></div>
+              <div className="w-10 h-5.5 bg-slate-300 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 dark:after:border-slate-600 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all after:shadow-sm peer-checked:bg-[#2A666A] dark:peer-checked:bg-[#92E6E0] shadow-inner"></div>
             </label>
           </div>
         </div>
 
         {/* Individual Event Triggers & Thresholds */}
         <div className={`space-y-3 pt-2 transition-opacity ${notifSettings.enabled ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
-          <h4 className="text-[11px] font-bold text-mac-subtext uppercase tracking-wider">Event Triggers & Automated Alerts</h4>
+          <h4 className="text-[11px] font-black text-slate-700 dark:text-mac-subtext uppercase tracking-wider">Event Triggers & Automated Alerts</h4>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             {/* RAM Purge Alert */}
             <label className="flex items-center justify-between p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 border border-mac-border/40 cursor-pointer hover:border-[#92E6E0]/40 transition-colors">
-              <span className="text-slate-700 dark:text-slate-300 font-medium">{t('notifyPurgeLabel')}</span>
+              <span className="text-slate-800 dark:text-slate-200 font-semibold">{t('notifyPurgeLabel')}</span>
               <input
                 type="checkbox"
                 checked={notifSettings.notifyOnPurge}
                 onChange={(e) => handleUpdateNotifSetting('notifyOnPurge', e.target.checked)}
-                className="rounded accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
+                className="rounded accent-[#2A666A] dark:accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
               />
             </label>
 
             {/* Clean Completion Alert */}
             <label className="flex items-center justify-between p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 border border-mac-border/40 cursor-pointer hover:border-[#92E6E0]/40 transition-colors">
-              <span className="text-slate-700 dark:text-slate-300 font-medium">{t('notifyCleanLabel')}</span>
+              <span className="text-slate-800 dark:text-slate-200 font-semibold">{t('notifyCleanLabel')}</span>
               <input
                 type="checkbox"
                 checked={notifSettings.notifyOnCleanComplete}
                 onChange={(e) => handleUpdateNotifSetting('notifyOnCleanComplete', e.target.checked)}
-                className="rounded accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
+                className="rounded accent-[#2A666A] dark:accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
               />
             </label>
 
             {/* High CPU Alert & Slider */}
             <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 border border-mac-border/40 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-slate-700 dark:text-slate-300 font-medium">{t('notifyCpuLabel')}</span>
+                <span className="text-slate-800 dark:text-slate-200 font-semibold">{t('notifyCpuLabel')}</span>
                 <input
                   type="checkbox"
                   checked={notifSettings.notifyOnHighCpu}
                   onChange={(e) => handleUpdateNotifSetting('notifyOnHighCpu', e.target.checked)}
-                  className="rounded accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
+                  className="rounded accent-[#2A666A] dark:accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
                 />
               </div>
               {notifSettings.notifyOnHighCpu && (
                 <div className="pt-1 space-y-1">
-                  <div className="flex justify-between text-[11px] text-mac-subtext font-mono">
+                  <div className="flex justify-between text-[11px] text-slate-600 dark:text-mac-subtext font-mono font-semibold">
                     <span>{t('cpuThresholdLabel')}</span>
-                    <span className="font-bold text-[#92E6E0]">{notifSettings.cpuThreshold}%</span>
+                    <span className="font-bold text-slate-900 dark:text-[#92E6E0]">{notifSettings.cpuThreshold}%</span>
                   </div>
                   <input
                     type="range"
@@ -495,7 +495,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
                     step="5"
                     value={notifSettings.cpuThreshold}
                     onChange={(e) => handleUpdateNotifSetting('cpuThreshold', parseInt(e.target.value, 10))}
-                    className="w-full accent-[#92E6E0] h-1.5 bg-slate-300 dark:bg-slate-700 rounded-lg cursor-pointer"
+                    className="w-full accent-[#2A666A] dark:accent-[#92E6E0] h-1.5 bg-slate-300 dark:bg-slate-700 rounded-lg cursor-pointer"
                   />
                 </div>
               )}
@@ -504,19 +504,19 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
             {/* High RAM Alert & Slider */}
             <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 border border-mac-border/40 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-slate-700 dark:text-slate-300 font-medium">{t('notifyRamLabel')}</span>
+                <span className="text-slate-800 dark:text-slate-200 font-semibold">{t('notifyRamLabel')}</span>
                 <input
                   type="checkbox"
                   checked={notifSettings.notifyOnHighRam}
                   onChange={(e) => handleUpdateNotifSetting('notifyOnHighRam', e.target.checked)}
-                  className="rounded accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
+                  className="rounded accent-[#2A666A] dark:accent-[#92E6E0] focus:ring-0 w-4 h-4 cursor-pointer"
                 />
               </div>
               {notifSettings.notifyOnHighRam && (
                 <div className="pt-1 space-y-1">
-                  <div className="flex justify-between text-[11px] text-mac-subtext font-mono">
+                  <div className="flex justify-between text-[11px] text-slate-600 dark:text-mac-subtext font-mono font-semibold">
                     <span>{t('ramThresholdLabel')}</span>
-                    <span className="font-bold text-[#92E6E0]">{notifSettings.ramThreshold}%</span>
+                    <span className="font-bold text-slate-900 dark:text-[#92E6E0]">{notifSettings.ramThreshold}%</span>
                   </div>
                   <input
                     type="range"
@@ -525,7 +525,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
                     step="5"
                     value={notifSettings.ramThreshold}
                     onChange={(e) => handleUpdateNotifSetting('ramThreshold', parseInt(e.target.value, 10))}
-                    className="w-full accent-[#92E6E0] h-1.5 bg-slate-300 dark:bg-slate-700 rounded-lg cursor-pointer"
+                    className="w-full accent-[#2A666A] dark:accent-[#92E6E0] h-1.5 bg-slate-300 dark:bg-slate-700 rounded-lg cursor-pointer"
                   />
                 </div>
               )}
@@ -536,23 +536,23 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
 
       {/* System Hardware Specifications Box */}
       <div className="p-6 rounded-3xl cputy-card border border-mac-border space-y-4">
-        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('systemSpecsTitle')}</h3>
+        <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{t('systemSpecsTitle')}</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
-            <span className="text-mac-subtext text-[11px]">{t('osVersionTitle')}</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200">{stats?.osVersion || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'Windows' : 'macOS')}</p>
+            <span className="text-slate-600 dark:text-mac-subtext text-[11px] font-semibold">{t('osVersionTitle')}</span>
+            <p className="font-bold text-slate-900 dark:text-slate-200">{stats?.osVersion || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'Windows' : 'macOS')}</p>
           </div>
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
-            <span className="text-mac-subtext text-[11px]">{t('systemUptime')}</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200 font-mono">{formatDuration(stats?.uptime || 0)}</p>
+            <span className="text-slate-600 dark:text-mac-subtext text-[11px] font-semibold">{t('systemUptime')}</span>
+            <p className="font-bold text-slate-900 dark:text-slate-200 font-mono">{formatDuration(stats?.uptime || 0)}</p>
           </div>
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
-            <span className="text-mac-subtext text-[11px]">{t('computerName')}</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200 truncate">{stats?.hostname || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'PC' : 'Mac')}</p>
+            <span className="text-slate-600 dark:text-mac-subtext text-[11px] font-semibold">{t('computerName')}</span>
+            <p className="font-bold text-slate-900 dark:text-slate-200 truncate">{stats?.hostname || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'PC' : 'Mac')}</p>
           </div>
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
-            <span className="text-mac-subtext text-[11px]">{t('mountPoint')}</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200 font-mono">{stats?.storage?.mountPoint || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'C:\\' : '/')}</p>
+            <span className="text-slate-600 dark:text-mac-subtext text-[11px] font-semibold">{t('mountPoint')}</span>
+            <p className="font-bold text-slate-900 dark:text-slate-200 font-mono">{stats?.storage?.mountPoint || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'C:\\' : '/')}</p>
           </div>
         </div>
       </div>

@@ -267,12 +267,12 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
                       <div className="flex items-center gap-2">
                         <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{app.name}</h4>
                         {app.version && (
-                          <span className="text-[10px] px-2 py-0.2 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 font-mono font-bold">
+                          <span className="text-[10px] px-2 py-0.2 rounded-full bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-300 font-mono font-bold">
                             v{app.version}
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-mac-subtext truncate max-w-md font-mono mt-0.5">
+                      <p className="text-[11px] text-slate-600 dark:text-mac-subtext truncate max-w-md font-mono font-medium mt-0.5">
                         {app.publisher ? `${app.publisher} • ` : ''}{app.appPath}
                       </p>
                     </div>
@@ -284,7 +284,7 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
                         {formatBytes(app.totalSize)}
                       </span>
                       {hasLeftovers && (
-                        <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                        <span className="text-[10px] font-mono font-semibold text-slate-600 dark:text-slate-400">
                           +{formatBytes(app.totalSize - app.appSize)} {t('leftoversText')}
                         </span>
                       )}
@@ -311,19 +311,19 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
                 {/* Leftovers Accordion */}
                 {hasLeftovers && isExpanded && (
                   <div className="bg-black/5 dark:bg-black/30 border-t border-mac-border/60 p-4 space-y-2">
-                    <div className="text-[11px] font-bold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+                    <div className="text-[11px] font-bold text-slate-800 dark:text-slate-300 flex items-center gap-1.5">
                       <Folder className="w-3.5 h-3.5 text-emerald-500" />
                       Associated Application Data & Residual Leftovers:
                     </div>
                     <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300 pl-4 font-mono">
-                        <span className="truncate max-w-md">📦 Application Bundle ({app.appPath})</span>
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400">{formatBytes(app.appSize)}</span>
+                      <div className="flex items-center justify-between text-xs text-slate-800 dark:text-slate-300 pl-4 font-mono">
+                        <span className="truncate max-w-md font-semibold">📦 Application Bundle ({app.appPath})</span>
+                        <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">{formatBytes(app.appSize)}</span>
                       </div>
                       {app.associatedFiles.map((file) => (
-                        <div key={file.path} className="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300 pl-4 font-mono">
-                          <span className="truncate max-w-md">📁 [{file.type.toUpperCase()}] {file.path}</span>
-                          <span className="text-[11px] text-slate-500 dark:text-slate-400">{formatBytes(file.size)}</span>
+                        <div key={file.path} className="flex items-center justify-between text-xs text-slate-800 dark:text-slate-300 pl-4 font-mono">
+                          <span className="truncate max-w-md font-semibold">📁 [{file.type.toUpperCase()}] {file.path}</span>
+                          <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">{formatBytes(file.size)}</span>
                         </div>
                       ))}
                     </div>

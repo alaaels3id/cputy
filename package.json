@@ -6,11 +6,11 @@
   "scripts": {
     "predev": "node scripts/patch-electron-icon.js",
     "postinstall": "node scripts/patch-electron-icon.js",
-    "dev:renderer": "vite",
+    "dev:renderer": "vite --config vite.config.mts",
     "dev:electron": "tsc -p tsconfig.electron.json -w",
-    "dev": "npm run build:electron && concurrently -k -n \"VITE,ELECTRON\" -c \"cyan,magenta\" \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "dev": "npm run build:electron && concurrently -k -n \"VITE,ELECTRON\" -c \"cyan,magenta\" \"vite --config vite.config.mts\" \"wait-on http://localhost:5173 && electron .\"",
     "build:electron": "tsc -p tsconfig.electron.json",
-    "build:renderer": "vite build",
+    "build:renderer": "vite build --config vite.config.mts",
     "build": "npm run build:renderer && npm run build:electron",
     "start": "NODE_ENV=production electron dist-electron/main.js",
     "dist": "npm run build && electron-builder",
@@ -99,5 +99,9 @@
     "typescript": "^7.0.2",
     "vite": "^8.2.2",
     "wait-on": "^9.1.0"
+  },
+  "allowScripts": {
+    "electron@41.10.7": true,
+    "electron-winstaller@5.4.0": true
   }
 }

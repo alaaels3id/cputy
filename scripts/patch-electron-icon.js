@@ -2,6 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+// macOS-specific icon patching and AppleScript notification compiling is only supported on macOS
+if (process.platform !== 'darwin') {
+  process.exit(0);
+}
+
 try {
   const srcIcon = path.join(__dirname, '../build/icon.icns');
   const targetIcon = path.join(__dirname, '../node_modules/electron/dist/Electron.app/Contents/Resources/electron.icns');

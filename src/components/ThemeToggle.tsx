@@ -29,7 +29,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '', showLa
         )}
       </div>
       {showLabel && (
-        <span className="text-xs font-medium text-slate-300 dark:text-slate-300 light:text-slate-700">
+        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
           {isLight ? 'Light Mode' : 'Dark Mode'}
         </span>
       )}

@@ -115,7 +115,7 @@ export const CleanModal: React.FC<CleanModalProps> = ({
           </button>
           <button
             onClick={() => onConfirm(permanently)}
-            className="flex-1 py-2.5 rounded-2xl text-white text-xs font-bold transition-all cursor-pointer btn-solid cputy-btn-primary shadow-glow-emerald"
+            className="flex-1 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer btn-solid cputy-btn-primary shadow-glow-emerald"
           >
             {modalConfirmText}
           </button>
