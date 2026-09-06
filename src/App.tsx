@@ -22,26 +22,36 @@ import {
 } from './types';
 
 // Mock fallback for browser preview mode when Electron IPC is not attached
-const createMockStats = (): SystemStats => ({
-  cpu: { usagePercent: 18.4, model: 'Apple M3 Pro (12 Cores)', cores: 12, loadAverage: [1.8, 2.1, 1.9] },
-  memory: {
-    totalBytes: 36 * 1024 * 1024 * 1024,
-    usedBytes: 19.5 * 1024 * 1024 * 1024,
-    freeBytes: 16.5 * 1024 * 1024 * 1024,
-    usagePercent: 54.2,
-  },
-  storage: {
-    totalBytes: 512 * 1024 * 1024 * 1024,
-    usedBytes: 312 * 1024 * 1024 * 1024,
-    freeBytes: 200 * 1024 * 1024 * 1024,
-    usagePercent: 60.9,
-    mountPoint: '/',
-    diskName: 'Macintosh HD',
-  },
-  uptime: 432000,
-  osVersion: 'macOS 15.0 Sequoia',
-  hostname: 'MacBook-Pro.local',
-});
+const createMockStats = (): SystemStats => {
+  const isWin = typeof navigator !== 'undefined' && (navigator.platform?.includes('Win') || navigator.userAgent?.includes('Windows'));
+  return {
+    cpu: { 
+      usagePercent: 18.4, 
+      model: isWin ? 'Intel Core i7 / AMD Ryzen' : 'Apple M3 Pro (12 Cores)', 
+      cores: 12, 
+      loadAverage: [1.8, 2.1, 1.9] 
+    },
+    memory: {
+      totalBytes: 32 * 1024 * 1024 * 1024,
+      usedBytes: 16.5 * 1024 * 1024 * 1024,
+      freeBytes: 15.5 * 1024 * 1024 * 1024,
+      usagePercent: 51.5,
+    },
+    storage: {
+      totalBytes: 512 * 1024 * 1024 * 1024,
+      usedBytes: 312 * 1024 * 1024 * 1024,
+      freeBytes: 200 * 1024 * 1024 * 1024,
+      usagePercent: 60.9,
+      mountPoint: isWin ? 'C:\\' : '/',
+      diskName: isWin ? 'Local Disk (C:)' : 'Macintosh HD',
+    },
+    uptime: 432000,
+    osVersion: isWin ? 'Windows 11 Pro' : 'macOS 15.0 Sequoia',
+    hostname: isWin ? 'DESKTOP-PC' : 'MacBook-Pro.local',
+    platform: isWin ? 'win32' : 'darwin',
+    osType: isWin ? 'Windows' : 'macOS',
+  };
+};
 
 export const App: React.FC = () => {
   const [currentCategory, setCurrentCategory] = useState<ScanCategory>('smart');
@@ -419,7 +429,21 @@ export const App: React.FC = () => {
               apps={installedApps}
               isScanning={isScanning}
               onUninstall={handleUninstallApps}
-              onRescan={runSmartScan}
+              onRescan={async () => {
+                if (window.cputyAPI) {
+                  setIsScanning(true);
+                  try {
+                    const apps = await window.cputyAPI.scanInstalledApps();
+                    if (apps) setInstalledApps(apps);
+                  } catch (err) {
+                    console.error('Failed to scan apps:', err);
+                  } finally {
+                    setIsScanning(false);
+                  }
+                } else {
+                  runSmartScan();
+                }
+              }}
             />
           )}
 

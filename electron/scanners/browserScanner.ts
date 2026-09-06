@@ -13,7 +13,81 @@ export async function scanBrowsers(): Promise<ScanResult> {
   const home = os.homedir();
   const items: CleanableItem[] = [];
 
-  const browsers: BrowserConfig[] = [
+  const isWin = process.platform === 'win32';
+  const browsers: BrowserConfig[] = isWin ? [
+    {
+      id: 'edge',
+      name: 'Microsoft Edge',
+      cachePaths: [
+        {
+          id: 'edge_disk_cache',
+          name: 'Edge Disk & Media Cache',
+          path: path.join(home, 'AppData/Local/Microsoft/Edge/User Data/Default/Cache'),
+          type: 'Cache',
+        },
+        {
+          id: 'edge_code_cache',
+          name: 'Edge Code Cache',
+          path: path.join(home, 'AppData/Local/Microsoft/Edge/User Data/Default/Code Cache'),
+          type: 'Code Cache',
+        },
+        {
+          id: 'edge_gpu_cache',
+          name: 'Edge GPU Shader Cache',
+          path: path.join(home, 'AppData/Local/Microsoft/Edge/User Data/Default/GPUCache'),
+          type: 'GPU Cache',
+        },
+      ],
+    },
+    {
+      id: 'chrome',
+      name: 'Google Chrome',
+      cachePaths: [
+        {
+          id: 'chrome_disk_cache',
+          name: 'Chrome Disk & Media Cache',
+          path: path.join(home, 'AppData/Local/Google/Chrome/User Data/Default/Cache'),
+          type: 'Cache',
+        },
+        {
+          id: 'chrome_code_cache',
+          name: 'Chrome Code Cache',
+          path: path.join(home, 'AppData/Local/Google/Chrome/User Data/Default/Code Cache'),
+          type: 'Code Cache',
+        },
+        {
+          id: 'chrome_gpu_cache',
+          name: 'Chrome GPU Shader Cache',
+          path: path.join(home, 'AppData/Local/Google/Chrome/User Data/Default/GPUCache'),
+          type: 'GPU Cache',
+        },
+      ],
+    },
+    {
+      id: 'brave',
+      name: 'Brave Browser',
+      cachePaths: [
+        {
+          id: 'brave_cache',
+          name: 'Brave Cache',
+          path: path.join(home, 'AppData/Local/BraveSoftware/Brave-Browser/User Data/Default/Cache'),
+          type: 'Cache',
+        },
+      ],
+    },
+    {
+      id: 'firefox',
+      name: 'Mozilla Firefox',
+      cachePaths: [
+        {
+          id: 'firefox_cache',
+          name: 'Firefox Cache & Profiles',
+          path: path.join(home, 'AppData/Local/Mozilla/Firefox/Profiles'),
+          type: 'Cache',
+        },
+      ],
+    },
+  ] : [
     {
       id: 'safari',
       name: 'Apple Safari',

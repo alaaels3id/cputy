@@ -63,6 +63,24 @@ export interface InstalledApp {
     size: number;
   }[];
   lastOpened?: number;
+  publisher?: string;
+  uninstallString?: string;
+  quietUninstallString?: string;
+}
+
+export interface OSInfo {
+  platform: 'win32' | 'darwin' | 'linux';
+  isWindows: boolean;
+  isMac: boolean;
+  isLinux: boolean;
+  osType: 'Windows' | 'macOS' | 'Linux';
+  osName: string;
+  osVersion: string;
+  arch: string;
+  hostname: string;
+  defaultDiskName: string;
+  defaultMountPoint: string;
+  deviceType: 'PC' | 'Mac';
 }
 
 export interface SystemStats {
@@ -92,6 +110,9 @@ export interface SystemStats {
   uptime: number;
   osVersion: string;
   hostname: string;
+  osInfo?: OSInfo;
+  platform?: 'win32' | 'darwin' | 'linux';
+  osType?: 'Windows' | 'macOS' | 'Linux';
 }
 
 export interface NotificationSettings {
@@ -116,6 +137,8 @@ export interface CleanProgress {
 
 export interface CPUTYAPI {
   getSystemStats: () => Promise<SystemStats>;
+  getOSInfo: () => Promise<OSInfo>;
+  platform: string;
   scanSystemJunk: () => Promise<ScanResult>;
   scanDevJunk: () => Promise<ScanResult>;
   scanBrowsers: () => Promise<ScanResult>;
@@ -126,6 +149,7 @@ export interface CPUTYAPI {
   cleanItems: (paths: string[], permanently?: boolean) => Promise<{ success: boolean; freedBytes: number; errors: string[] }>;
   purgeRAM: (elevated?: boolean) => Promise<{ success: boolean; message: string }>;
   revealInFinder: (filePath: string) => Promise<void>;
+  launchUninstaller?: (uninstallString: string) => Promise<{ success: boolean; error?: string }>;
   selectFolderDialog: () => Promise<string | null>;
   getNotificationSettings: () => Promise<NotificationSettings>;
   updateNotificationSettings: (settings: Partial<NotificationSettings>) => Promise<NotificationSettings>;

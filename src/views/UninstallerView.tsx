@@ -273,7 +273,7 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
                         )}
                       </div>
                       <p className="text-[11px] text-mac-subtext truncate max-w-md font-mono mt-0.5">
-                        {app.bundleId || app.appPath}
+                        {app.publisher ? `${app.publisher} • ` : ''}{app.appPath}
                       </p>
                     </div>
                   </div>

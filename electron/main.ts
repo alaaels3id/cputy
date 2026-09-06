@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, shell, dialog, nativeImage } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { exec } from 'child_process';
 import { getSystemStats, purgeRAM } from './scanners/systemMonitor';
 import { scanSystemJunk } from './scanners/systemJunkScanner';
 import { scanDevJunk } from './scanners/devJunkScanner';
@@ -12,6 +13,7 @@ import { scanInstalledApps } from './scanners/uninstallerScanner';
 import { cleanPaths } from './scanners/cleanerEngine';
 import { setupTray, destroyTray } from './trayManager';
 import { getNotificationSettings, saveNotificationSettings, sendTestDesktopNotification, sendDesktopNotification, getAppIconPath } from './notificationManager';
+import { getOSInfo, isMac, isWindows } from './osChecker';
 
 app.setName('CPUTY');
 if (process.platform === 'win32') {
@@ -23,7 +25,7 @@ let isQuitting = false;
 
 function createWindow() {
   const iconPath = getAppIconPath();
-  if (process.platform === 'darwin' && app.dock && iconPath && fs.existsSync(iconPath)) {
+  if (isMac && app.dock && iconPath && fs.existsSync(iconPath)) {
     try {
       app.dock.setIcon(iconPath);
     } catch {
@@ -31,15 +33,13 @@ function createWindow() {
     }
   }
 
-  mainWindow = new BrowserWindow({
+  const windowOptions: any = {
     width: 1180,
     height: 780,
     minWidth: 1000,
     minHeight: 650,
-    title: 'CPUTY',
+    title: isWindows ? 'CPUTY - Windows System Cleaner & Optimizer' : 'CPUTY - macOS System Cleaner & Optimizer',
     icon: iconPath,
-    titleBarStyle: 'hiddenInset',
-    trafficLightPosition: { x: 18, y: 18 },
     backgroundColor: '#090C15',
     show: false,
     webPreferences: {
@@ -48,7 +48,14 @@ function createWindow() {
       contextIsolation: true,
       sandbox: false,
     },
-  });
+  };
+
+  if (isMac) {
+    windowOptions.titleBarStyle = 'hiddenInset';
+    windowOptions.trafficLightPosition = { x: 18, y: 18 };
+  }
+
+  mainWindow = new BrowserWindow(windowOptions);
 
   mainWindow.once('ready-to-show', () => {
     mainWindow?.show();
@@ -79,6 +86,10 @@ app.whenReady().then(() => {
   // IPC Handlers
   ipcMain.handle('get-system-stats', async () => {
     return await getSystemStats();
+  });
+
+  ipcMain.handle('get-os-info', async () => {
+    return await getOSInfo();
   });
 
   ipcMain.handle('scan-system-junk', async () => {
@@ -112,9 +123,10 @@ app.whenReady().then(() => {
   ipcMain.handle('clean-items', async (_event, paths: string[], permanently?: boolean) => {
     const res = await cleanPaths(paths, permanently);
     if (res.success) {
+      const osInfo = await getOSInfo();
       sendDesktopNotification({
         title: '🧹 CPUTY Storage Cleaner',
-        body: `Successfully cleaned ${paths.length} items from your Mac.`,
+        body: `Successfully cleaned ${paths.length} items from your ${osInfo.deviceType}.`,
         category: 'clean',
       });
     }
@@ -128,6 +140,20 @@ app.whenReady().then(() => {
 
   ipcMain.handle('reveal-in-finder', async (_event, filePath: string) => {
     shell.showItemInFolder(filePath);
+  });
+
+  ipcMain.handle('launch-uninstaller', async (_event, uninstallString: string) => {
+    try {
+      if (!uninstallString || typeof uninstallString !== 'string') {
+        return { success: false, error: 'Invalid uninstaller string' };
+      }
+      exec(uninstallString, (err) => {
+        if (err) console.error('[CPUTY] Uninstaller process exited with message:', err.message);
+      });
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err?.message || 'Failed to launch uninstaller' };
+    }
   });
 
   ipcMain.handle('get-notification-settings', async () => {

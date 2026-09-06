@@ -8,7 +8,54 @@ export async function scanSystemJunk(): Promise<ScanResult> {
   const home = os.homedir();
   const items: CleanableItem[] = [];
 
-  const targets = [
+  const isWin = process.platform === 'win32';
+  const targets = isWin ? [
+    {
+      id: 'win_temp',
+      name: 'Windows User Temp Files',
+      category: 'system',
+      path: process.env.TEMP || path.join(home, 'AppData/Local/Temp'),
+      description: 'Temporary cached data and application run files. Safe to remove.',
+      safeToDelete: true,
+      scanChildren: true,
+    },
+    {
+      id: 'win_crash_dumps',
+      name: 'Application Crash Dumps',
+      category: 'system',
+      path: path.join(home, 'AppData/Local/CrashDumps'),
+      description: 'Crash logs and memory dump traces from terminated Windows processes.',
+      safeToDelete: true,
+      scanChildren: false,
+    },
+    {
+      id: 'win_explorer_cache',
+      name: 'Windows Explorer Thumbnail Cache',
+      category: 'system',
+      path: path.join(home, 'AppData/Local/Microsoft/Windows/Explorer'),
+      description: 'Explorer thumbnails and cached icon files.',
+      safeToDelete: true,
+      scanChildren: true,
+    },
+    {
+      id: 'win_inet_cache',
+      name: 'Windows Web & System Cache',
+      category: 'system',
+      path: path.join(home, 'AppData/Local/Microsoft/Windows/INetCache'),
+      description: 'Web caches and temporary system network downloads.',
+      safeToDelete: true,
+      scanChildren: true,
+    },
+    {
+      id: 'win_wer',
+      name: 'Windows Error Reporting Reports',
+      category: 'system',
+      path: path.join(home, 'AppData/Local/Microsoft/Windows/WER'),
+      description: 'Queued and archived error diagnostic logs for Microsoft Error Reporting.',
+      safeToDelete: true,
+      scanChildren: true,
+    },
+  ] : [
     {
       id: 'user_caches',
       name: 'User Application Caches',

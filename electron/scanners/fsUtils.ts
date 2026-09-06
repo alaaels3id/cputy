@@ -5,7 +5,8 @@ import * as os from 'os';
 /**
  * Calculates the size of a file or directory recursively
  */
-export async function getPathSize(targetPath: string): Promise<number> {
+export async function getPathSize(targetPath: string, maxDepth = 6, currentDepth = 0): Promise<number> {
+  if (currentDepth > maxDepth) return 0;
   try {
     const stats = await fs.promises.lstat(targetPath);
     if (stats.isFile()) {
@@ -20,7 +21,7 @@ export async function getPathSize(targetPath: string): Promise<number> {
         const fullPath = path.join(targetPath, entry.name);
         try {
           if (entry.isDirectory()) {
-            totalSize += await getPathSize(fullPath);
+            totalSize += await getPathSize(fullPath, maxDepth, currentDepth + 1);
           } else if (entry.isFile()) {
             const fileStat = await fs.promises.stat(fullPath);
             totalSize += fileStat.size;
@@ -72,11 +73,13 @@ export function formatBytes(bytes: number, decimals = 2): string {
 }
 
 /**
- * Safety check: Ensures paths are safe to touch and not critical macOS system root paths
+ * Safety check: Ensures paths are safe to touch and not critical macOS / Windows system root paths
  */
 export function isPathSafe(targetPath: string): boolean {
   const normalized = path.resolve(targetPath);
   const home = os.homedir();
+  const isWin = process.platform === 'win32';
+
   const dangerousRoots = [
     '/',
     '/System',
@@ -100,13 +103,29 @@ export function isPathSafe(targetPath: string): boolean {
     path.join(home, 'Pictures'),
     path.join(home, 'Movies'),
     path.join(home, 'Music'),
+    path.join(home, 'Videos'),
   ];
+
+  if (isWin) {
+    const sysDrive = process.env.SystemDrive || 'C:';
+    dangerousRoots.push(
+      `${sysDrive}\\`,
+      path.join(sysDrive, '\\Windows'),
+      path.join(sysDrive, '\\Windows\\System32'),
+      path.join(sysDrive, '\\Program Files'),
+      path.join(sysDrive, '\\Program Files (x86)'),
+      path.join(sysDrive, '\\Users'),
+      path.join(home, 'AppData'),
+      path.join(home, 'AppData', 'Roaming'),
+      path.join(home, 'AppData', 'Local')
+    );
+  }
 
   if (dangerousRoots.includes(normalized)) {
     return false;
   }
 
-  // Must be within user directory or specific allowed /Library caches/logs
+  // Allowed cache and log sub-roots
   const allowedRoots = [
     path.join(home, 'Library/Caches'),
     path.join(home, 'Library/Logs'),
@@ -128,13 +147,46 @@ export function isPathSafe(targetPath: string): boolean {
     '/var/tmp',
   ];
 
+  if (isWin) {
+    if (process.env.TEMP) allowedRoots.push(process.env.TEMP);
+    if (process.env.TMP) allowedRoots.push(process.env.TMP);
+    allowedRoots.push(
+      path.join(home, 'AppData/Local/Temp'),
+      path.join(home, 'AppData/Local/CrashDumps'),
+      path.join(home, 'AppData/Local/Microsoft/Windows/Explorer'),
+      path.join(home, 'AppData/Local/Microsoft/Windows/INetCache'),
+      path.join(home, 'AppData/Local/Google/Chrome/User Data'),
+      path.join(home, 'AppData/Local/Microsoft/Edge/User Data'),
+      path.join(home, 'AppData/Local/BraveSoftware'),
+      path.join(home, 'AppData/Local/Mozilla/Firefox'),
+      path.join(home, 'AppData/Local/Programs')
+    );
+  }
+
   // If it's a subpath in allowed roots, it is definitely safe
-  const isInsideAllowed = allowedRoots.some(allowed => normalized.startsWith(allowed) && normalized.length > allowed.length);
+  const isInsideAllowed = allowedRoots.some(allowed => allowed && normalized.startsWith(path.resolve(allowed)) && normalized.length > path.resolve(allowed).length);
   if (isInsideAllowed) return true;
 
-  // If it's an app bundle inside /Applications or ~/Applications (for uninstaller), it is safe
+  // If it's an app bundle inside /Applications or ~/Applications (for macOS uninstaller), it is safe
   if (normalized.startsWith('/Applications/') || normalized.startsWith(path.join(home, 'Applications/'))) {
     return true;
+  }
+
+  // If it's an application directory inside Windows Program Files, ProgramData, or AppData Programs, it is safe
+  if (isWin) {
+    const programFiles = process.env.ProgramFiles || 'C:\\Program Files';
+    const programFilesX86 = process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)';
+    const programData = process.env.ProgramData || 'C:\\ProgramData';
+    const winAppRoots = [
+      path.resolve(programFiles),
+      path.resolve(programFilesX86),
+      path.resolve(programData),
+    ];
+    for (const appRoot of winAppRoots) {
+      if (normalized.startsWith(appRoot + path.sep) && normalized.length > appRoot.length + 1) {
+        return true;
+      }
+    }
   }
 
   // If it's inside user's home (excluding protected root folders), it can be cleaned if explicitly selected

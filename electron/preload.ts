@@ -3,6 +3,8 @@ import { CPUTYAPI } from './types';
 
 const api: CPUTYAPI = {
   getSystemStats: () => ipcRenderer.invoke('get-system-stats'),
+  getOSInfo: () => ipcRenderer.invoke('get-os-info'),
+  platform: process.platform,
   scanSystemJunk: () => ipcRenderer.invoke('scan-system-junk'),
   scanDevJunk: () => ipcRenderer.invoke('scan-dev-junk'),
   scanBrowsers: () => ipcRenderer.invoke('scan-browsers'),
@@ -13,6 +15,7 @@ const api: CPUTYAPI = {
   cleanItems: (paths: string[], permanently?: boolean) => ipcRenderer.invoke('clean-items', paths, permanently),
   purgeRAM: (elevated?: boolean) => ipcRenderer.invoke('purge-ram', elevated),
   revealInFinder: (filePath: string) => ipcRenderer.invoke('reveal-in-finder', filePath),
+  launchUninstaller: (cmd: string) => ipcRenderer.invoke('launch-uninstaller', cmd),
   selectFolderDialog: () => ipcRenderer.invoke('select-folder-dialog'),
   getNotificationSettings: () => ipcRenderer.invoke('get-notification-settings'),
   updateNotificationSettings: (settings) => ipcRenderer.invoke('update-notification-settings', settings),

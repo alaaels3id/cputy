@@ -85,9 +85,21 @@ export const CleanModal: React.FC<CleanModalProps> = ({
             <div className="text-xs">
               <span className="font-bold text-slate-900 dark:text-slate-200 block">{t('deletePermanently')}</span>
               <span className="text-[11px] text-mac-subtext leading-relaxed">
-                {permanently 
-                  ? (isRTL ? 'سيتم حذف الملفات والتطبيقات نهائياً ولن يمكن استعادتها من سلة المهملات.' : 'Files and application binaries will be permanently deleted and cannot be restored from macOS Trash.')
-                  : (isRTL ? 'سيتم نقل الملفات إلى سلة مهملات ماك حتى تتمكن من استعادتها بسهولة إذا أردت.' : 'Files will be safely moved to macOS Trash bin so you can easily restore them if needed.')}
+                {(() => {
+                  const isWin = typeof window !== 'undefined' && Boolean(
+                    window.cputyAPI?.platform === 'win32' ||
+                    (typeof navigator !== 'undefined' && (navigator.platform?.includes('Win') || navigator.userAgent?.includes('Windows')))
+                  );
+                  if (permanently) {
+                    return isRTL
+                      ? (isWin ? 'سيتم حذف الملفات والتطبيقات نهائياً ولن يمكن استعادتها من سلة المحذوفات.' : 'سيتم حذف الملفات والتطبيقات نهائياً ولن يمكن استعادتها من سلة المهملات.')
+                      : (isWin ? 'Files and application binaries will be permanently deleted and cannot be restored from Recycle Bin.' : 'Files and application binaries will be permanently deleted and cannot be restored from macOS Trash.');
+                  } else {
+                    return isRTL
+                      ? (isWin ? 'سيتم نقل الملفات إلى سلة المحذوفات حتى تتمكن من استعادتها بسهولة إذا أردت.' : 'سيتم نقل الملفات إلى سلة مهملات ماك حتى تتمكن من استعادتها بسهولة إذا أردت.')
+                      : (isWin ? 'Files will be safely moved to Recycle Bin so you can easily restore them if needed.' : 'Files will be safely moved to macOS Trash bin so you can easily restore them if needed.');
+                  }
+                })()}
               </span>
             </div>
           </label>

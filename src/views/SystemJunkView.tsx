@@ -143,7 +143,13 @@ export const SystemJunkView: React.FC<SystemJunkViewProps> = ({
         <div className="p-12 text-center rounded-3xl cputy-glass border border-mac-border space-y-3">
           <ShieldCheck className="w-12 h-12 text-emerald-500 dark:text-emerald-400 mx-auto opacity-80" />
           <h3 className="text-sm font-bold text-slate-900 dark:text-white">{t('noJunkFound')}</h3>
-          <p className="text-xs text-mac-subtext">{isRTL ? 'ملفات كاش وسجلات النظام لديك نظيفة تماماً.' : 'Your macOS system caches and logs are completely clean.'}</p>
+          <p className="text-xs text-mac-subtext">
+            {isRTL 
+              ? 'ملفات كاش وسجلات النظام لديك نظيفة تماماً.' 
+              : (typeof window !== 'undefined' && (window as any).cputyAPI?.platform === 'win32'
+                  ? 'Your Windows system caches and logs are completely clean.'
+                  : 'Your system caches and logs are completely clean.')}
+          </p>
         </div>
       ) : (
         <div className="space-y-3">

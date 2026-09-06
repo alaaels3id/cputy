@@ -91,9 +91,10 @@ export function setupTray(getMainWindow: () => BrowserWindow | null): Tray {
   const buildContextMenu = (getWin: () => BrowserWindow | null) => {
     if (!tray) return;
 
+    const suiteLabel = process.platform === 'darwin' ? 'CPUTY PRO  •  macOS Suite' : (process.platform === 'win32' ? 'CPUTY PRO  •  Windows Suite' : 'CPUTY PRO  •  Linux Suite');
     const contextMenu = Menu.buildFromTemplate([
       {
-        label: 'CPUTY PRO  •  macOS Suite',
+        label: suiteLabel,
         click: () => showAppWindow(getWin),
       },
       { type: 'separator' },

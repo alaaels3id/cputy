@@ -224,7 +224,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
           <button
             onClick={() => handlePurgeRAM(true)}
             disabled={isPurging}
-            title="Purge RAM with macOS Administrator Privileges"
+            title="Purge RAM with Administrator Privileges"
             className="px-3.5 py-2.5 rounded-2xl cputy-btn-secondary text-xs font-semibold transition-all disabled:opacity-40 flex items-center gap-1.5 cursor-pointer shrink-0"
           >
             <ShieldAlert className="w-3.5 h-3.5 text-emerald-500" />
@@ -345,7 +345,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
               <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('storageNvme')}</span>
             </div>
             <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              {storage?.diskName || 'Macintosh HD'}
+              {storage?.diskName || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'Local Disk (C:)' : 'Macintosh HD')}
             </span>
           </div>
 
@@ -539,8 +539,8 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
         <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('systemSpecsTitle')}</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
-            <span className="text-mac-subtext text-[11px]">{t('macosVersion')}</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200">{stats?.osVersion || 'macOS 15.0'}</p>
+            <span className="text-mac-subtext text-[11px]">{t('osVersionTitle')}</span>
+            <p className="font-bold text-slate-800 dark:text-slate-200">{stats?.osVersion || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'Windows' : 'macOS')}</p>
           </div>
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
             <span className="text-mac-subtext text-[11px]">{t('systemUptime')}</span>
@@ -548,11 +548,11 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
           </div>
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
             <span className="text-mac-subtext text-[11px]">{t('computerName')}</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200 truncate">{stats?.hostname || 'Mac'}</p>
+            <p className="font-bold text-slate-800 dark:text-slate-200 truncate">{stats?.hostname || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'PC' : 'Mac')}</p>
           </div>
           <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-black/20 space-y-1 border border-mac-border/40">
             <span className="text-mac-subtext text-[11px]">{t('mountPoint')}</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200 font-mono">{stats?.storage?.mountPoint || '/'}</p>
+            <p className="font-bold text-slate-800 dark:text-slate-200 font-mono">{stats?.storage?.mountPoint || (stats?.platform === 'win32' || stats?.osType === 'Windows' ? 'C:\\' : '/')}</p>
           </div>
         </div>
       </div>

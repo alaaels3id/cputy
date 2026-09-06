@@ -64,6 +64,7 @@ export interface Translations {
   wiredLabel: string;
   compressedLabel: string;
   systemSpecsTitle: string;
+  osVersionTitle: string;
   macosVersion: string;
   systemUptime: string;
   computerName: string;
@@ -167,11 +168,16 @@ export interface Translations {
   safeBadge: string;
 }
 
+const isWin = typeof window !== 'undefined' && Boolean(
+  (window as any)?.cputyAPI?.platform === 'win32' ||
+  (typeof navigator !== 'undefined' && (navigator.platform?.includes('Win') || navigator.userAgent?.includes('Windows')))
+);
+
 const translations: Record<Language, Translations> = {
   en: {
     appName: 'CPUTY',
     proBadge: 'PRO',
-    suiteSubtitle: 'macOS Clean Suite',
+    suiteSubtitle: isWin ? 'Windows Clean Suite' : 'macOS Clean Suite',
     smartScan: 'Smart Scan',
     systemJunk: 'System Junk',
     developerJunk: 'Developer Junk',
@@ -189,12 +195,12 @@ const translations: Record<Language, Translations> = {
     sectionFiles: 'FILES',
     sectionApplications: 'APPLICATIONS',
 
-    protectedTag: 'macOS Protected',
+    protectedTag: isWin ? 'Windows Protected' : 'macOS Protected',
     cleanSelected: 'Clean Selected',
     rescan: 'Rescan',
 
     smartTitle: 'Smart Scan & Cleanup',
-    systemTitle: 'macOS System Junk & Caches',
+    systemTitle: isWin ? 'Windows System Junk & Caches' : 'macOS System Junk & Caches',
     developerTitle: 'Developer & Build Caches',
     browsersTitle: 'Browsers & Privacy Cleanup',
     photosTitle: 'Photos & Media Clutter',
@@ -204,13 +210,15 @@ const translations: Record<Language, Translations> = {
     uninstallerTitle: 'Complete App Uninstaller',
     monitorTitle: 'Real-time System Health & Memory',
 
-    macintoshHD: 'Macintosh HD',
+    macintoshHD: isWin ? 'Local Disk (C:)' : 'Macintosh HD',
     storageFree: 'free',
     storageTotal: 'total',
     storageUsed: 'used',
 
-    healthTitle: 'macOS Hardware & Performance Monitor',
-    healthDesc: 'Real-time diagnostics for Apple Silicon / Intel CPUs, unified memory pressure, and internal NVMe storage.',
+    healthTitle: isWin ? 'Windows Hardware & Performance Monitor' : 'macOS Hardware & Performance Monitor',
+    healthDesc: isWin 
+      ? 'Real-time diagnostics for CPU cores, memory pressure, and primary storage drive.'
+      : 'Real-time diagnostics for Apple Silicon / Intel CPUs, unified memory pressure, and internal NVMe storage.',
     freeInactiveRam: 'Free Up Inactive RAM',
     purgingRam: 'Purging RAM...',
     ramPurgeSuccess: 'Inactive RAM successfully purged!',
@@ -224,7 +232,8 @@ const translations: Record<Language, Translations> = {
     wiredLabel: 'Wired:',
     compressedLabel: 'Compressed:',
     systemSpecsTitle: 'System Specifications',
-    macosVersion: 'macOS Version',
+    osVersionTitle: 'Operating System',
+    macosVersion: 'Operating System',
     systemUptime: 'System Uptime',
     computerName: 'Computer Name',
     mountPoint: 'Mount Point',
@@ -250,18 +259,18 @@ const translations: Record<Language, Translations> = {
     cpuThresholdLabel: 'CPU Load Threshold',
     ramThresholdLabel: 'RAM Usage Threshold',
     testNotificationBtn: 'Send Test Notification',
-    testNotificationSent: 'Test notification delivered to Notification Center!',
+    testNotificationSent: isWin ? 'Test notification delivered to Action Center!' : 'Test notification delivered to Notification Center!',
     elevatedPurgeBtn: 'Elevated Purge (Admin Sudo)',
 
 
-    smartScanTitle: 'One-Click Smart macOS Cleaner',
+    smartScanTitle: isWin ? 'One-Click Smart Windows Cleaner' : 'One-Click Smart macOS Cleaner',
     smartScanDesc: 'Instantly inspect and reclaim gigabytes across system caches, developer build artifacts, browser data, and duplicate files.',
     startSmartScan: 'Run Smart Scan',
-    scanningSystem: 'Analyzing macOS System...',
+    scanningSystem: isWin ? 'Analyzing Windows System...' : 'Analyzing macOS System...',
     smartScanReady: 'Smart Scan Completed',
     itemsFoundText: 'items safe to clean',
     cleanAllNow: 'Clean Smart Scan Items',
-    noJunkFound: 'Your Mac is clean and running at peak performance.',
+    noJunkFound: isWin ? 'Your PC is clean and running at peak performance.' : 'Your Mac is clean and running at peak performance.',
     systemCleanBadge: 'System Optimal',
     summaryCleanup: 'Cleanup',
     summaryProtection: 'Protection',
@@ -269,14 +278,16 @@ const translations: Record<Language, Translations> = {
     reviewDetails: 'View Details',
 
     uninstallerHeaderTitle: 'Complete App Uninstaller & Leftover Hunter',
-    uninstallerHeaderDesc: 'Completely remove applications along with hidden ~/Library preferences, caches, and leftover application data.',
+    uninstallerHeaderDesc: isWin 
+      ? 'Completely remove applications along with AppData caches, registry traces, and leftover application data.'
+      : 'Completely remove applications along with hidden ~/Library preferences, caches, and leftover application data.',
     uninstallSelectedBtn: 'Uninstall Selected',
     searchAppsPlaceholder: 'Search applications...',
     selectedCountText: 'selected',
     leftoversText: 'leftovers',
     uninstallSingleApp: 'Uninstall App',
 
-    systemJunkHeaderTitle: 'macOS System Junk & Caches',
+    systemJunkHeaderTitle: isWin ? 'Windows System Junk & Caches' : 'macOS System Junk & Caches',
     systemJunkHeaderDesc: 'Safely reclaim disk space by purging obsolete user caches, system log archives, and crash diagnostics.',
 
     devJunkHeaderTitle: 'Developer & Build Caches',
@@ -300,17 +311,17 @@ const translations: Record<Language, Translations> = {
     keepOriginalAutoSelect: 'Auto-Select Duplicates (Keep Originals)',
 
     confirmCleanup: 'Confirm File Cleanup',
-    confirmCleanupDesc: 'The selected files and caches will be safely cleaned from your Mac.',
+    confirmCleanupDesc: isWin ? 'The selected files and caches will be safely cleaned from your PC.' : 'The selected files and caches will be safely cleaned from your Mac.',
     selectedItems: 'Selected Items',
     totalSizeToFree: 'Reclaimable Space',
     deletePermanently: 'Delete Permanently',
-    deletePermanentlyDesc: 'Bypass Trash and immediately free up disk blocks',
+    deletePermanentlyDesc: isWin ? 'Bypass Recycle Bin and immediately free up disk blocks' : 'Bypass Trash and immediately free up disk blocks',
     cancelBtn: 'Cancel',
     cleanNowBtn: 'Clean Now',
     cleaningInProgress: 'Cleaning...',
     cleaningSuccess: 'Cleanup completed successfully!',
     selectFolder: 'Select Folder',
-    revealInFinder: 'Reveal in Finder',
+    revealInFinder: isWin ? 'Reveal in File Explorer' : 'Reveal in Finder',
     uninstallApp: 'Uninstall App',
     selectAll: 'Select All',
     unselectAll: 'Unselect All',
@@ -319,7 +330,7 @@ const translations: Record<Language, Translations> = {
   ar: {
     appName: 'CPUTY',
     proBadge: 'برو',
-    suiteSubtitle: 'مجموعة تنظيف وصيانة ماك',
+    suiteSubtitle: isWin ? 'حزمة تنظيف وصيانة ويندوز' : 'مجموعة تنظيف وصيانة ماك',
     smartScan: 'الفحص الذكي',
     systemJunk: 'مخلفات النظام',
     developerJunk: 'مخلفات المطورين',
@@ -337,12 +348,12 @@ const translations: Record<Language, Translations> = {
     sectionFiles: 'الملفات والمساحة',
     sectionApplications: 'التطبيقات',
 
-    protectedTag: 'نظام macOS محمي',
+    protectedTag: isWin ? 'نظام Windows محمي' : 'نظام macOS محمي',
     cleanSelected: 'تنظيف المحدد',
     rescan: 'إعادة الفحص',
 
     smartTitle: 'الفحص والتنظيف الذكي',
-    systemTitle: 'مخلفات وذاكرة التخزين المؤقت لنظام ماك',
+    systemTitle: isWin ? 'مخلفات وذاكرة التخزين المؤقت لنظام ويندوز' : 'مخلفات وذاكرة التخزين المؤقت لنظام ماك',
     developerTitle: 'مخلفات حزم المطورين وبناء المشاريع',
     browsersTitle: 'تنظيف المتصفحات والخصوصية',
     photosTitle: 'مخلفات الصور ومكتبة الوسائط',
@@ -352,13 +363,15 @@ const translations: Record<Language, Translations> = {
     uninstallerTitle: 'إلغاء تثبيت التطبيقات بالكامل',
     monitorTitle: 'مراقبة صحة النظام والذاكرة لحظياً',
 
-    macintoshHD: 'قرص Macintosh HD',
+    macintoshHD: isWin ? 'القرص المحلي (C:)' : 'قرص Macintosh HD',
     storageFree: 'متاح',
     storageTotal: 'الإجمالي',
     storageUsed: 'مستخدم',
 
-    healthTitle: 'مراقب عتاد وأداء نظام macOS',
-    healthDesc: 'تشخيص مباشر لمعالجات Apple Silicon / Intel وضغط الذاكرة الموحدة وسعة تخزين NVMe الداخلية.',
+    healthTitle: isWin ? 'مراقب عتاد وأداء نظام Windows' : 'مراقب عتاد وأداء نظام macOS',
+    healthDesc: isWin 
+      ? 'تشخيص مباشر للمعالج واستهلاك الذاكرة العشوائية ومساحة التخزين الرئيسية.'
+      : 'تشخيص مباشر لمعالجات Apple Silicon / Intel وضغط الذاكرة الموحدة وسعة تخزين NVMe الداخلية.',
     freeInactiveRam: 'تفريغ الذاكرة غير النشطة',
     purgingRam: 'جاري تفريغ الذاكرة...',
     ramPurgeSuccess: 'تم تفريغ الذاكرة العشوائية غير النشطة بنجاح!',
@@ -372,7 +385,8 @@ const translations: Record<Language, Translations> = {
     wiredLabel: 'المثبت (Wired):',
     compressedLabel: 'المضغوط:',
     systemSpecsTitle: 'مواصفات وتفاصيل النظام',
-    macosVersion: 'إصدار نظام macOS',
+    osVersionTitle: 'نظام التشغيل',
+    macosVersion: 'نظام التشغيل',
     systemUptime: 'مدة تشغيل الجهاز',
     computerName: 'اسم الكمبيوتر',
     mountPoint: 'نقطة التثبيت',
@@ -398,18 +412,18 @@ const translations: Record<Language, Translations> = {
     cpuThresholdLabel: 'حد تنبيه حمل المعالج',
     ramThresholdLabel: 'حد تنبيه استهلاك الذاكرة',
     testNotificationBtn: 'إرسال إشعار تجريبي',
-    testNotificationSent: 'تم إرسال الإشعار التجريبي لمركز إشعارات ماك بنجاح!',
+    testNotificationSent: isWin ? 'تم إرسال الإشعار التجريبي لمركز إشعارات ويندوز بنجاح!' : 'تم إرسال الإشعار التجريبي لمركز إشعارات ماك بنجاح!',
     elevatedPurgeBtn: 'تفريغ مع صلاحيات مسؤول (Sudo)',
 
 
-    smartScanTitle: 'التنظيف الذكي لنظام ماك بنقرة واحدة',
+    smartScanTitle: isWin ? 'التنظيف الذكي لنظام ويندوز بنقرة واحدة' : 'التنظيف الذكي لنظام ماك بنقرة واحدة',
     smartScanDesc: 'افحص واستعد غيغابايت من المساحة الضائعة عبر كاش النظام، ملفات بناء المطورين، بيانات المتصفحات، والملفات المكررة.',
     startSmartScan: 'بدء الفحص الذكي',
-    scanningSystem: 'جاري فحص نظام macOS...',
+    scanningSystem: isWin ? 'جاري فحص نظام Windows...' : 'جاري فحص نظام macOS...',
     smartScanReady: 'اكتمل الفحص الذكي',
     itemsFoundText: 'عناصر آمنة للتنظيف',
     cleanAllNow: 'تنظيف جميع عناصر الفحص الذكي',
-    noJunkFound: 'نظام ماك نظيف ويعمل بأقصى كفاءة.',
+    noJunkFound: isWin ? 'جهاز الكمبيوتر الخاص بك نظيف ويعمل بأقصى كفاءة.' : 'نظام ماك نظيف ويعمل بأقصى كفاءة.',
     systemCleanBadge: 'نظام مثالي',
     summaryCleanup: 'التنظيف',
     summaryProtection: 'الحماية',
@@ -417,14 +431,16 @@ const translations: Record<Language, Translations> = {
     reviewDetails: 'عرض التفاصيل',
 
     uninstallerHeaderTitle: 'إلغاء تثبيت التطبيقات وصياد المتبقيات',
-    uninstallerHeaderDesc: 'حذف التطبيقات بالكامل مع ملفات التفضيلات المخفية في مكتبة النظام والكاش وبقايا الملفات.',
+    uninstallerHeaderDesc: isWin 
+      ? 'حذف التطبيقات بالكامل مع ملفات AppData وسجل النظام وبقايا الملفات.'
+      : 'حذف التطبيقات بالكامل مع ملفات التفضيلات المخفية في مكتبة النظام والكاش وبقايا الملفات.',
     uninstallSelectedBtn: 'إلغاء تثبيت المحدد',
     searchAppsPlaceholder: 'بحث عن التطبيقات...',
     selectedCountText: 'محدد',
     leftoversText: 'متبقيات',
     uninstallSingleApp: 'إلغاء التثبيت',
 
-    systemJunkHeaderTitle: 'مخلفات وذاكرة التخزين المؤقت لنظام ماك',
+    systemJunkHeaderTitle: isWin ? 'مخلفات وذاكرة التخزين المؤقت لنظام ويندوز' : 'مخلفات وذاكرة التخزين المؤقت لنظام ماك',
     systemJunkHeaderDesc: 'استعد مساحة التخزين بحذف كاش المستخدم وسجلات النظام وتقارير التشخيص وسلة المهملات بأمان.',
 
     devJunkHeaderTitle: 'مخلفات حزم المطورين وبناء المشاريع',
@@ -448,17 +464,17 @@ const translations: Record<Language, Translations> = {
     keepOriginalAutoSelect: 'تحديد المكررات تلقائياً (الإبقاء على الأصل)',
 
     confirmCleanup: 'تأكيد تنظيف الملفات',
-    confirmCleanupDesc: 'سيتم حذف الملفات والذاكرة المؤقتة المحددة بأمان من جهازك.',
+    confirmCleanupDesc: isWin ? 'سيتم حذف الملفات والذاكرة المؤقتة المحددة بأمان من جهازك.' : 'سيتم تنظيف الملفات والكاش المحددة بأمان من جهاز ماك الخاص بك.',
     selectedItems: 'العناصر المحددة',
     totalSizeToFree: 'المساحة المستعادة',
     deletePermanently: 'حذف نهائي فوري',
-    deletePermanentlyDesc: 'تجاوز سلة المهملات وتحرير مساحة التخزين فوراً',
+    deletePermanentlyDesc: isWin ? 'تجاوز سلة المحذوفات وتحرير مساحة التخزين فوراً' : 'تجاوز سلة المهملات وتحرير مساحة التخزين فوراً',
     cancelBtn: 'إلغاء',
     cleanNowBtn: 'تنظيف الآن',
     cleaningInProgress: 'جاري التنظيف...',
     cleaningSuccess: 'تم التنظيف بنجاح!',
     selectFolder: 'اختيار مجلد',
-    revealInFinder: 'إظهار في Finder',
+    revealInFinder: isWin ? 'فتح في مستكشف الملفات' : 'إظهار في Finder',
     uninstallApp: 'إلغاء التثبيت',
     selectAll: 'تحديد الكل',
     unselectAll: 'إلغاء تحديد الكل',

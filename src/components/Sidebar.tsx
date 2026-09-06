@@ -233,7 +233,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-mac-subtext flex items-center gap-1.5 font-semibold">
               <HardDrive className="w-3.5 h-3.5 text-[#92E6E0] shrink-0" />
-              {t('macintoshHD')}
+              {systemStats?.storage?.diskName || t('macintoshHD')}
             </span>
             <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
               {storagePercent}% {t('storageUsed')}
