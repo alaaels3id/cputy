@@ -66,7 +66,7 @@ function createWindow() {
     minWidth: 1000,
     minHeight: 650,
     title: isWindows ? 'CPUTY - Windows System Cleaner & Optimizer' : 'CPUTY - macOS System Cleaner & Optimizer',
-    backgroundColor: '#090C15',
+    backgroundColor: '#13232C',
     show: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

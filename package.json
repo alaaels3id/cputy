@@ -102,7 +102,6 @@
   "license": "MIT",
   "dependencies": {
     "clsx": "^2.1.1",
-    "latest": "^0.2.0",
     "lucide-react": "^1.38.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -127,6 +126,7 @@
   },
   "allowScripts": {
     "electron@41.10.7": true,
-    "electron-winstaller@5.4.0": true
+    "electron-winstaller@5.4.0": true,
+    "fsevents@2.3.3": true
   }
 }

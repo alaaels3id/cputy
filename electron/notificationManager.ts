@@ -225,6 +225,7 @@ export interface SendNotificationOptions {
   category?: 'purge' | 'clean' | 'cpu' | 'ram' | 'general';
   force?: boolean;
   onClick?: () => void;
+  icon?: NativeImage | string | false | null;
 }
 
 export function sendDesktopNotification(options: SendNotificationOptions): boolean {
@@ -239,23 +240,41 @@ export function sendDesktopNotification(options: SendNotificationOptions): boole
     if (options.category === 'ram' && !settings.notifyOnHighRam) return false;
   }
 
-  const appIcon = getAppIcon();
-  const iconPath = getAppIconPath();
+  const isMac = process.platform === 'darwin';
+  let notificationIcon: NativeImage | string | undefined = undefined;
+
+  // On macOS, passing `icon` to Electron Notification displays it as a content image/thumbnail
+  // on the right side of the notification banner. macOS already displays the application bundle's
+  // icon in the header. For Windows/Linux, the icon is needed for the notification toast logo.
+  if (options.icon !== false && options.icon !== null) {
+    if (typeof options.icon === 'string' || (options.icon && typeof options.icon === 'object')) {
+      notificationIcon = options.icon;
+    } else if (!isMac) {
+      notificationIcon = getAppIcon() || getAppIconPath();
+    }
+  }
 
   let nativeNotificationShown = false;
 
   // Dispatch via Electron native Notification.
-  // In dev mode, patch-electron-icon.js (predev script) has already replaced Electron.app's icon
-  // with the CPUTY icon and set CFBundleIdentifier to com.cputy.app, so macOS will correctly
-  // attribute the notification to CPUTY with the proper icon in both dev and production.
   if (Notification && typeof Notification.isSupported === 'function' && Notification.isSupported()) {
     try {
-      const notification = new Notification({
+      const notificationParams: {
+        title: string;
+        body: string;
+        silent: boolean;
+        icon?: NativeImage | string;
+      } = {
         title: options.title,
         body: options.body,
-        icon: appIcon || iconPath,
         silent: !settings.sound,
-      });
+      };
+
+      if (notificationIcon) {
+        notificationParams.icon = notificationIcon;
+      }
+
+      const notification = new Notification(notificationParams);
 
       if (options.onClick) {
         notification.on('click', () => {
@@ -327,6 +346,7 @@ export function sendTestDesktopNotification(): boolean {
     body: 'Notifications are configured correctly! CPU load & RAM alerts will notify you automatically.',
     category: 'general',
     force: true,
+    icon: false,
   });
 }
 

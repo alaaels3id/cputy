@@ -18,8 +18,8 @@
   --color-mac-purple: #5F9C9F;
 
   /* Direct User Swatch Utilities */
-  --color-cputy-midnight: #14252E;
-  --color-cputy-black: #000000;
+  --color-cputy-midnight: #13232C;
+  --color-cputy-black: #13232C;
   --color-cputy-spruce: #19353C;
   --color-cputy-seafoam: #5F9C9F;
   --color-cputy-aqua: #92E6E0;
@@ -30,14 +30,14 @@
   --color-emerald-500: #5F9C9F;
   --color-emerald-600: #487E81;
   --color-emerald-700: #19353C;
-  --color-emerald-800: #14252E;
-  --color-emerald-900: #0D1920;
+  --color-emerald-800: #13232C;
+  --color-emerald-900: #0E1B22;
 }
 
 :root {
-  /* Dark Mode: Swatch 1 (#14252E), Swatch 2 (#000000), Swatch 3 (#19353C), Swatch 4 (#5F9C9F), Swatch 5 (#92E6E0) */
-  --cputy-bg: #000000;
-  --cputy-sidebar: #14252E;
+  /* Dark Mode: Swatch 1 (#13232C), Swatch 2 (#13232C), Swatch 3 (#19353C), Swatch 4 (#5F9C9F), Swatch 5 (#92E6E0) */
+  --cputy-bg: #13232C;
+  --cputy-sidebar: #0E1B22;
   --cputy-card: #19353C;
   --cputy-card-hover: #1F424B;
   --cputy-border: rgba(95, 156, 159, 0.22);
@@ -46,15 +46,15 @@
   --cputy-text-main: #FFFFFF;
   --cputy-text-secondary: #E3F2F1;
   --cputy-text-muted: #8EACB0;
-  --cputy-glass-bg: rgba(20, 37, 46, 0.88);
+  --cputy-glass-bg: rgba(19, 35, 44, 0.88);
   --cputy-card-bg: rgba(25, 53, 60, 0.72);
   --cputy-card-hover-bg: rgba(31, 66, 75, 0.88);
   --cputy-card-border: rgba(95, 156, 159, 0.22);
   --cputy-card-hover-border: rgba(146, 230, 224, 0.5);
   
   /* User Palette Tokens */
-  --cputy-midnight: #14252E;
-  --cputy-black: #000000;
+  --cputy-midnight: #13232C;
+  --cputy-black: #13232C;
   --cputy-spruce: #19353C;
   --cputy-seafoam: #5F9C9F;
   --cputy-aqua: #92E6E0;
@@ -394,7 +394,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, #19353C 0%, #000000 100%);
+  background: radial-gradient(circle at center, #19353C 0%, #13232C 100%);
   border: 1.5px solid rgba(146, 230, 224, 0.4);
   box-shadow: 0 0 35px -5px rgba(146, 230, 224, 0.3), inset 0 0 25px rgba(95, 156, 159, 0.25);
   transition: all 0.3s ease;
@@ -736,7 +736,7 @@ input[type="range"] {
     #5F9C9F 52%, 
     #19353C 74%, 
     #14252E 88%,
-    #000000 100%
+    #13232C 100%
   );
   box-shadow: 
     0 20px 50px -10px rgba(25, 53, 60, 0.85),
