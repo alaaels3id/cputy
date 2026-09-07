@@ -23,26 +23,61 @@ function formatBytes(bytes: number, decimals = 1): string {
 }
 
 function getTrayIcon(): NativeImage {
+  const isWin = process.platform === 'win32';
   const possiblePaths = [
+    ...(isWin ? [
+      path.join(process.resourcesPath || '', 'app.asar.unpacked/build/icon.ico'),
+      path.join(process.resourcesPath || '', 'build/icon.ico'),
+      path.join(__dirname, '../build/icon.ico'),
+      path.join(process.cwd(), 'build/icon.ico'),
+    ] : []),
     path.join(__dirname, '../build/trayTemplate.png'),
     path.join(__dirname, '../../build/trayTemplate.png'),
-    path.join(process.resourcesPath, 'build/trayTemplate.png'),
-    path.join(process.resourcesPath, 'app.asar.unpacked/build/trayTemplate.png'),
-    path.join(app.getAppPath(), 'build/trayTemplate.png'),
+    path.join(process.resourcesPath || '', 'app.asar.unpacked/build/trayTemplate.png'),
+    path.join(process.resourcesPath || '', 'build/trayTemplate.png'),
+    path.join(process.cwd(), 'build/trayTemplate.png'),
   ];
 
+  try {
+    if (app && typeof app.getAppPath === 'function') {
+      const appPath = app.getAppPath();
+      if (appPath) {
+        if (isWin) possiblePaths.push(path.join(appPath, 'build/icon.ico'));
+        possiblePaths.push(path.join(appPath, 'build/trayTemplate.png'));
+      }
+    }
+  } catch {
+    // ignore
+  }
+
   for (const p of possiblePaths) {
-    if (fs.existsSync(p)) {
-      const rawIcon = nativeImage.createFromPath(p);
-      const icon = rawIcon.resize({ width: 16, height: 16 });
-      icon.setTemplateImage(true);
-      return icon;
+    try {
+      if (p && fs.existsSync(p)) {
+        let rawIcon: NativeImage;
+        if (p.endsWith('.ico')) {
+          rawIcon = nativeImage.createFromPath(p);
+        } else {
+          const buf = fs.readFileSync(p);
+          rawIcon = nativeImage.createFromBuffer(buf);
+        }
+        if (!rawIcon.isEmpty()) {
+          const icon = rawIcon.resize({ width: 16, height: 16 });
+          if (process.platform === 'darwin') {
+            icon.setTemplateImage(true);
+          }
+          return icon;
+        }
+      }
+    } catch {
+      // continue
     }
   }
 
   // Fallback programmatic 16x16 template icon if file not found
   const icon = nativeImage.createEmpty();
-  icon.setTemplateImage(true);
+  if (process.platform === 'darwin') {
+    icon.setTemplateImage(true);
+  }
   return icon;
 }
 
@@ -51,18 +86,44 @@ function showAppWindow(getWin: () => BrowserWindow | null) {
   if (win) {
     if (win.isMinimized()) win.restore();
     win.show();
+    win.setAlwaysOnTop(true);
     win.focus();
+    win.setAlwaysOnTop(false);
   }
 }
 
-export function setupTray(getMainWindow: () => BrowserWindow | null): Tray {
+export function setupTray(getMainWindow: () => BrowserWindow | null): Tray | null {
   if (tray) return tray;
 
   startSystemMonitor();
 
-  const icon = getTrayIcon();
-  tray = new Tray(icon);
-  tray.setToolTip('CPUTY - Real-time System Health & RAM Cleaner');
+  try {
+    if (process.platform === 'win32') {
+      const icoCandidates = [
+        path.join(process.resourcesPath || '', 'app.asar.unpacked/build/icon.ico'),
+        path.join(process.resourcesPath || '', 'build/icon.ico'),
+        path.join(__dirname, '../build/icon.ico'),
+        path.join(process.cwd(), 'build/icon.ico'),
+      ];
+      const validIco = icoCandidates.find((p) => p && fs.existsSync(p));
+      if (validIco) {
+        tray = new Tray(validIco);
+      } else {
+        tray = new Tray(getTrayIcon());
+      }
+    } else {
+      tray = new Tray(getTrayIcon());
+    }
+
+    try {
+      tray.setToolTip('CPUTY - Real-time System Health & RAM Cleaner');
+    } catch {
+      // ignore
+    }
+  } catch (err) {
+    console.error('[CPUTY Tray] Failed to initialize tray:', err);
+    return null;
+  }
 
   const updateMenu = async () => {
     try {
@@ -78,8 +139,15 @@ export function setupTray(getMainWindow: () => BrowserWindow | null): Tray {
 
       // Display live real-time CPU % directly on the macOS menu bar
       if (tray) {
-        tray.setTitle(` ${lastCpuUsage}%`, { fontType: 'monospacedDigit' });
-        tray.setToolTip(`CPUTY - CPU: ${lastCpuUsage}% | RAM: ${lastMemUsedStr} / ${lastMemTotalStr} (${lastMemUsage}%) | Free Disk: ${lastStorageFreeStr}`);
+        if (process.platform === 'darwin' && typeof tray.setTitle === 'function') {
+          tray.setTitle(` ${lastCpuUsage}%`, { fontType: 'monospacedDigit' });
+        }
+        const tip = `CPUTY - CPU: ${lastCpuUsage}% | RAM: ${lastMemUsedStr} / ${lastMemTotalStr} (${lastMemUsage}%) | Disk: ${lastStorageFreeStr}`;
+        try {
+          tray.setToolTip(tip.slice(0, 120));
+        } catch {
+          // ignore
+        }
       }
 
       buildContextMenu(getMainWindow);
@@ -148,6 +216,10 @@ export function setupTray(getMainWindow: () => BrowserWindow | null): Tray {
   updateInterval = setInterval(updateMenu, 1000);
 
   tray.on('double-click', () => {
+    showAppWindow(getMainWindow);
+  });
+
+  tray.on('click', () => {
     showAppWindow(getMainWindow);
   });
 

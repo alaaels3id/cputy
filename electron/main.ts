@@ -2,6 +2,14 @@ import { app, BrowserWindow, ipcMain, shell, dialog, nativeImage } from 'electro
 import * as path from 'path';
 import * as fs from 'fs';
 import { exec } from 'child_process';
+
+process.on('uncaughtException', (err) => {
+  console.error('[CPUTY] Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[CPUTY] Unhandled Rejection:', reason);
+});
+
 import { getSystemStats, purgeRAM } from './scanners/systemMonitor';
 import { scanSystemJunk } from './scanners/systemJunkScanner';
 import { scanDevJunk } from './scanners/devJunkScanner';
@@ -12,7 +20,7 @@ import { scanDuplicates } from './scanners/duplicateScanner';
 import { scanInstalledApps } from './scanners/uninstallerScanner';
 import { cleanPaths } from './scanners/cleanerEngine';
 import { setupTray, destroyTray } from './trayManager';
-import { getNotificationSettings, saveNotificationSettings, sendTestDesktopNotification, sendDesktopNotification, getAppIconPath } from './notificationManager';
+import { getNotificationSettings, saveNotificationSettings, sendTestDesktopNotification, sendDesktopNotification, getAppIconPath, getAppIcon } from './notificationManager';
 import { getOSInfo, isMac, isWindows } from './osChecker';
 
 app.setName('CPUTY');
@@ -20,11 +28,30 @@ if (process.platform === 'win32') {
   app.setAppUserModelId('com.cputy.app');
 }
 
+// Ensure single instance lock so multiple instances don't clash
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.show();
+      mainWindow.setAlwaysOnTop(true);
+      mainWindow.focus();
+      mainWindow.setAlwaysOnTop(false);
+    } else {
+      createWindow();
+    }
+  });
+}
+
 let mainWindow: BrowserWindow | null = null;
 let isQuitting = false;
 
 function createWindow() {
   const iconPath = getAppIconPath();
+  const appIcon = getAppIcon();
   if (isMac && app.dock && iconPath && fs.existsSync(iconPath)) {
     try {
       app.dock.setIcon(iconPath);
@@ -39,9 +66,8 @@ function createWindow() {
     minWidth: 1000,
     minHeight: 650,
     title: isWindows ? 'CPUTY - Windows System Cleaner & Optimizer' : 'CPUTY - macOS System Cleaner & Optimizer',
-    icon: iconPath,
     backgroundColor: '#090C15',
-    show: false,
+    show: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -50,23 +76,43 @@ function createWindow() {
     },
   };
 
+  const resolvedIcon = appIcon || (iconPath && fs.existsSync(iconPath) ? iconPath : undefined);
+  if (resolvedIcon) {
+    windowOptions.icon = resolvedIcon;
+  }
+
   if (isMac) {
     windowOptions.titleBarStyle = 'hiddenInset';
     windowOptions.trafficLightPosition = { x: 18, y: 18 };
   }
 
   mainWindow = new BrowserWindow(windowOptions);
+  mainWindow.show();
+  mainWindow.focus();
+
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
+    console.error(`[CPUTY] Failed to load URL ${validatedURL}: (${errorCode}) ${errorDescription}`);
+  });
+
+  mainWindow.webContents.on('render-process-gone', (_event, details) => {
+    console.error(`[CPUTY] Renderer process gone: reason=${details.reason}, exitCode=${details.exitCode}`);
+  });
 
   mainWindow.once('ready-to-show', () => {
     mainWindow?.show();
+    mainWindow?.focus();
   });
 
-  const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+  const isDev = !app.isPackaged && process.env.NODE_ENV !== 'production';
 
   if (isDev) {
-    mainWindow.loadURL('http://localhost:5173');
+    mainWindow.loadURL('http://localhost:5173').catch((err) => {
+      console.error('[CPUTY] Failed to load dev URL:', err);
+    });
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+    mainWindow.loadFile(path.join(__dirname, '../dist/index.html')).catch((err) => {
+      console.error('[CPUTY] Failed to load production file:', err);
+    });
   }
 
   mainWindow.on('close', (event) => {
@@ -180,8 +226,17 @@ app.whenReady().then(() => {
   });
 
 
-  createWindow();
-  setupTray(() => mainWindow);
+  try {
+    createWindow();
+  } catch (err: any) {
+    console.error('[CPUTY] Error creating window:', err);
+  }
+
+  try {
+    setupTray(() => mainWindow);
+  } catch (err: any) {
+    console.error('[CPUTY] Error initializing tray:', err);
+  }
 
   app.on('activate', () => {
     if (mainWindow) {

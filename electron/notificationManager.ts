@@ -5,16 +5,23 @@ import { exec } from 'child_process';
 import { purgeRAM } from './scanners/systemMonitor';
 
 export function getAppIconPath(): string {
+  const isWin = process.platform === 'win32';
+  const iconFileName = isWin ? 'icon.ico' : 'icon.png';
+
   const possiblePaths: string[] = [
+    path.join(__dirname, `../build/${iconFileName}`),
+    path.join(__dirname, `../../build/${iconFileName}`),
     path.join(__dirname, '../build/icon.png'),
-    path.join(__dirname, '../../build/icon.png'),
   ];
 
   if (process.resourcesPath) {
     possiblePaths.push(
+      path.join(process.resourcesPath, `app.asar.unpacked/build/${iconFileName}`),
+      path.join(process.resourcesPath, 'app.asar.unpacked/build/icon.png'),
+      path.join(process.resourcesPath, `build/${iconFileName}`),
       path.join(process.resourcesPath, 'build/icon.png'),
       path.join(process.resourcesPath, 'icon.png'),
-      path.join(process.resourcesPath, 'app.asar.unpacked/build/icon.png'),
+      path.join(process.resourcesPath, 'icon.ico'),
       path.join(process.resourcesPath, 'icon.icns')
     );
   }
@@ -24,6 +31,7 @@ export function getAppIconPath(): string {
       const appPath = app.getAppPath();
       if (appPath) {
         possiblePaths.push(
+          path.join(appPath, `build/${iconFileName}`),
           path.join(appPath, 'build/icon.png'),
           path.join(appPath, 'public/app-icon.png')
         );
@@ -35,6 +43,7 @@ export function getAppIconPath(): string {
 
   possiblePaths.push(
     path.join(__dirname, '../public/app-icon.png'),
+    path.join(process.cwd(), `build/${iconFileName}`),
     path.join(process.cwd(), 'build/icon.png')
   );
 
@@ -52,8 +61,14 @@ export function getAppIcon(): NativeImage | undefined {
   const iconPath = getAppIconPath();
   try {
     if (fs.existsSync(iconPath)) {
-      const img = nativeImage.createFromPath(iconPath);
-      if (!img.isEmpty()) return img;
+      if (iconPath.endsWith('.ico')) {
+        const img = nativeImage.createFromPath(iconPath);
+        if (!img.isEmpty()) return img;
+      } else {
+        const buf = fs.readFileSync(iconPath);
+        const img = nativeImage.createFromBuffer(buf);
+        if (!img.isEmpty()) return img;
+      }
     }
   } catch {
     // ignore

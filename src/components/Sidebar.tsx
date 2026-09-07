@@ -18,6 +18,7 @@ import {
 import { ScanCategory, SystemStats } from '../types';
 import { formatBytes } from '../utils/formatters';
 import { useLanguage } from '../context/LanguageContext';
+import appIcon from '../assets/app-icon.png';
 
 interface SidebarProps {
   currentCategory: ScanCategory;
@@ -165,7 +166,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="pt-10 px-4 pb-2 shrink-0">
         <div className="flex items-center gap-3 px-2 mb-3">
           <div className="w-10 h-10 shrink-0 flex items-center justify-center drop-shadow-md">
-            <img src="/app-icon.png?v=7" alt="CPUTY" className="w-full h-full object-contain" />
+            <img 
+              src={appIcon} 
+              alt="CPUTY" 
+              className="w-full h-full object-contain" 
+              onError={(e) => {
+                e.currentTarget.src = './app-icon.png';
+              }}
+            />
           </div>
 
           <div className="min-w-0">
