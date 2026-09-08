@@ -23,6 +23,8 @@ import { formatBytes, formatDuration } from '../utils/formatters';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { LanguageToggle } from '../components/LanguageToggle';
+import { FontSelector } from '../components/FontSelector';
+import { SoftwareUpdateCard } from '../components/SoftwareUpdateCard';
 
 interface SystemHealthViewProps {
   stats: SystemStats | null;
@@ -572,8 +574,11 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
         <LanguageToggle variant="cards" />
       </div>
 
+      {/* Application Font Selection */}
+      <FontSelector />
+
       {/* Appearance & Preferences */}
-      <div className="p-6 rounded-3xl cputy-card border border-mac-border flex items-center justify-between">
+      <div className="p-6 rounded-3xl cputy-card border border-mac-border flex items-center justify-between relative z-0">
         <div>
           <h3 className="text-sm font-bold text-slate-900 dark:text-white">{t('appearanceTitle')}</h3>
           <p className="text-xs text-mac-subtext mt-0.5">{t('appearanceDesc')}</p>
@@ -604,6 +609,9 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Software Auto-Updates */}
+      <SoftwareUpdateCard />
     </div>
   );
 };

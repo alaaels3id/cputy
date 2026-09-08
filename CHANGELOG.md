@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-09-08
+
+### Added
+- **Internet Speed Test**:
+  - Added dedicated **Internet Speed** view under the SPEED sidebar navigation section.
+  - Interactive futuristic speedometer gauge with central start test button and live real-time Mbps needle.
+  - Real-time telemetry sparkline tracking instant network throughput variations.
+  - Comprehensive post-test results dashboard: Download & Upload speeds, Ping, Jitter, Packet Loss, and connection stability.
+  - Real-world capability matrix evaluating 4K/8K streaming, competitive low-latency gaming, and HD video conferencing.
+  - Network metadata and server diagnostics (public IP, city, country, ISP, and Cloudflare edge node).
+  - Session test history table with comparison metrics and quick re-test controls.
+- **Application Typography & Font Customization**:
+  - Added in-app Font Selector in Settings to customize the primary interface typeface.
+  - Support for popular Google Fonts and system typefaces: Cairo (Arabic/English), Inter, Outfit, Roboto, Tajawal, and System Default.
+  - Live typography preview box displaying real-time English and Arabic sample text.
+  - Dynamic root CSS variable binding (`--app-font-family`) with persistent user preferences in `localStorage`.
+- **Integrated Auto-Updater System**:
+  - Built-in software update system using `electron-updater` configured for GitHub Releases (`alaaels3id/cputy`).
+  - Added dedicated Software Updates card in Settings displaying current version, check for updates action, and release notes.
+  - Real-time download progress bar showing transferred MB, total size, and download speed.
+  - One-click restart and install action.
+  - Hybrid mode: native delta updates in production and fallback GitHub API release checks in development.
+
+### Fixed
+- Fixed dropdown menu overlapping and CSS stacking context issues caused by `backdrop-filter` in settings cards.
+
 ## [1.2.0] - 2026-09-06
 
 ### Added

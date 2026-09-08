@@ -33,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'duplicates': return t('duplicatesTitle');
       case 'uninstaller': return t('uninstallerTitle');
       case 'monitor': return t('monitorTitle');
+      case 'speed_test': return t('speedTestTitle');
       default: return 'CPUTY';
     }
   };

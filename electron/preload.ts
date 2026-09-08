@@ -27,6 +27,18 @@ const api: CPUTYAPI = {
       ipcRenderer.removeListener('scan-progress', subscription);
     };
   },
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  startDownloadUpdate: () => ipcRenderer.invoke('download-update'),
+  quitAndInstallUpdate: () => ipcRenderer.invoke('quit-and-install-update'),
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  getUpdateStatus: () => ipcRenderer.invoke('get-update-status'),
+  onUpdateStatusChange: (callback) => {
+    const subscription = (_event: any, status: any) => callback(status);
+    ipcRenderer.on('update-status-changed', subscription);
+    return () => {
+      ipcRenderer.removeListener('update-status-changed', subscription);
+    };
+  },
 };
 
 contextBridge.exposeInMainWorld('cputyAPI', api);

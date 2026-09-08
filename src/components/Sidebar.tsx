@@ -13,7 +13,8 @@ import {
   HardDrive,
   ShieldCheck,
   Zap,
-  FolderArchive
+  FolderArchive,
+  Gauge
 } from 'lucide-react';
 import { ScanCategory, SystemStats } from '../types';
 import { formatBytes } from '../utils/formatters';
@@ -104,6 +105,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'monitor',
           label: t('systemHealth'),
           icon: Activity,
+          color: 'text-emerald-500 dark:text-emerald-400',
+          activeColor: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30'
+        },
+        {
+          id: 'speed_test',
+          label: t('speedTest'),
+          icon: Gauge,
           color: 'text-emerald-500 dark:text-emerald-400',
           activeColor: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30'
         }

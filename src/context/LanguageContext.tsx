@@ -166,6 +166,76 @@ export interface Translations {
   selectAll: string;
   unselectAll: string;
   safeBadge: string;
+
+  // Speed Test View
+  speedTest: string;
+  speedTestTitle: string;
+  speedTestSubtitle: string;
+  startSpeedTestBtn: string;
+  testingSpeedBtn: string;
+  testAgainBtn: string;
+  phasePing: string;
+  phaseDownload: string;
+  phaseUpload: string;
+  phaseComplete: string;
+  downloadSpeedLabel: string;
+  uploadSpeedLabel: string;
+  pingLatencyLabel: string;
+  jitterLabel: string;
+  packetLossLabel: string;
+  peakSpeedLabel: string;
+  networkDiagnosticsTitle: string;
+  ipAddressLabel: string;
+  locationLabel: string;
+  ispLabel: string;
+  serverLabel: string;
+  ratingExcellent: string;
+  ratingGood: string;
+  ratingModerate: string;
+  ratingSlow: string;
+  capabilitiesTitle: string;
+  capStreaming4k: string;
+  capGaming: string;
+  capVideoCalls: string;
+  capLargeDownloads: string;
+  recentTestsTitle: string;
+  noRecentTests: string;
+  testedJustNow: string;
+  statusIdle: string;
+  statusTesting: string;
+  statusCompleted: string;
+  offlineNotice: string;
+
+  // Font Settings
+  fontTitle: string;
+  fontDesc: string;
+  fontSelectLabel: string;
+  fontPreviewTitle: string;
+  fontPreviewSampleEn: string;
+  fontPreviewSampleAr: string;
+  fontCairoDesc: string;
+  fontInterDesc: string;
+  fontOutfitDesc: string;
+  fontRobotoDesc: string;
+  fontTajawalDesc: string;
+  fontSystemDesc: string;
+
+  // Software Update
+  updateTitle: string;
+  updateDesc: string;
+  currentVersionLabel: string;
+  checkForUpdatesBtn: string;
+  checkingForUpdatesText: string;
+  upToDateTitle: string;
+  upToDateDesc: string;
+  updateAvailableTitle: string;
+  downloadUpdateBtn: string;
+  downloadingUpdateText: string;
+  updateDownloadedTitle: string;
+  restartAndInstallBtn: string;
+  releaseNotesTitle: string;
+  viewOnGithubBtn: string;
+  updateErrorText: string;
 }
 
 const isWin = typeof window !== 'undefined' && Boolean(
@@ -326,6 +396,76 @@ const translations: Record<Language, Translations> = {
     selectAll: 'Select All',
     unselectAll: 'Unselect All',
     safeBadge: 'Safe',
+
+    // Speed Test View
+    speedTest: 'Internet Speed',
+    speedTestTitle: 'Internet Speed & Connection Test',
+    speedTestSubtitle: 'High-precision real-time network speed, latency, jitter, and bandwidth diagnostics',
+    startSpeedTestBtn: 'START TEST',
+    testingSpeedBtn: 'TESTING...',
+    testAgainBtn: 'Test Again',
+    phasePing: 'Ping & Latency',
+    phaseDownload: 'Download Speed',
+    phaseUpload: 'Upload Speed',
+    phaseComplete: 'Test Completed',
+    downloadSpeedLabel: 'Download',
+    uploadSpeedLabel: 'Upload',
+    pingLatencyLabel: 'Ping / Latency',
+    jitterLabel: 'Jitter',
+    packetLossLabel: 'Packet Loss',
+    peakSpeedLabel: 'Peak Speed',
+    networkDiagnosticsTitle: 'Network & Server Diagnostics',
+    ipAddressLabel: 'Public IP',
+    locationLabel: 'Location',
+    ispLabel: 'ISP / Provider',
+    serverLabel: 'Test Server',
+    ratingExcellent: 'Excellent Connection',
+    ratingGood: 'Fast Connection',
+    ratingModerate: 'Moderate Connection',
+    ratingSlow: 'Slow Connection',
+    capabilitiesTitle: 'Real-World Performance',
+    capStreaming4k: '4K/8K Ultra HD Streaming',
+    capGaming: 'Competitive Online Gaming',
+    capVideoCalls: 'HD Video Conferencing',
+    capLargeDownloads: 'Large File Downloads',
+    recentTestsTitle: 'Session Test History',
+    noRecentTests: 'No tests recorded in this session yet.',
+    testedJustNow: 'Just now',
+    statusIdle: 'Ready to test your internet connection',
+    statusTesting: 'Measuring real-time throughput...',
+    statusCompleted: 'Speed test completed successfully',
+    offlineNotice: 'Network unreachable. Please check your internet connection.',
+
+    // Font Settings
+    fontTitle: 'Application Font',
+    fontDesc: 'Choose the primary font style and typography for the interface',
+    fontSelectLabel: 'Select Interface Font',
+    fontPreviewTitle: 'Live Font Preview',
+    fontPreviewSampleEn: 'The quick brown fox jumps over the lazy dog. 1234567890',
+    fontPreviewSampleAr: 'أبجد هوز حطي كلمن - واجهة مستخدم سريعة وعصرية فائقة الأناقة',
+    fontCairoDesc: 'Modern geometric typeface optimized for Arabic and English',
+    fontInterDesc: 'Neutral, highly legible modern UI font crafted for screens',
+    fontOutfitDesc: 'Clean, rounded contemporary geometric display font',
+    fontRobotoDesc: 'Versatile Google neo-grotesque typeface with balanced rhythm',
+    fontTajawalDesc: 'Fluid, elegant Arabic typography designed for digital interfaces',
+    fontSystemDesc: 'Native system font (San Francisco on macOS / Segoe UI on Windows)',
+
+    // Software Update
+    updateTitle: 'Software Updates',
+    updateDesc: 'Keep CPUTY up to date with performance improvements and new features',
+    currentVersionLabel: 'Current Version',
+    checkForUpdatesBtn: 'Check for Updates',
+    checkingForUpdatesText: 'Checking for updates...',
+    upToDateTitle: 'You are on the latest version',
+    upToDateDesc: 'CPUTY is completely up to date with the latest features and security updates.',
+    updateAvailableTitle: 'New Version Available!',
+    downloadUpdateBtn: 'Download & Install',
+    downloadingUpdateText: 'Downloading update...',
+    updateDownloadedTitle: 'Update Ready to Install',
+    restartAndInstallBtn: 'Restart & Install Now',
+    releaseNotesTitle: 'Release Notes & Changelog',
+    viewOnGithubBtn: 'View Release on GitHub',
+    updateErrorText: 'Could not connect to update servers. Please check your internet connection.',
   },
   ar: {
     appName: 'CPUTY',
@@ -479,6 +619,76 @@ const translations: Record<Language, Translations> = {
     selectAll: 'تحديد الكل',
     unselectAll: 'إلغاء تحديد الكل',
     safeBadge: 'آمن',
+
+    // Speed Test View
+    speedTest: 'سرعة الإنترنت',
+    speedTestTitle: 'اختبار سرعة واستقرار الإنترنت',
+    speedTestSubtitle: 'تشخيص مباشر وعالي الدقة لسرعات التحميل والرفع، وزمن الاستجابة (Ping) والتذبذب',
+    startSpeedTestBtn: 'بدء الاختبار',
+    testingSpeedBtn: 'جاري الاختبار...',
+    testAgainBtn: 'إعادة الاختبار',
+    phasePing: 'زمن الاستجابة (Ping)',
+    phaseDownload: 'سرعة التحميل (Download)',
+    phaseUpload: 'سرعة الرفع (Upload)',
+    phaseComplete: 'اكتمل الفحص بنجاح',
+    downloadSpeedLabel: 'التحميل',
+    uploadSpeedLabel: 'الرفع',
+    pingLatencyLabel: 'زمن الاستجابة',
+    jitterLabel: 'التذبذب (Jitter)',
+    packetLossLabel: 'فقدان الحزم',
+    peakSpeedLabel: 'أقصى سرعة',
+    networkDiagnosticsTitle: 'بيانات الشبكة وخادم الفحص',
+    ipAddressLabel: 'عنوان IP العام',
+    locationLabel: 'الموقع الجغرافي',
+    ispLabel: 'مزود الخدمة (ISP)',
+    serverLabel: 'خادم الاختبار',
+    ratingExcellent: 'اتصال ممتاز وفائق السرعة',
+    ratingGood: 'اتصال سريع ومستقر',
+    ratingModerate: 'اتصال متوسط السرعة',
+    ratingSlow: 'اتصال بطيء أو غير مستقر',
+    capabilitiesTitle: 'أداء الشبكة في الاستخدام الفعلي',
+    capStreaming4k: 'بث الفيديو بدقة 4K / 8K بسلاسة',
+    capGaming: 'الألعاب التنافسية عبر الإنترنت (Ping منخفض)',
+    capVideoCalls: 'مكالمات الفيديو والمؤتمرات عالية الدقة',
+    capLargeDownloads: 'تحميل ورفع الملفات الضخمة بسرعة',
+    recentTestsTitle: 'سجل اختبارات الجلسة الحالية',
+    noRecentTests: 'لم يتم إجراء أي اختبارات خلال هذه الجلسة بعد.',
+    testedJustNow: 'الآن',
+    statusIdle: 'الشبكة جاهزة لإجراء اختبار السرعة',
+    statusTesting: 'جاري قياس تدفق ونقل البيانات لحظياً...',
+    statusCompleted: 'اكتمل قياس سرعة الاتصال بنجاح',
+    offlineNotice: 'تعذر الاتصال بالشبكة. يرجى التحقق من اتصال الإنترنت.',
+
+    // Font Settings
+    fontTitle: 'خط واجهة التطبيق',
+    fontDesc: 'اختر نمط ونوع الخط المفضل لعرض نصوص وعناصر التطبيق بالكامل',
+    fontSelectLabel: 'اختيار خط الواجهة',
+    fontPreviewTitle: 'معاينة حية لشكل الخط المختار',
+    fontPreviewSampleEn: 'The quick brown fox jumps over the lazy dog. 1234567890',
+    fontPreviewSampleAr: 'أبجد هوز حطي كلمن - تجربة قراءة فائقة الوضوح وسريعة الاستجابة',
+    fontCairoDesc: 'خط هندسي عصري فائق الجمال والوضوح ومثالي للغة العربية والإنجليزية',
+    fontInterDesc: 'خط واجهات مستخدم احترافي وعصري يتميز بالقراءة المريحة',
+    fontOutfitDesc: 'خط هندسي منحني يعطي الواجهة لمسة عصرية وشبابية أنيقة',
+    fontRobotoDesc: 'خط جوجل الكلاسيكي الشهير بتوازنه ودقته العالية',
+    fontTajawalDesc: 'خط عربي رشيق وأنيق صُمم خصيصاً للشاشات والتطبيقات الرقمية',
+    fontSystemDesc: 'خط النظام الافتراضي (San Francisco على ماك / Segoe UI على ويندوز)',
+
+    // Software Update
+    updateTitle: 'تحديثات البرنامج',
+    updateDesc: 'حافظ على تحديث CPUTY بأحدث الميزات وتحسينات الأداء الفائقة',
+    currentVersionLabel: 'الإصدار الحالي',
+    checkForUpdatesBtn: 'التحقق من التحديثات',
+    checkingForUpdatesText: 'جاري البحث عن تحديثات...',
+    upToDateTitle: 'أنت تستخدم أحدث إصدار',
+    upToDateDesc: 'تطبيق CPUTY محدث بالكامل ولا توجد أي إصدارات جديدة حالياً.',
+    updateAvailableTitle: 'يتوفر إصدار جديد!',
+    downloadUpdateBtn: 'تحميل وتثبيت التحديث',
+    downloadingUpdateText: 'جاري تحميل ملفات التحديث...',
+    updateDownloadedTitle: 'التحديث جاهز للتثبيت',
+    restartAndInstallBtn: 'إعادة التشغيل وتثبيت الآن',
+    releaseNotesTitle: 'ما الجديد في هذا الإصدار',
+    viewOnGithubBtn: 'عرض التحديث على GitHub',
+    updateErrorText: 'تعذر الاتصال بخوادم التحديث. يرجى التحقق من اتصال الإنترنت.',
   },
 };
 

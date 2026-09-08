@@ -22,6 +22,7 @@ import { cleanPaths } from './scanners/cleanerEngine';
 import { setupTray, destroyTray } from './trayManager';
 import { getNotificationSettings, saveNotificationSettings, sendTestDesktopNotification, sendDesktopNotification, getAppIconPath, getAppIcon } from './notificationManager';
 import { getOSInfo, isMac, isWindows } from './osChecker';
+import { updateManager } from './updateManager';
 
 app.setName('CPUTY');
 if (process.platform === 'win32') {
@@ -225,9 +226,37 @@ app.whenReady().then(() => {
     return result.filePaths[0];
   });
 
+  // Auto-Updater IPC Handlers
+  ipcMain.handle('check-for-updates', async () => {
+    return await updateManager.checkForUpdates();
+  });
+
+  ipcMain.handle('download-update', async () => {
+    return await updateManager.startDownload();
+  });
+
+  ipcMain.handle('quit-and-install-update', () => {
+    updateManager.quitAndInstall();
+  });
+
+  ipcMain.handle('get-app-version', () => {
+    return app.getVersion();
+  });
+
+  ipcMain.handle('get-update-status', () => {
+    return updateManager.getStatus();
+  });
 
   try {
     createWindow();
+    updateManager.init(() => mainWindow);
+
+    // Check for updates in background shortly after launch
+    setTimeout(() => {
+      updateManager.checkForUpdates().catch((e) => {
+        console.log('[CPUTY] Background update check:', e?.message || e);
+      });
+    }, 4000);
   } catch (err: any) {
     console.error('[CPUTY] Error creating window:', err);
   }

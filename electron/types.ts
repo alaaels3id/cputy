@@ -8,7 +8,8 @@ export type ScanCategory =
   | 'large_files'
   | 'duplicates'
   | 'uninstaller'
-  | 'monitor';
+  | 'monitor'
+  | 'speed_test';
 
 export interface CleanableItem {
   id: string;
@@ -135,6 +136,31 @@ export interface CleanProgress {
   error?: string;
 }
 
+export type UpdateStatusState = 'idle' | 'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error';
+
+export interface AppUpdateInfo {
+  version: string;
+  releaseDate?: string;
+  releaseNotes?: string;
+  releaseName?: string;
+  downloadUrl?: string;
+}
+
+export interface AppUpdateProgress {
+  percent: number;
+  bytesPerSecond: number;
+  transferred: number;
+  total: number;
+}
+
+export interface AppUpdateStatus {
+  state: UpdateStatusState;
+  currentVersion: string;
+  updateInfo?: AppUpdateInfo;
+  progress?: AppUpdateProgress;
+  error?: string;
+}
+
 export interface CPUTYAPI {
   getSystemStats: () => Promise<SystemStats>;
   getOSInfo: () => Promise<OSInfo>;
@@ -155,6 +181,12 @@ export interface CPUTYAPI {
   updateNotificationSettings: (settings: Partial<NotificationSettings>) => Promise<NotificationSettings>;
   testNotification: () => Promise<boolean>;
   onScanProgress: (callback: (data: { category: string; progress: number; currentItem?: string }) => void) => () => void;
+  checkForUpdates?: () => Promise<AppUpdateStatus>;
+  startDownloadUpdate?: () => Promise<boolean>;
+  quitAndInstallUpdate?: () => Promise<void>;
+  getAppVersion?: () => Promise<string>;
+  getUpdateStatus?: () => Promise<AppUpdateStatus>;
+  onUpdateStatusChange?: (callback: (status: AppUpdateStatus) => void) => () => void;
 }
 
 declare global {

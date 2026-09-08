@@ -131,23 +131,23 @@ body {
   overflow: hidden;
   background-color: var(--cputy-bg);
   color: var(--cputy-text-secondary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", sans-serif;
+  font-family: var(--app-font-family, 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", sans-serif);
   font-weight: 600;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* Cairo font integration for Arabic & RTL */
+/* Dynamic app font integration for LTR & RTL */
 [dir="rtl"],
 [dir="rtl"] *,
 .rtl-layout,
 .rtl-layout * {
-  font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Geeza Pro", sans-serif !important;
+  font-family: var(--app-font-family, 'Cairo', -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Geeza Pro", sans-serif) !important;
   letter-spacing: normal;
 }
 
 [dir="rtl"] .font-mono {
-  font-family: 'SF Mono', ui-monospace, 'Menlo', 'Cairo', monospace !important;
+  font-family: 'SF Mono', ui-monospace, 'Menlo', monospace !important;
 }
 
 [dir="rtl"], .rtl-layout {
@@ -188,7 +188,7 @@ body {
 }
 
 [dir="rtl"] .nav-label {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: var(--app-font-family, 'Cairo', sans-serif) !important;
   font-weight: 800 !important;
   font-size: 13px !important;
 }

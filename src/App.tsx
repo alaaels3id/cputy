@@ -10,6 +10,7 @@ import { CloudAndLargeFilesView } from './views/CloudAndLargeFilesView';
 import { DuplicateFinderView } from './views/DuplicateFinderView';
 import { UninstallerView } from './views/UninstallerView';
 import { SystemHealthView } from './views/SystemHealthView';
+import { SpeedTestView } from './views/SpeedTestView';
 import { CleanModal } from './components/CleanModal';
 import { useLanguage } from './context/LanguageContext';
 import { 
@@ -452,6 +453,10 @@ export const App: React.FC = () => {
               stats={systemStats}
               onRefresh={fetchStats}
             />
+          )}
+
+          {currentCategory === 'speed_test' && (
+            <SpeedTestView />
           )}
         </main>
       </div>
