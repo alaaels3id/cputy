@@ -11,6 +11,7 @@ import { DuplicateFinderView } from './views/DuplicateFinderView';
 import { UninstallerView } from './views/UninstallerView';
 import { SystemHealthView } from './views/SystemHealthView';
 import { SpeedTestView } from './views/SpeedTestView';
+import { SettingsView } from './views/SettingsView';
 import { CleanModal } from './components/CleanModal';
 import { useLanguage } from './context/LanguageContext';
 import { 
@@ -457,6 +458,10 @@ export const App: React.FC = () => {
 
           {currentCategory === 'speed_test' && (
             <SpeedTestView />
+          )}
+
+          {currentCategory === 'settings' && (
+            <SettingsView />
           )}
         </main>
       </div>

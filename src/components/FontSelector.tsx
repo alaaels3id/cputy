@@ -85,7 +85,7 @@ export const FontSelector: React.FC = () => {
                         <span>{font.name}</span>
                         {font.id === 'Cairo' && (
                           <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#92E6E0]/20 text-[#92E6E0] font-mono">
-                            Popular
+                            {t('popularBadge')}
                           </span>
                         )}
                       </div>

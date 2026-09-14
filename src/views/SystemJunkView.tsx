@@ -191,7 +191,7 @@ export const SystemJunkView: React.FC<SystemJunkViewProps> = ({
                         <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{item.name}</h4>
                         {item.safeToDelete && (
                           <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                            Safe
+                            {t('safeBadge')}
                           </span>
                         )}
                       </div>
@@ -207,7 +207,7 @@ export const SystemJunkView: React.FC<SystemJunkViewProps> = ({
                     </span>
                     <button
                       onClick={() => handleReveal(item.path)}
-                      title="Reveal in Finder"
+                      title={t('revealInFinder')}
                       className="p-2 rounded-xl bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -239,7 +239,7 @@ export const SystemJunkView: React.FC<SystemJunkViewProps> = ({
                             <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">{formatBytes(sub.size)}</span>
                             <button
                               onClick={() => handleReveal(sub.path)}
-                              title="Reveal in Finder"
+                              title={t('revealInFinder')}
                               className="text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer p-1"
                             >
                               <ExternalLink className="w-3 h-3" />

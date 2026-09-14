@@ -29,6 +29,15 @@ interface SmartScanViewProps {
   lastCleanSummary: { freedBytes: number; count: number } | null;
 }
 
+const splitFormattedBytes = (bytes: number) => {
+  const formatted = formatBytes(bytes);
+  const parts = formatted.trim().split(' ');
+  if (parts.length >= 2) {
+    return { value: parts[0], unit: parts.slice(1).join(' ') };
+  }
+  return { value: formatted, unit: '' };
+};
+
 export const SmartScanView: React.FC<SmartScanViewProps> = ({
   isScanning,
   onStartScan,
@@ -47,6 +56,7 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
   const browserSize = browserResult?.totalSize || 0;
   const photosSize = photosResult?.totalSize || 0;
   const totalCleanable = systemSize + devSize + browserSize + photosSize;
+  const { value: cleanableValue, unit: cleanableUnit } = splitFormattedBytes(totalCleanable);
 
   const hasScanned = Boolean(systemResult || devResult || browserResult || photosResult);
 
@@ -115,57 +125,151 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         </p>
       </div>
 
-      {/* Signature CleanMyMac X 3D Glass Orb Centerpiece */}
+      {/* Signature 3D Glass Morphism & Luminous Ring Gauge Centerpiece */}
       <div className="flex flex-col items-center justify-center relative py-4">
-        <div className="cleanmymac-orb-stage">
-          {/* Ambient Breathed Light Flare */}
-          <div className="cleanmymac-orb-aura" />
+        <div className="cputy-gauge-stage">
+          {/* Ambient Backlight Aura */}
+          <div className="cputy-gauge-aura" />
 
-          {/* 3D Rotating Orbital Halo Rings */}
-          <div className="cleanmymac-orbital-ring cleanmymac-orbital-ring-1" />
-          <div className="cleanmymac-orbital-ring cleanmymac-orbital-ring-2" />
+          {/* Luminous Circular Ring Gauge SVG */}
+          <svg className="cputy-gauge-svg" viewBox="0 0 280 280">
+            <defs>
+              <linearGradient id="cputyGaugeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#169873" />
+                <stop offset="26%" stopColor="#9EBD6E" />
+                <stop offset="52%" stopColor="#FFD3BA" />
+                <stop offset="78%" stopColor="#F49FBC" />
+                <stop offset="100%" stopColor="#805D93" />
+              </linearGradient>
+              <linearGradient id="cputyEmeraldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#169873" />
+                <stop offset="100%" stopColor="#9EBD6E" />
+              </linearGradient>
+              <filter id="cputyGaugeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
 
-          {/* Radar Sonar Wave Pulse on Scanning */}
-          {isScanning && <div className="cleanmymac-radar-wave" />}
+            {/* Outer Fine Orbit Track (subtle dashed ring) */}
+            <circle
+              cx="140"
+              cy="140"
+              r="132"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeDasharray="4 8"
+              className="text-pink-400/25 dark:text-pink-300/15 cputy-orbit-track"
+            />
 
-          {/* The 3D Glass Sphere Body */}
+            {/* Background Base Track */}
+            <circle
+              cx="140"
+              cy="140"
+              r="115"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="7"
+              className="text-slate-200/70 dark:text-slate-800/80"
+            />
+
+            {/* Active Luminous Progress Ring */}
+            <circle
+              cx="140"
+              cy="140"
+              r="115"
+              fill="none"
+              stroke={hasScanned && totalCleanable === 0 ? "url(#cputyEmeraldGradient)" : "url(#cputyGaugeGradient)"}
+              strokeWidth="7.5"
+              strokeLinecap="round"
+              filter="url(#cputyGaugeGlow)"
+              strokeDasharray={
+                isScanning 
+                  ? "180 542" 
+                  : hasScanned 
+                    ? (totalCleanable > 0 ? "722 0" : "722 0") 
+                    : "380 342"
+              }
+              className={`transition-all duration-700 ${isScanning ? 'cputy-gauge-active-spin' : ''}`}
+              style={{
+                transformOrigin: 'center',
+                transform: isScanning ? undefined : 'rotate(-90deg)'
+              }}
+            />
+
+            {/* Secondary Accent Inner Halo Ring */}
+            <circle
+              cx="140"
+              cy="140"
+              r="104"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeDasharray="3 6"
+              className="text-emerald-500/30 dark:text-emerald-400/20"
+            />
+          </svg>
+
+          {/* Sonar Ripple Pulse when Scanning */}
+          {isScanning && <div className="cputy-gauge-ripple" />}
+
+          {/* The 3D Glassmorphism Center Disc */}
           <div 
             onClick={!isScanning ? (hasScanned && totalCleanable > 0 ? onCleanAll : onStartScan) : undefined}
-            className={`cleanmymac-orb-sphere ${isScanning ? 'animate-pulse-energy' : ''}`}
+            className={`cputy-gauge-disc ${isScanning ? 'animate-pulse-subtle' : ''}`}
           >
             {/* Specular Crescent Reflection */}
-            <div className="cleanmymac-orb-highlight" />
+            <div className="cputy-gauge-highlight" />
 
             {/* Inner Content */}
-            <div className="cleanmymac-orb-core px-4 select-none">
+            <div className="cputy-gauge-core px-4 select-none">
               {isScanning ? (
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-center gap-2.5">
                   <div className="relative">
-                    <Loader2 className="w-12 h-12 text-emerald-300 animate-spin" />
-                    <Rocket className="w-5 h-5 text-white absolute inset-0 m-auto" />
+                    <Loader2 className="w-12 h-12 text-emerald-500 dark:text-emerald-400 animate-spin" />
+                    <Rocket className="w-5 h-5 text-emerald-600 dark:text-emerald-300 absolute inset-0 m-auto" />
                   </div>
-                  <span className="text-xs font-mono font-black tracking-wider text-emerald-100 uppercase drop-shadow-sm">
+                  <span className="text-xs font-mono font-black tracking-wider text-emerald-600 dark:text-emerald-300 uppercase drop-shadow-xs">
                     {t('scanningSystem')}
                   </span>
                 </div>
               ) : hasScanned ? (
-                <div className="flex flex-col items-center gap-1.5">
-                  <span className="text-[11px] font-black font-mono tracking-widest uppercase px-3 py-1 rounded-full cleanmymac-orb-badge">
+                <div className="flex flex-col items-center gap-2">
+                  {/* Status Capsule Badge */}
+                  <span className={`text-[10.5px] font-bold font-mono tracking-wider uppercase px-3 py-0.5 rounded-full ${
+                    totalCleanable > 0 
+                      ? 'bg-pink-500/15 text-pink-600 dark:text-pink-300 border border-pink-500/30 shadow-xs' 
+                      : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 shadow-xs'
+                  }`}>
                     {totalCleanable > 0 ? t('totalSizeToFree') : t('systemCleanBadge')}
                   </span>
-                  <span className="text-3xl md:text-4xl font-black font-mono tracking-tight text-white drop-shadow-xl">
-                    {formatBytes(totalCleanable)}
-                  </span>
-                  <span className="text-xs font-black text-white drop-shadow-md">
-                    {totalCleanable > 0 ? t('itemsFoundText') : t('noJunkFound')}
-                  </span>
+
+                  {/* Cleanable Value & Unit (Guaranteed LTR order so RTL never flips it to GB 3.3) */}
+                  <div className="flex items-baseline justify-center gap-1.5 font-mono select-none" dir="ltr">
+                    <span className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white drop-shadow-xs">
+                      {cleanableValue}
+                    </span>
+                    <span className="text-lg md:text-xl font-bold text-slate-500 dark:text-slate-300">
+                      {cleanableUnit}
+                    </span>
+                  </div>
+
+                  {/* Subtitle / Item Count with live dot indicator */}
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                    <span className={`w-1.5 h-1.5 rounded-full ${totalCleanable > 0 ? 'bg-pink-500 animate-pulse' : 'bg-emerald-500'}`} />
+                    <span>{totalCleanable > 0 ? t('itemsFoundText') : t('noJunkFound')}</span>
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-2.5">
-                  <div className="p-3.5 rounded-2xl bg-white/20 backdrop-blur-md text-white shadow-inner">
-                    <Rocket className="w-9 h-9" />
+                  <div className="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-lavender-500/20 dark:from-emerald-500/25 dark:to-pink-500/25 border border-white/30 dark:border-white/15 text-emerald-600 dark:text-emerald-300 shadow-inner">
+                    <Rocket className="w-8 h-8" />
                   </div>
-                  <span className="text-xs font-black text-white tracking-wider uppercase drop-shadow-md">
+                  <span className="text-xs font-black tracking-wider uppercase text-slate-800 dark:text-slate-200 drop-shadow-xs">
                     {t('startSmartScan')}
                   </span>
                 </div>

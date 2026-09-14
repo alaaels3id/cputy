@@ -17,6 +17,8 @@ export interface Translations {
   appUninstaller: string;
   systemHealth: string;
   preferencesLogs: string;
+  settingsTitle: string;
+  settingsDesc: string;
   
   // Section Headers (CleanMyMac X Grouping)
   sectionCleanup: string;
@@ -63,6 +65,7 @@ export interface Translations {
   freeCacheLabel: string;
   wiredLabel: string;
   compressedLabel: string;
+  activeLabel: string;
   systemSpecsTitle: string;
   osVersionTitle: string;
   macosVersion: string;
@@ -199,6 +202,10 @@ export interface Translations {
   capVideoCalls: string;
   capLargeDownloads: string;
   recentTestsTitle: string;
+  speedTrendChartTitle: string;
+  avgDownloadLabel: string;
+  avgPingLabel: string;
+  chartFilterAll: string;
   noRecentTests: string;
   testedJustNow: string;
   statusIdle: string;
@@ -236,6 +243,32 @@ export interface Translations {
   releaseNotesTitle: string;
   viewOnGithubBtn: string;
   updateErrorText: string;
+  updateReadyDesc: string;
+  retryBtn: string;
+  popularBadge: string;
+  ramPurgeRequiresAdmin: string;
+  elevatedPurgeTooltip: string;
+  cores: string;
+  systemMode: string;
+  themeActive: string;
+  systemThemeNote: string;
+  associatedLeftovers: string;
+  appBundleLabel: string;
+  req25Mbps: string;
+  ultraFast: string;
+  limited: string;
+  req50msPing: string;
+  excellent: string;
+  moderate: string;
+  req10MbpsUpload: string;
+  hdSupported: string;
+  standard: string;
+  privacySafeBadge: string;
+  mediaCacheBadge: string;
+  heavyFileBadge: string;
+  eachFile: string;
+  wastingSize: string;
+  originalOldestBadge: string;
 }
 
 const isWin = typeof window !== 'undefined' && Boolean(
@@ -258,6 +291,8 @@ const translations: Record<Language, Translations> = {
     appUninstaller: 'App Uninstaller',
     systemHealth: 'System Health',
     preferencesLogs: 'Preferences & Logs',
+    settingsTitle: 'Preferences & Settings',
+    settingsDesc: 'Customize your appearance, language, typography, notifications, and updates',
 
     sectionCleanup: 'CLEANUP',
     sectionProtection: 'PROTECTION',
@@ -301,6 +336,7 @@ const translations: Record<Language, Translations> = {
     freeCacheLabel: 'Free / Cache:',
     wiredLabel: 'Wired:',
     compressedLabel: 'Compressed:',
+    activeLabel: 'Active:',
     systemSpecsTitle: 'System Specifications',
     osVersionTitle: 'Operating System',
     macosVersion: 'Operating System',
@@ -429,6 +465,10 @@ const translations: Record<Language, Translations> = {
     capVideoCalls: 'HD Video Conferencing',
     capLargeDownloads: 'Large File Downloads',
     recentTestsTitle: 'Session Test History',
+    speedTrendChartTitle: 'Speed Progression Trends',
+    avgDownloadLabel: 'Avg Download',
+    avgPingLabel: 'Avg Latency',
+    chartFilterAll: 'All Metrics',
     noRecentTests: 'No tests recorded in this session yet.',
     testedJustNow: 'Just now',
     statusIdle: 'Ready to test your internet connection',
@@ -466,6 +506,32 @@ const translations: Record<Language, Translations> = {
     releaseNotesTitle: 'Release Notes & Changelog',
     viewOnGithubBtn: 'View Release on GitHub',
     updateErrorText: 'Could not connect to update servers. Please check your internet connection.',
+    updateReadyDesc: 'The update is ready. Click restart to apply the new version immediately.',
+    retryBtn: 'Retry',
+    popularBadge: 'Popular',
+    ramPurgeRequiresAdmin: 'macOS requires administrator permissions to purge kernel RAM buffers. Try elevated purge.',
+    elevatedPurgeTooltip: 'Purge RAM with Administrator Privileges',
+    cores: 'Cores',
+    systemMode: 'System',
+    themeActive: 'Active',
+    systemThemeNote: 'Automatically follows your macOS appearance setting.',
+    associatedLeftovers: 'Associated Application Data & Residual Leftovers:',
+    appBundleLabel: 'Application Bundle',
+    req25Mbps: 'Requires 25+ Mbps',
+    ultraFast: 'Ultra Fast',
+    limited: 'Limited',
+    req50msPing: 'Requires < 50 ms Ping',
+    excellent: 'Excellent',
+    moderate: 'Moderate',
+    req10MbpsUpload: 'Requires 10+ Mbps Upload',
+    hdSupported: 'HD Supported',
+    standard: 'Standard',
+    privacySafeBadge: 'Privacy Safe',
+    mediaCacheBadge: 'Media Cache',
+    heavyFileBadge: 'Heavy >1GB',
+    eachFile: 'each',
+    wastingSize: 'Wasting',
+    originalOldestBadge: 'Original (Oldest)',
   },
   ar: {
     appName: 'CPUTY',
@@ -481,6 +547,8 @@ const translations: Record<Language, Translations> = {
     appUninstaller: 'إلغاء تثبيت التطبيقات',
     systemHealth: 'صحة وأداء النظام',
     preferencesLogs: 'التفضيلات والسجلات',
+    settingsTitle: 'التفضيلات والإعدادات',
+    settingsDesc: 'تخصيص مظهر التطبيق واللغة والخط والإشعارات والتحديثات التلقائية',
 
     sectionCleanup: 'التنظيف',
     sectionProtection: 'الحماية والخصوصية',
@@ -522,8 +590,9 @@ const translations: Record<Language, Translations> = {
     usedLabel: 'المستخدم:',
     availableLabel: 'المتاح:',
     freeCacheLabel: 'المتاح / الكاش:',
-    wiredLabel: 'المثبت (Wired):',
+    wiredLabel: 'المثبت:',
     compressedLabel: 'المضغوط:',
+    activeLabel: 'النشط:',
     systemSpecsTitle: 'مواصفات وتفاصيل النظام',
     osVersionTitle: 'نظام التشغيل',
     macosVersion: 'نظام التشغيل',
@@ -652,6 +721,10 @@ const translations: Record<Language, Translations> = {
     capVideoCalls: 'مكالمات الفيديو والمؤتمرات عالية الدقة',
     capLargeDownloads: 'تحميل ورفع الملفات الضخمة بسرعة',
     recentTestsTitle: 'سجل اختبارات الجلسة الحالية',
+    speedTrendChartTitle: 'مخطط تغيرات السرعة عبر أوقات الفحص',
+    avgDownloadLabel: 'متوسط التحميل',
+    avgPingLabel: 'متوسط الاستجابة',
+    chartFilterAll: 'الكل',
     noRecentTests: 'لم يتم إجراء أي اختبارات خلال هذه الجلسة بعد.',
     testedJustNow: 'الآن',
     statusIdle: 'الشبكة جاهزة لإجراء اختبار السرعة',
@@ -689,6 +762,32 @@ const translations: Record<Language, Translations> = {
     releaseNotesTitle: 'ما الجديد في هذا الإصدار',
     viewOnGithubBtn: 'عرض التحديث على GitHub',
     updateErrorText: 'تعذر الاتصال بخوادم التحديث. يرجى التحقق من اتصال الإنترنت.',
+    updateReadyDesc: 'التحديث جاهز. انقر على إعادة التشغيل لتطبيق الإصدار الجديد فوراً.',
+    retryBtn: 'إعادة المحاولة',
+    popularBadge: 'شائع',
+    ramPurgeRequiresAdmin: 'يتطلب تفريغ ذاكرة التخزين المؤقت للنواة صلاحيات المسؤول. جرب التفريغ المتقدم.',
+    elevatedPurgeTooltip: 'تفريغ الذاكرة بصلاحيات المسؤول',
+    cores: 'أنوية',
+    systemMode: 'تلقائي (النظام)',
+    themeActive: 'مفعّل',
+    systemThemeNote: 'يتبع تلقائياً إعداد مظهر نظام التشغيل.',
+    associatedLeftovers: 'بيانات ومخلفات التطبيق المتبقية:',
+    appBundleLabel: 'حزمة التطبيق',
+    req25Mbps: 'يتطلب 25+ ميغابت/ث',
+    ultraFast: 'فائق السرعة',
+    limited: 'محدود',
+    req50msPing: 'يتطلب زمن استجابة أقل من 50 مللي ثانية',
+    excellent: 'ممتاز',
+    moderate: 'متوسط',
+    req10MbpsUpload: 'يتطلب رفع 10+ ميغابت/ث',
+    hdSupported: 'يدعم HD',
+    standard: 'عادي',
+    privacySafeBadge: 'آمن للخصوصية',
+    mediaCacheBadge: 'ذاكرة مؤقتة للوسائط',
+    heavyFileBadge: 'كبير >1 جيجابايت',
+    eachFile: 'لكل ملف',
+    wastingSize: 'إهدار',
+    originalOldestBadge: 'الأصل (الأقدم)',
   },
 };
 

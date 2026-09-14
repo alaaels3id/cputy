@@ -47,6 +47,30 @@ try {
     }
   }
 
+  // Also patch installed /Applications/CPUTY.app and release app if present
+  const installedApp = '/Applications/CPUTY.app';
+  if (fs.existsSync(installedApp)) {
+    try {
+      fs.copyFileSync(srcIcon, path.join(installedApp, 'Contents/Resources/icon.icns'));
+      execSync(`codesign --force --deep -s - "${installedApp}" 2>/dev/null || true`);
+      execSync(`/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "${installedApp}" 2>/dev/null || true`);
+      console.log('[patch-electron-icon] Updated /Applications/CPUTY.app with new icon');
+    } catch {
+      // ignore
+    }
+  }
+
+  const releaseApp = path.join(__dirname, '../release/mac-arm64/CPUTY.app');
+  if (fs.existsSync(releaseApp)) {
+    try {
+      fs.copyFileSync(srcIcon, path.join(releaseApp, 'Contents/Resources/icon.icns'));
+      execSync(`codesign --force --deep -s - "${releaseApp}" 2>/dev/null || true`);
+      execSync(`/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "${releaseApp}" 2>/dev/null || true`);
+    } catch {
+      // ignore
+    }
+  }
+
   // Compile CPUTYNotifier.app helper with CPUTY icon so any system notifications on macOS use the CPUTY icon
   const notifierApp = path.join(__dirname, '../build/CPUTYNotifier.app');
   if (fs.existsSync(srcIcon)) {

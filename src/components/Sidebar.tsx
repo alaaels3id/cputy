@@ -186,10 +186,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <div className="min-w-0">
             <h1 className="font-bold text-sm tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-              <span className="font-mono tracking-wider font-extrabold bg-gradient-to-r from-[#19353C] via-[#2F676B] to-[#14252E] dark:from-[#5F9C9F] dark:via-[#92E6E0] dark:to-white bg-clip-text text-transparent">
+              <span className="font-mono tracking-wider font-extrabold bg-gradient-to-r from-[#3A1A50] via-[#805D93] to-[#2A1040] dark:from-[#F49FBC] dark:via-[#FFD3BA] dark:to-white bg-clip-text text-transparent">
                 {t('appName')}
               </span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#19353C]/10 text-[#19353C] dark:bg-[#92E6E0]/15 dark:text-[#92E6E0] font-mono font-bold uppercase tracking-wider border border-[#19353C]/20 dark:border-[#92E6E0]/25">
+              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#805D93]/10 text-[#805D93] dark:bg-[#F49FBC]/15 dark:text-[#F49FBC] font-mono font-bold uppercase tracking-wider border border-[#805D93]/22 dark:border-[#F49FBC]/28">
                 {t('proBadge')}
               </span>
             </h1>
@@ -221,11 +221,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2 rtl:mr-0 rtl:ml-2">
                     <div className={`p-1.5 rounded-lg transition-all shrink-0 ${
                       isActive 
-                        ? 'bg-[#92E6E0]/20 text-[#92E6E0] scale-105 shadow-xs' 
+                        ? 'bg-[#F49FBC]/20 text-[#F49FBC] scale-105 shadow-xs' 
                         : 'bg-black/5 dark:bg-white/5 group-hover:bg-black/10 dark:group-hover:bg-white/10'
                     }`}>
                       <Icon className={`w-3.5 h-3.5 nav-icon shrink-0 ${
-                        isActive ? 'text-[#19353C] dark:text-[#92E6E0]' : `${item.color} opacity-95 group-hover:opacity-100`
+                        isActive ? 'text-[#3A1A50] dark:text-[#F49FBC]' : `${item.color} opacity-95 group-hover:opacity-100`
                       }`} />
                     </div>
                     <span className="truncate nav-label whitespace-nowrap text-[13px] font-extrabold text-slate-800 dark:text-slate-100">{item.label}</span>
@@ -248,7 +248,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-2.5 rounded-2xl bg-mac-card/80 border border-mac-border space-y-2 shadow-xs">
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-slate-700 dark:text-mac-subtext flex items-center gap-1.5 font-bold">
-              <HardDrive className="w-3.5 h-3.5 text-emerald-600 dark:text-[#92E6E0] shrink-0" />
+              <HardDrive className="w-3.5 h-3.5 text-[#169873] dark:text-[#9EBD6E] shrink-0" />
               {systemStats?.storage?.diskName || t('macintoshHD')}
             </span>
             <span className="font-mono font-bold text-slate-900 dark:text-slate-200">
@@ -259,7 +259,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Segmented Gradient Distribution Bar */}
           <div className="w-full bg-slate-200 dark:bg-slate-800/90 rounded-full h-1.5 overflow-hidden flex p-0.5">
             <div 
-              className="bg-gradient-to-r from-[#19353C] via-[#5F9C9F] to-[#92E6E0] h-full rounded-full transition-all duration-700 shadow-sm" 
+              className="bg-gradient-to-r from-[#169873] via-[#9EBD6E] to-[#FFD3BA] h-full rounded-full transition-all duration-700 shadow-sm" 
               style={{ width: `${storagePercent}%` }}
             />
           </div>
@@ -272,9 +272,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Preferences Quick Button */}
         <button
-          onClick={() => onSelectCategory('monitor')}
+          onClick={() => onSelectCategory('settings')}
           className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold sidebar-nav-item cursor-pointer transition-all ${
-            currentCategory === 'monitor' ? 'active' : 'hover:bg-black/5 dark:hover:bg-white/5'
+            currentCategory === 'settings' ? 'active' : 'hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
           <div className="flex items-center gap-2">

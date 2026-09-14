@@ -17,7 +17,8 @@ import {
   CloudDownload,
   Trash2,
   Clock,
-  Radio
+  Radio,
+  TrendingUp
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { 
@@ -26,6 +27,34 @@ import {
   SpeedTestNetworkInfo, 
   SpeedTestHistoryItem 
 } from '../types';
+
+const generateSmoothPath = (points: { x: number; y: number }[]): string => {
+  if (!points || points.length === 0) return '';
+  if (points.length === 1) return `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  if (points.length === 2) return `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)} L ${points[1].x.toFixed(1)} ${points[1].y.toFixed(1)}`;
+
+  let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i === 0 ? 0 : i - 1];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2] || p2;
+
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+    d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+  }
+  return d;
+};
+
+const generateAreaPath = (points: { x: number; y: number }[], baselineY: number): string => {
+  if (!points || points.length === 0) return '';
+  const line = generateSmoothPath(points);
+  return `${line} L ${points[points.length - 1].x.toFixed(1)} ${baselineY} L ${points[0].x.toFixed(1)} ${baselineY} Z`;
+};
 
 export const SpeedTestView: React.FC = () => {
   const { t, isRTL } = useLanguage();
@@ -43,6 +72,8 @@ export const SpeedTestView: React.FC = () => {
   // Results
   const [finalResult, setFinalResult] = useState<SpeedTestResult | null>(null);
   const [networkInfo, setNetworkInfo] = useState<SpeedTestNetworkInfo | null>(null);
+  const [chartMetric, setChartMetric] = useState<'all' | 'download' | 'upload' | 'ping'>('all');
+  const [hoveredChronoIndex, setHoveredChronoIndex] = useState<number | null>(null);
   const [history, setHistory] = useState<SpeedTestHistoryItem[]>(() => {
     try {
       const saved = localStorage.getItem('cputy_speedtest_history');
@@ -704,7 +735,7 @@ export const SpeedTestView: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-100">{t('capStreaming4k')}</span>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400">Requires 25+ Mbps</p>
+                      <p className="text-[10px] text-slate-600 dark:text-slate-400">{t('req25Mbps')}</p>
                     </div>
                   </div>
                   <span className={`text-[10.5px] font-bold px-2.5 py-1 rounded-full font-mono ${
@@ -712,7 +743,7 @@ export const SpeedTestView: React.FC = () => {
                       ? 'bg-emerald-500/15 text-emerald-600 dark:text-[#92E6E0]' 
                       : 'bg-amber-500/15 text-amber-500'
                   }`}>
-                    {finalResult.downloadMbps >= 25 ? 'Ultra Fast' : 'Limited'}
+                    {finalResult.downloadMbps >= 25 ? t('ultraFast') : t('limited')}
                   </span>
                 </div>
 
@@ -724,7 +755,7 @@ export const SpeedTestView: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-100">{t('capGaming')}</span>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400">Requires &lt; 50 ms Ping</p>
+                      <p className="text-[10px] text-slate-600 dark:text-slate-400">{t('req50msPing')}</p>
                     </div>
                   </div>
                   <span className={`text-[10.5px] font-bold px-2.5 py-1 rounded-full font-mono ${
@@ -732,7 +763,7 @@ export const SpeedTestView: React.FC = () => {
                       ? 'bg-emerald-500/15 text-emerald-600 dark:text-[#92E6E0]' 
                       : 'bg-amber-500/15 text-amber-500'
                   }`}>
-                    {finalResult.pingMs <= 40 ? 'Excellent' : 'Moderate'}
+                    {finalResult.pingMs <= 40 ? t('excellent') : t('moderate')}
                   </span>
                 </div>
 
@@ -744,7 +775,7 @@ export const SpeedTestView: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-100">{t('capVideoCalls')}</span>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400">Requires 10+ Mbps Upload</p>
+                      <p className="text-[10px] text-slate-600 dark:text-slate-400">{t('req10MbpsUpload')}</p>
                     </div>
                   </div>
                   <span className={`text-[10.5px] font-bold px-2.5 py-1 rounded-full font-mono ${
@@ -752,7 +783,7 @@ export const SpeedTestView: React.FC = () => {
                       ? 'bg-emerald-500/15 text-emerald-600 dark:text-[#92E6E0]' 
                       : 'bg-amber-500/15 text-amber-500'
                   }`}>
-                    {finalResult.uploadMbps >= 10 ? 'HD Supported' : 'Standard'}
+                    {finalResult.uploadMbps >= 10 ? t('hdSupported') : t('standard')}
                   </span>
                 </div>
               </div>
@@ -802,57 +833,613 @@ export const SpeedTestView: React.FC = () => {
             </div>
           </div>
 
-          {/* Session History Table */}
-          {history.length > 0 && (
-            <div className="p-5 rounded-3xl bg-mac-card border border-mac-border shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-black uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-emerald-500" />
-                  <span>{t('recentTestsTitle')}</span>
-                </h4>
-                <button
-                  onClick={clearHistory}
-                  className="text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:text-rose-500 transition-colors flex items-center gap-1 cursor-pointer"
-                >
-                  <Trash2 className="w-3 h-3" />
-                  <span>Clear</span>
-                </button>
-              </div>
+          {/* Session History & Speed Progression Chart */}
+          {history.length > 0 && (() => {
+            const chronoHistory = [...history].reverse();
+            const totalChecks = chronoHistory.length;
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left rtl:text-right">
-                  <thead>
-                    <tr className="border-b border-mac-border/50 text-[10.5px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-black">
-                      <th className="py-2 px-3">Time</th>
-                      <th className="py-2 px-3">{t('downloadSpeedLabel')}</th>
-                      <th className="py-2 px-3">{t('uploadSpeedLabel')}</th>
-                      <th className="py-2 px-3">{t('pingLatencyLabel')}</th>
-                      <th className="py-2 px-3">Rating</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-mac-border/30">
-                    {history.map((item, idx) => {
-                      const r = getRating(item.downloadMbps, item.pingMs);
-                      const timeStr = new Date(item.testedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const peakDl = totalChecks > 0 ? Math.max(...chronoHistory.map(h => h.downloadMbps || 0)) : 0;
+            const avgDl = totalChecks > 0 ? (chronoHistory.reduce((s, h) => s + (h.downloadMbps || 0), 0) / totalChecks) : 0;
+            const avgUl = totalChecks > 0 ? (chronoHistory.reduce((s, h) => s + (h.uploadMbps || 0), 0) / totalChecks) : 0;
+            const avgPing = totalChecks > 0 ? Math.round(chronoHistory.reduce((s, h) => s + (h.pingMs || 0), 0) / totalChecks) : 0;
+
+            const svgW = 680;
+            const svgH = 200;
+            const pad = { top: 22, right: 35, bottom: 42, left: 55 };
+            const plotW = svgW - pad.left - pad.right;
+            const plotH = svgH - pad.top - pad.bottom;
+            const baselineY = pad.top + plotH;
+
+            const maxRecordedSpeed = Math.max(
+              ...chronoHistory.map(h => Math.max(h.downloadMbps || 0, h.uploadMbps || 0)),
+              10
+            );
+            const yMaxSpeed = Math.ceil((maxRecordedSpeed * 1.25) / 5) * 5 || 25;
+            const maxRecordedPing = Math.max(...chronoHistory.map(h => h.pingMs || 0), 20);
+            const yMaxPing = Math.ceil((maxRecordedPing * 1.3) / 20) * 20 || 50;
+
+            const getChronoX = (idx: number) => {
+              if (totalChecks <= 1) return pad.left + plotW / 2;
+              return pad.left + (idx / (totalChecks - 1)) * plotW;
+            };
+
+            const getSpeedY = (val: number) => {
+              const clamped = Math.max(0, Math.min(val, yMaxSpeed));
+              return pad.top + plotH - (clamped / yMaxSpeed) * plotH;
+            };
+
+            const getPingY = (val: number) => {
+              const clamped = Math.max(0, Math.min(val, yMaxPing));
+              return pad.top + plotH - (clamped / yMaxPing) * plotH;
+            };
+
+            const dlPoints = chronoHistory.map((item, i) => ({
+              x: getChronoX(i),
+              y: getSpeedY(item.downloadMbps || 0),
+              val: item.downloadMbps,
+              raw: item,
+            }));
+
+            const ulPoints = chronoHistory.map((item, i) => ({
+              x: getChronoX(i),
+              y: getSpeedY(item.uploadMbps || 0),
+              val: item.uploadMbps,
+              raw: item,
+            }));
+
+            const pingPoints = chronoHistory.map((item, i) => ({
+              x: getChronoX(i),
+              y: getPingY(item.pingMs || 0),
+              val: item.pingMs,
+              raw: item,
+            }));
+
+            const showDl = chartMetric === 'all' || chartMetric === 'download';
+            const showUl = chartMetric === 'all' || chartMetric === 'upload';
+            const showPing = chartMetric === 'ping';
+
+            const activeYMax = showPing ? yMaxPing : yMaxSpeed;
+            const yTicks = [0, 0.333, 0.666, 1];
+
+            const hoveredItem = hoveredChronoIndex !== null ? chronoHistory[hoveredChronoIndex] : null;
+            const hoveredX = hoveredChronoIndex !== null ? getChronoX(hoveredChronoIndex) : null;
+
+            return (
+              <div className="space-y-5 w-full">
+                {/* Visual Speed Changes Progression Chart Card */}
+                <div className="p-6 rounded-3xl bg-mac-card border border-mac-border shadow-xs space-y-4 transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-mac-border/50 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-500 dark:text-emerald-400">
+                        <TrendingUp className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+                          <span>{t('speedTrendChartTitle')}</span>
+                          <span className="text-[10.5px] px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 font-mono font-bold text-slate-600 dark:text-slate-300">
+                            {totalChecks} {isRTL ? 'فحوصات' : 'tests'}
+                          </span>
+                        </h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          {isRTL 
+                            ? 'تتبع تطور واستقرار سرعات التحميل والرفع وزمن الاستجابة عبر أوقات الفحص' 
+                            : 'Track connection performance progression and stability across test sessions'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Metric Selector Tabs */}
+                    <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-black/5 dark:bg-white/5 border border-mac-border/40 self-start sm:self-auto">
+                      <button
+                        onClick={() => setChartMetric('all')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          chartMetric === 'all'
+                            ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        {t('chartFilterAll')}
+                      </button>
+                      <button
+                        onClick={() => setChartMetric('download')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                          chartMetric === 'download'
+                            ? 'bg-emerald-500 text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-emerald-500'
+                        }`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        <span>{t('downloadSpeedLabel')}</span>
+                      </button>
+                      <button
+                        onClick={() => setChartMetric('upload')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                          chartMetric === 'upload'
+                            ? 'bg-[#805D93] text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-purple-400'
+                        }`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-300" />
+                        <span>{t('uploadSpeedLabel')}</span>
+                      </button>
+                      <button
+                        onClick={() => setChartMetric('ping')}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                          chartMetric === 'ping'
+                            ? 'bg-amber-500 text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-amber-400'
+                        }`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                        <span>{t('pingLatencyLabel')}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Summary Metric Stats Row */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                    <div className="p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-mac-border/30 flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-500">
+                        <ArrowDown className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[10.5px] font-bold text-slate-500 dark:text-slate-400 block">{t('peakSpeedLabel')}</span>
+                        <span className="text-sm font-black font-mono text-slate-900 dark:text-white" dir="ltr">
+                          {peakDl.toFixed(1)} <span className="text-[11px] font-bold text-slate-500">Mbps</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-mac-border/30 flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-500">
+                        <ArrowDown className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[10.5px] font-bold text-slate-500 dark:text-slate-400 block">{t('avgDownloadLabel')}</span>
+                        <span className="text-sm font-black font-mono text-slate-900 dark:text-white" dir="ltr">
+                          {avgDl.toFixed(1)} <span className="text-[11px] font-bold text-slate-500">Mbps</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-mac-border/30 flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-purple-500/15 text-purple-500">
+                        <ArrowUp className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[10.5px] font-bold text-slate-500 dark:text-slate-400 block">{t('uploadSpeedLabel')}</span>
+                        <span className="text-sm font-black font-mono text-slate-900 dark:text-white" dir="ltr">
+                          {avgUl.toFixed(1)} <span className="text-[11px] font-bold text-slate-500">Mbps</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-mac-border/30 flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-amber-500/15 text-amber-500">
+                        <Activity className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[10.5px] font-bold text-slate-500 dark:text-slate-400 block">{t('avgPingLabel')}</span>
+                        <span className="text-sm font-black font-mono text-slate-900 dark:text-white" dir="ltr">
+                          {avgPing} <span className="text-[11px] font-bold text-slate-500">ms</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SVG Chart Stage */}
+                  <div className="relative w-full overflow-hidden select-none pt-2">
+                    <svg
+                      viewBox={`0 0 ${svgW} ${svgH}`}
+                      className="w-full h-52 overflow-visible"
+                    >
+                      <defs>
+                        {/* Download Gradient Area */}
+                        <linearGradient id="speedDlGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#169873" stopOpacity="0.35" />
+                          <stop offset="60%" stopColor="#9EBD6E" stopOpacity="0.12" />
+                          <stop offset="100%" stopColor="#169873" stopOpacity="0.0" />
+                        </linearGradient>
+
+                        {/* Upload Gradient Area */}
+                        <linearGradient id="speedUlGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#805D93" stopOpacity="0.30" />
+                          <stop offset="60%" stopColor="#F49FBC" stopOpacity="0.10" />
+                          <stop offset="100%" stopColor="#805D93" stopOpacity="0.0" />
+                        </linearGradient>
+
+                        {/* Ping Gradient Area */}
+                        <linearGradient id="speedPingGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.25" />
+                          <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.0" />
+                        </linearGradient>
+
+                        {/* Line Glow Filter */}
+                        <filter id="speedLineGlow" x="-20%" y="-20%" width="140%" height="140%">
+                          <feGaussianBlur stdDeviation="3" result="blur" />
+                          <feMerge>
+                            <feMergeNode in="blur" />
+                            <feMergeNode in="SourceGraphic" />
+                          </feMerge>
+                        </filter>
+                      </defs>
+
+                      {/* Horizontal Gridlines & Y-Axis Labels */}
+                      {yTicks.map((step, idx) => {
+                        const yVal = Math.round(activeYMax * step);
+                        const yPos = pad.top + plotH - step * plotH;
+                        return (
+                          <g key={idx}>
+                            <line
+                              x1={pad.left}
+                              y1={yPos}
+                              x2={pad.left + plotW}
+                              y2={yPos}
+                              stroke="currentColor"
+                              strokeDasharray="4 5"
+                              className="text-slate-200 dark:text-slate-800"
+                            />
+                            <text
+                              x={pad.left - 10}
+                              y={yPos + 3.5}
+                              textAnchor="end"
+                              className="text-[10px] font-mono font-bold fill-slate-500 dark:fill-slate-400"
+                            >
+                              {yVal}
+                            </text>
+                          </g>
+                        );
+                      })}
+
+                      {/* Vertical Timestamps Gridlines & X-Axis Labels */}
+                      {chronoHistory.map((item, idx) => {
+                        const xPos = getChronoX(idx);
+                        const timeStr = new Date(item.testedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        const isHovered = hoveredChronoIndex === idx;
+
+                        return (
+                          <g key={item.id || idx}>
+                            <line
+                              x1={xPos}
+                              y1={pad.top}
+                              x2={xPos}
+                              y2={baselineY}
+                              stroke="currentColor"
+                              strokeDasharray="3 4"
+                              className={`transition-colors ${
+                                isHovered 
+                                  ? 'text-emerald-500 dark:text-emerald-400 stroke-1' 
+                                  : 'text-slate-200/60 dark:text-slate-800/60'
+                              }`}
+                            />
+                            <text
+                              x={xPos}
+                              y={baselineY + 20}
+                              textAnchor="middle"
+                              className={`text-[10px] font-mono font-bold transition-colors ${
+                                isHovered 
+                                  ? 'fill-emerald-600 dark:fill-emerald-400 font-extrabold' 
+                                  : 'fill-slate-500 dark:fill-slate-400'
+                              }`}
+                            >
+                              {timeStr}
+                            </text>
+                          </g>
+                        );
+                      })}
+
+                      {/* Download Area & Line */}
+                      {showDl && totalChecks > 1 && (
+                        <>
+                          <path
+                            d={generateAreaPath(dlPoints, baselineY)}
+                            fill="url(#speedDlGradient)"
+                          />
+                          <path
+                            d={generateSmoothPath(dlPoints)}
+                            fill="none"
+                            stroke="#169873"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            filter="url(#speedLineGlow)"
+                          />
+                        </>
+                      )}
+
+                      {/* Upload Area & Line */}
+                      {showUl && totalChecks > 1 && (
+                        <>
+                          <path
+                            d={generateAreaPath(ulPoints, baselineY)}
+                            fill="url(#speedUlGradient)"
+                          />
+                          <path
+                            d={generateSmoothPath(ulPoints)}
+                            fill="none"
+                            stroke="#805D93"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </>
+                      )}
+
+                      {/* Ping Area & Line */}
+                      {showPing && totalChecks > 1 && (
+                        <>
+                          <path
+                            d={generateAreaPath(pingPoints, baselineY)}
+                            fill="url(#speedPingGradient)"
+                          />
+                          <path
+                            d={generateSmoothPath(pingPoints)}
+                            fill="none"
+                            stroke="#F59E0B"
+                            strokeWidth="2.5"
+                            strokeDasharray="4 3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </>
+                      )}
+
+                      {/* Vertical Indicator Guide when Hovered */}
+                      {hoveredX !== null && (
+                        <line
+                          x1={hoveredX}
+                          y1={pad.top}
+                          x2={hoveredX}
+                          y2={baselineY}
+                          stroke="#169873"
+                          strokeWidth="1.5"
+                          strokeDasharray="2 2"
+                        />
+                      )}
+
+                      {/* Download Data Points */}
+                      {showDl && dlPoints.map((pt, idx) => {
+                        const isHovered = hoveredChronoIndex === idx;
+                        return (
+                          <g key={`dl-${idx}`}>
+                            <circle
+                              cx={pt.x}
+                              cy={pt.y}
+                              r={isHovered ? 7 : 4.5}
+                              fill="#169873"
+                              stroke="#FFFFFF"
+                              strokeWidth={isHovered ? 2.5 : 1.5}
+                              className="transition-all duration-200 cursor-pointer drop-shadow-sm"
+                            />
+                            {/* Hit zone */}
+                            <circle
+                              cx={pt.x}
+                              cy={pt.y}
+                              r="18"
+                              fill="transparent"
+                              className="cursor-pointer"
+                              onMouseEnter={() => setHoveredChronoIndex(idx)}
+                              onMouseLeave={() => setHoveredChronoIndex(null)}
+                            />
+                          </g>
+                        );
+                      })}
+
+                      {/* Upload Data Points */}
+                      {showUl && ulPoints.map((pt, idx) => {
+                        const isHovered = hoveredChronoIndex === idx;
+                        return (
+                          <g key={`ul-${idx}`}>
+                            <circle
+                              cx={pt.x}
+                              cy={pt.y}
+                              r={isHovered ? 6 : 4}
+                              fill="#805D93"
+                              stroke="#FFFFFF"
+                              strokeWidth={isHovered ? 2 : 1.5}
+                              className="transition-all duration-200 cursor-pointer drop-shadow-sm"
+                            />
+                            <circle
+                              cx={pt.x}
+                              cy={pt.y}
+                              r="18"
+                              fill="transparent"
+                              className="cursor-pointer"
+                              onMouseEnter={() => setHoveredChronoIndex(idx)}
+                              onMouseLeave={() => setHoveredChronoIndex(null)}
+                            />
+                          </g>
+                        );
+                      })}
+
+                      {/* Ping Data Points */}
+                      {showPing && pingPoints.map((pt, idx) => {
+                        const isHovered = hoveredChronoIndex === idx;
+                        return (
+                          <g key={`ping-${idx}`}>
+                            <circle
+                              cx={pt.x}
+                              cy={pt.y}
+                              r={isHovered ? 6 : 4}
+                              fill="#F59E0B"
+                              stroke="#FFFFFF"
+                              strokeWidth={isHovered ? 2 : 1.5}
+                              className="transition-all duration-200 cursor-pointer drop-shadow-sm"
+                            />
+                            <circle
+                              cx={pt.x}
+                              cy={pt.y}
+                              r="18"
+                              fill="transparent"
+                              className="cursor-pointer"
+                              onMouseEnter={() => setHoveredChronoIndex(idx)}
+                              onMouseLeave={() => setHoveredChronoIndex(null)}
+                            />
+                          </g>
+                        );
+                      })}
+                    </svg>
+
+                    {/* Interactive Floating Tooltip */}
+                    {hoveredItem && hoveredX !== null && (() => {
+                      const r = getRating(hoveredItem.downloadMbps, hoveredItem.pingMs);
+                      const timeStr = new Date(hoveredItem.testedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                      const dateStr = new Date(hoveredItem.testedAt).toLocaleDateString([], { month: 'short', day: 'numeric' });
+                      const leftPercent = (hoveredX / svgW) * 100;
+                      const isNearRight = leftPercent > 70;
+                      const isNearLeft = leftPercent < 30;
+
                       return (
-                        <tr key={item.id || idx} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                          <td className="py-2.5 px-3 font-mono font-semibold text-slate-600 dark:text-slate-400">{timeStr}</td>
-                          <td className="py-2.5 px-3 font-mono font-bold text-slate-900 dark:text-white">{item.downloadMbps.toFixed(1)} Mbps</td>
-                          <td className="py-2.5 px-3 font-mono font-bold text-slate-700 dark:text-slate-300">{item.uploadMbps.toFixed(1)} Mbps</td>
-                          <td className="py-2.5 px-3 font-mono text-slate-600 dark:text-slate-400">{item.pingMs} ms</td>
-                          <td className="py-2.5 px-3">
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full font-mono ${r.bg} ${r.color}`}>
-                              {r.label}
-                            </span>
-                          </td>
-                        </tr>
+                        <div
+                          className="absolute pointer-events-none z-30 transition-all duration-150"
+                          style={{
+                            left: `${leftPercent}%`,
+                            top: '10px',
+                            transform: isNearRight ? 'translateX(-95%)' : isNearLeft ? 'translateX(-5%)' : 'translateX(-50%)',
+                          }}
+                        >
+                          <div className="p-3 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-mac-border shadow-xl min-w-[200px] space-y-2">
+                            <div className="flex items-center justify-between border-b border-mac-border/40 pb-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                              <span className="font-bold text-slate-800 dark:text-slate-200">{timeStr}</span>
+                              <span>{dateStr}</span>
+                            </div>
+
+                            <div className="space-y-1 text-xs font-mono">
+                              <div className="flex items-center justify-between gap-3 text-emerald-600 dark:text-emerald-400 font-bold">
+                                <span className="flex items-center gap-1.5 text-[11px]">
+                                  <ArrowDown className="w-3.5 h-3.5" />
+                                  <span>{t('downloadSpeedLabel')}</span>
+                                </span>
+                                <span>{hoveredItem.downloadMbps.toFixed(1)} Mbps</span>
+                              </div>
+
+                              <div className="flex items-center justify-between gap-3 text-purple-600 dark:text-purple-400 font-bold">
+                                <span className="flex items-center gap-1.5 text-[11px]">
+                                  <ArrowUp className="w-3.5 h-3.5" />
+                                  <span>{t('uploadSpeedLabel')}</span>
+                                </span>
+                                <span>{hoveredItem.uploadMbps.toFixed(1)} Mbps</span>
+                              </div>
+
+                              <div className="flex items-center justify-between gap-3 text-amber-600 dark:text-amber-400 font-bold">
+                                <span className="flex items-center gap-1.5 text-[11px]">
+                                  <Activity className="w-3.5 h-3.5" />
+                                  <span>{t('pingLatencyLabel')}</span>
+                                </span>
+                                <span>{hoveredItem.pingMs} ms</span>
+                              </div>
+                            </div>
+
+                            <div className="pt-1 border-t border-mac-border/30">
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full block text-center ${r.bg} ${r.color}`}>
+                                {r.label}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       );
-                    })}
-                  </tbody>
-                </table>
+                    })()}
+                  </div>
+
+                  {/* Chart Legend Footer */}
+                  <div className="flex items-center justify-center gap-6 pt-1 text-xs font-bold text-slate-600 dark:text-slate-300">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#169873] shadow-xs" />
+                      <span>{t('downloadSpeedLabel')} (Mbps)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#805D93] shadow-xs" />
+                      <span>{t('uploadSpeedLabel')} (Mbps)</span>
+                    </div>
+                    {showPing && (
+                      <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-amber-500 shadow-xs" />
+                        <span>{t('pingLatencyLabel')} (ms)</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Session History Table with interactive row-linking */}
+                <div className="p-5 rounded-3xl bg-mac-card border border-mac-border shadow-xs space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-emerald-500" />
+                      <span>{t('recentTestsTitle')}</span>
+                    </h4>
+                    <button
+                      onClick={clearHistory}
+                      className="text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:text-rose-500 transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Clear</span>
+                    </button>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs text-left rtl:text-right">
+                      <thead>
+                        <tr className="border-b border-mac-border/50 text-[10.5px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-black">
+                          <th className="py-2 px-3">Time</th>
+                          <th className="py-2 px-3">{t('downloadSpeedLabel')}</th>
+                          <th className="py-2 px-3">{t('uploadSpeedLabel')}</th>
+                          <th className="py-2 px-3">{t('pingLatencyLabel')}</th>
+                          <th className="py-2 px-3">Rating</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-mac-border/30">
+                        {history.map((item, idx) => {
+                          const r = getRating(item.downloadMbps, item.pingMs);
+                          const timeStr = new Date(item.testedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                          const chronoIndex = totalChecks - 1 - idx;
+                          const isHovered = hoveredChronoIndex === chronoIndex;
+
+                          return (
+                            <tr 
+                              key={item.id || idx} 
+                              onMouseEnter={() => setHoveredChronoIndex(chronoIndex)}
+                              onMouseLeave={() => setHoveredChronoIndex(null)}
+                              className={`transition-colors cursor-pointer ${
+                                isHovered 
+                                  ? 'bg-emerald-500/15 dark:bg-emerald-500/20' 
+                                  : 'hover:bg-black/5 dark:hover:bg-white/5'
+                              }`}
+                            >
+                              <td className="py-2.5 px-3">
+                                <span dir="ltr" className="inline-block font-mono font-semibold text-slate-600 dark:text-slate-400">
+                                  {timeStr}
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3">
+                                <span dir="ltr" className="inline-block font-mono font-bold text-slate-900 dark:text-white">
+                                  {item.downloadMbps.toFixed(1)} Mbps
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3">
+                                <span dir="ltr" className="inline-block font-mono font-bold text-slate-700 dark:text-slate-300">
+                                  {item.uploadMbps.toFixed(1)} Mbps
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3">
+                                <span dir="ltr" className="inline-block font-mono text-slate-600 dark:text-slate-400">
+                                  {item.pingMs} ms
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3">
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full font-mono ${r.bg} ${r.color}`}>
+                                  {r.label}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       )}
     </div>

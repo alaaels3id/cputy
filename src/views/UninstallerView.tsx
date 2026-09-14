@@ -313,11 +313,11 @@ export const UninstallerView: React.FC<UninstallerViewProps> = ({
                   <div className="bg-black/5 dark:bg-black/30 border-t border-mac-border/60 p-4 space-y-2">
                     <div className="text-[11px] font-bold text-slate-800 dark:text-slate-300 flex items-center gap-1.5">
                       <Folder className="w-3.5 h-3.5 text-emerald-500" />
-                      Associated Application Data & Residual Leftovers:
+                      {t('associatedLeftovers')}
                     </div>
                     <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs text-slate-800 dark:text-slate-300 pl-4 font-mono">
-                        <span className="truncate max-w-md font-semibold">📦 Application Bundle ({app.appPath})</span>
+                      <div className="flex items-center justify-between text-xs text-slate-800 dark:text-slate-300 pl-4 rtl:pl-0 rtl:pr-4 font-mono">
+                        <span className="truncate max-w-md font-semibold">📦 {t('appBundleLabel')} ({app.appPath})</span>
                         <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">{formatBytes(app.appSize)}</span>
                       </div>
                       {app.associatedFiles.map((file) => (

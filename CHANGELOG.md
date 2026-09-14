@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2026-09-13
+
+### Added
+- **Dedicated Settings & Preferences Architecture**:
+  - Decoupled all configuration settings from the System Health view into a dedicated **Preferences & Settings** view (`SettingsView.tsx`).
+  - Seamlessly integrated all configuration areas: Appearance (Dark, Light, System) with interactive live preview cards, Typography (`FontSelector`), Language (`LanguageToggle` with full RTL/LTR support), Desktop Notifications, and Software Auto-Updates (`SoftwareUpdateCard`).
+  - Wired Sidebar bottom quick navigation button directly to the Settings view.
+- **Speed Progression Trends Timeline Chart**:
+  - Interactive SVG trend chart visualizing historical speed fluctuations across session tests.
+  - Smooth cubic Bézier interpolation curves with dynamic area gradients for Download, Upload, and Latency metrics.
+  - Interactive metric filters (`All Metrics`, `Download`, `Upload`, `Latency`).
+  - Aggregate telemetry statistics: Peak Speed, Average Download, and Average Latency.
+  - Bidirectional hover linking between timeline points and session history table rows.
+  - Complete left-to-right (`dir="ltr"`) number and unit isolation for `Mbps`, `ms`, and timestamps across RTL and LTR view modes.
+- **Modernized Brand Identity & High-Resolution App Icons**:
+  - Generated and packaged high-resolution app icons with transparent backgrounds across all required formats: `build/icon.icns`, `build/icon.ico`, `build/icon.png`, `public/app-icon.png`, `public/favicon.svg`.
+  - Updated macOS Electron patcher (`scripts/patch-electron-icon.js`) with automated LaunchServices dock and notification center cache flushes.
+  - Re-aligned visual brand colors (`#805D93` purple, `#169873` emerald, `#F49FBC` rose, `#FFD3BA` peach) across cards and indicators.
+
+### Changed
+- **System Health & Hardware Telemetry Refinements**:
+  - Streamlined `SystemHealthView` to focus strictly on real-time performance and system specs with zero settings clutter.
+  - Redesigned the 4-tier memory breakdown (Active, Wired, Compressed, Free/Cache) into a 2×2 metric grid with dedicated numeric rows and `dir="ltr"` formatting, preventing any number clipping or ellipsis truncation.
+  - Synchronized memory pressure bar segment colors with the metric badge indicators.
+  - Cleaned up Arabic terminology for memory allocation (`المثبت:` for Wired Memory).
+
+### Fixed
+- Fixed text truncation in system RAM breakdown where numbers were obscured on compact card layouts.
+- Fixed bidirectional text mixing with parenthesized English words in Arabic localization.
+- Fixed duplicate translation keys in `LanguageContext.tsx`.
+
 ## [1.3.0] - 2026-09-08
 
 ### Added

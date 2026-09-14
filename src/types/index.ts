@@ -9,7 +9,8 @@ export type ScanCategory =
   | 'duplicates'
   | 'uninstaller'
   | 'monitor'
-  | 'speed_test';
+  | 'speed_test'
+  | 'settings';
 
 export type SpeedTestPhase = 'idle' | 'ping' | 'download' | 'upload' | 'completed' | 'error';
 

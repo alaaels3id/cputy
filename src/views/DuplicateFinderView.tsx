@@ -167,9 +167,9 @@ export const DuplicateFinderView: React.FC<DuplicateFinderViewProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-mac-subtext font-mono">{formatBytes(group.size)} each</span>
+                  <span className="text-mac-subtext font-mono">{formatBytes(group.size)} {t('eachFile')}</span>
                   <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                    Wasting {formatBytes(group.totalWastedSize)}
+                    {t('wastingSize')} {formatBytes(group.totalWastedSize)}
                   </span>
                 </div>
               </div>
@@ -197,7 +197,7 @@ export const DuplicateFinderView: React.FC<DuplicateFinderViewProps> = ({
                             <span className="font-semibold text-slate-900 dark:text-white truncate max-w-md">{file.name}</span>
                             {isOriginal && (
                               <span className="text-[9.5px] font-bold px-2 py-0.2 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
-                                Original (Oldest)
+                                {t('originalOldestBadge')}
                               </span>
                             )}
                           </div>
@@ -209,7 +209,7 @@ export const DuplicateFinderView: React.FC<DuplicateFinderViewProps> = ({
                         <span className="text-[10px] font-mono text-slate-400">{formatTimeAgo(file.lastModified)}</span>
                         <button
                           onClick={() => handleReveal(file.path)}
-                          title="Reveal in Finder"
+                          title={t('revealInFinder')}
                           className="p-1.5 rounded-lg bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />

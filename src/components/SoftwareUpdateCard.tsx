@@ -249,7 +249,7 @@ export const SoftwareUpdateCard: React.FC = () => {
                   {t('updateDownloadedTitle')} (v{status.updateInfo?.version || 'Latest'})
                 </h4>
                 <p className="text-[11px] text-slate-700 dark:text-slate-300 mt-0.5">
-                  The update is ready. Click restart to apply the new version immediately.
+                  {t('updateReadyDesc')}
                 </p>
               </div>
             </div>
@@ -278,7 +278,7 @@ export const SoftwareUpdateCard: React.FC = () => {
             onClick={handleCheckForUpdates}
             className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-black/10 text-[11px] font-bold text-slate-700 dark:text-slate-200 transition-all cursor-pointer"
           >
-            <span>Retry</span>
+            <span>{t('retryBtn')}</span>
           </button>
         </div>
       )}

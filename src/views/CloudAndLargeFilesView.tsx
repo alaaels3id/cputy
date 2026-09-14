@@ -215,7 +215,7 @@ export const CloudAndLargeFilesView: React.FC<CloudAndLargeFilesViewProps> = ({
                       <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{item.name}</h4>
                       {isHeavy && (
                         <span className="text-[10px] font-mono font-bold px-2 py-0.2 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
-                          Heavy &gt;1GB
+                          {t('heavyFileBadge')}
                         </span>
                       )}
                     </div>
@@ -241,7 +241,7 @@ export const CloudAndLargeFilesView: React.FC<CloudAndLargeFilesViewProps> = ({
                   </span>
                   <button
                     onClick={() => handleReveal(item.path)}
-                    title="Reveal in Finder"
+                    title={t('revealInFinder')}
                     className="p-2 rounded-xl bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />

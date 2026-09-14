@@ -34,6 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'uninstaller': return t('uninstallerTitle');
       case 'monitor': return t('monitorTitle');
       case 'speed_test': return t('speedTestTitle');
+      case 'settings': return t('settingsTitle');
       default: return 'CPUTY';
     }
   };
@@ -44,10 +45,10 @@ export const Header: React.FC<HeaderProps> = ({
         <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-2">
           {getCategoryTitle(currentCategory)}
         </h2>
-        <span className="flex items-center gap-1.5 text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-600/30 font-semibold">
+        <span className="flex items-center gap-1.5 text-[11px] px-2.5 py-0.5 rounded-full bg-[#805D93]/10 text-[#805D93] dark:text-[#F49FBC] border border-[#805D93]/30 dark:border-[#F49FBC]/30 font-semibold">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F49FBC] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#805D93]"></span>
           </span>
           <ShieldCheck className="w-3 h-3" />
           <span>{t('protectedTag')}</span>
@@ -72,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({
           title={t('rescan')}
           className="p-2 rounded-xl bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 transition-all disabled:opacity-50 border border-black/5 dark:border-white/5 cursor-pointer hover:border-black/10 dark:hover:border-white/10"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-emerald-500 dark:text-emerald-400' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-[#805D93] dark:text-[#F49FBC]' : ''}`} />
         </button>
       </div>
     </header>
