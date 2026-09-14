@@ -40,8 +40,17 @@ try {
       console.log('[patch-electron-icon] Re-signed Electron.app with ad-hoc signature');
       // Flush macOS Launch Services icon cache so notifications use the new CPUTY icon
       execSync(`/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "${electronApp}" 2>/dev/null || true`);
-      // Restart Notification Center to clear any cached notification icons
-      execSync(`killall NotificationCenter 2>/dev/null || true`);
+      // Clear macOS icon and notification cache files
+      try {
+        const cacheDir = execSync('getconf DARWIN_USER_CACHE_DIR 2>/dev/null', { encoding: 'utf-8' }).trim();
+        if (cacheDir && fs.existsSync(cacheDir)) {
+          execSync(`rm -rf "${cacheDir}com.apple.dock.iconcache" "${cacheDir}com.apple.iconservices"* "${cacheDir}com.apple.usernotificationsd"* "${cacheDir}com.apple.notificationcenter"* 2>/dev/null || true`);
+        }
+      } catch {
+        // ignore
+      }
+      // Restart notification daemons to flush cached app icons
+      execSync(`killall iconservicesagent usernoted NotificationCenter Dock 2>/dev/null || true`);
     } catch {
       // ignore
     }
